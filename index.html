@@ -950,6 +950,40 @@ function initSchierTabs() {
   ).join('');
   showSchierStage(null, 'vor');
 }
+function getCandlingSVG(stage) {
+  const bg = `<rect width="120" height="150" fill="#1a0f05" rx="8"/>`;
+  const egg = (fill, op=1, stroke='#8a6a30') => `<ellipse cx="60" cy="80" rx="38" ry="52" fill="${fill}" opacity="${op}" stroke="${stroke}" stroke-width="1.5"/>`;
+  const ac = (size=12, alpha=0.9) => `<ellipse cx="60" cy="38" rx="${size}" ry="8" fill="#f5e8a0" opacity="${alpha}"/>`;
+  const lbl = (t, col='#90d090') => `<text x="60" y="143" text-anchor="middle" font-size="8" fill="${col}" font-family="Georgia">${t}</text>`;
+  switch(stage) {
+    case 'vor_ok': return bg+egg('#f5d87a',0.85)+ac(10)+`<ellipse cx="60" cy="90" rx="16" ry="14" fill="#e8a820" opacity="0.6"/>`+lbl('Normal','#90d090');
+    case 'vor_riss': return bg+egg('#f5d87a',0.8)+ac(10)+`<line x1="45" y1="55" x2="55" y2="75" stroke="#fff" stroke-width="1.5" opacity="0.8"/><line x1="55" y1="75" x2="60" y2="95" stroke="#fff" stroke-width="1" opacity="0.6"/>`+lbl('Riss!','#f08080');
+    case 'vor_lk': return bg+egg('#f5d87a',0.8)+`<ellipse cx="75" cy="55" rx="10" ry="7" fill="#f5e8a0" opacity="0.9"/>`+lbl('LK seitlich!','#f0a050');
+    case 'vor_dd': return bg+egg('#f5d87a',0.8)+`<ellipse cx="48" cy="85" rx="11" ry="10" fill="#e8a820" opacity="0.6"/><ellipse cx="72" cy="82" rx="11" ry="10" fill="#e8a820" opacity="0.6"/>`+lbl('Doppeldotter','#aaa');
+    case 't5_ja': return bg+egg('#c8853a',0.5)+ac(9,0.85)+`<circle cx="60" cy="82" r="5" fill="#e05020" opacity="0.9"/><line x1="60" y1="77" x2="42" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="78" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="45" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/><line x1="60" y1="77" x2="75" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/>`+lbl('Spinnennetz ✓','#90d090');
+    case 't5_nein': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d060" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="85" rx="18" ry="16" fill="#e8a820" opacity="0.5"/>`+lbl('Unbefruchtet','#f08080');
+    case 't5_ring': return bg+egg('#3a1a08',0.8)+ac(8,0.7)+`<ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/>`+lbl('Blutring!','#f08080');
+    case 't5_unklar': return bg+egg('#a06030',0.7)+ac(9,0.7)+`<ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/>`+lbl('Unklar – warten','#f0c060');
+    case 't7_ja': return bg+egg('#a05020',0.6)+ac(10,0.85)+`<ellipse cx="60" cy="85" rx="14" ry="18" fill="#7a3010" opacity="0.8"/><line x1="60" y1="67" x2="35" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/><line x1="60" y1="67" x2="85" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/><line x1="60" y1="90" x2="38" y2="108" stroke="#d04020" stroke-width="1" opacity="0.6"/><line x1="60" y1="90" x2="82" y2="108" stroke="#d04020" stroke-width="1" opacity="0.6"/>`+lbl('Lebend ✓','#90d090');
+    case 't7_nein': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f0cc50" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="86" rx="18" ry="16" fill="#dda020" opacity="0.5"/>`+lbl('Raus!','#f08080');
+    case 't7_ring': return bg+egg('#3a1a08',0.8)+ac(8,0.7)+`<ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/>`+lbl('Blutring!','#f08080');
+    case 't7_unklar': return bg+egg('#a06030',0.7)+ac(9,0.7)+`<ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/>`+lbl('Unklar – warten','#f0c060');
+    case 't10_ja': return bg+egg('#5a2808',0.85)+ac(12,0.85)+`<ellipse cx="60" cy="95" rx="28" ry="36" fill="#3a1505" opacity="0.8"/><line x1="60" y1="60" x2="30" y2="45" stroke="#c03015" stroke-width="1" opacity="0.6"/><line x1="60" y1="60" x2="90" y2="45" stroke="#c03015" stroke-width="1" opacity="0.6"/>`+lbl('Lebend ✓','#90d090');
+    case 't10_tot': return bg+egg('#4a2008',0.9)+ac(11,0.6)+`<ellipse cx="60" cy="92" rx="25" ry="32" fill="#1a0500" opacity="0.9"/>`+lbl('Abgestorben?','#f08080');
+    case 't10_nein': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#e8c040" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="86" rx="18" ry="16" fill="#d09015" opacity="0.5"/>`+lbl('Raus!','#f08080');
+    case 't10_lk': return bg+egg('#5a2808',0.75)+`<ellipse cx="60" cy="38" rx="14" ry="10" fill="#f5e8a0" opacity="0.9"/>`+lbl('LK ~1/5','#f0c060');
+    case 't14_ja': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.97" stroke="#5a3010" stroke-width="1.5"/>`+ac(15,0.9)+lbl('Perfekt ✓','#90d090');
+    case 't14_tot': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/>`+ac(12,0.4)+lbl('Kein Leben – raus!','#f08080');
+    case 't14_lk_klein': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="8" ry="6" fill="#f5e8a0" opacity="0.9"/>`+lbl('Zu feucht!','#f0a050');
+    case 't14_lk_gross': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="44" rx="22" ry="17" fill="#f5e8a0" opacity="0.9"/>`+lbl('Zu trocken!','#f0a050');
+    case 't18_ok': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/>`+lbl('Schlupfbereit ✓','#90d090');
+    case 't18_pip': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/><circle cx="60" cy="40" r="3" fill="none" stroke="#fff" stroke-width="1.5"/>`+lbl('Pip! 🐣','#90d090');
+    case 't18_tot': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1a0803" opacity="0.97" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="10" ry="7" fill="#f5e8a0" opacity="0.4"/>`+lbl('Abgestorben','#f08080');
+    case 't18_nein': return bg+`<ellipse cx="60" cy="80" rx="38" ry="52" fill="#d0a030" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="86" rx="18" ry="16" fill="#b07010" opacity="0.4"/>`+lbl('Raus!','#f08080');
+    default: return bg+egg('#5a3020',0.7)+ac(10);
+  }
+}
+
 function showSchierStage(btn, key) {
   document.querySelectorAll('.schier-tab-btn').forEach(b => {
     b.style.background = 'var(--card)'; b.style.color = 'var(--muted)';
@@ -969,10 +1003,12 @@ function showSchierStage(btn, key) {
   content.innerHTML = `
     <div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">💡</span><span>${s.info}</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
-      ${s.eggs.map(e => `<div style="border:2px solid ${e.c};border-radius:8px;padding:0.6rem;text-align:center;background:var(--card)">
-        <div style="font-size:0.78rem;font-weight:bold;color:var(--blue)">${e.l}</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:2px">${e.d}</div>
-      </div>`).join('')}
+      ${s.eggs.map(e => `
+        <div style="border:2px solid ${e.c};border-radius:8px;padding:0.5rem;text-align:center;background:var(--card)">
+          <svg viewBox="0 0 120 150" width="88" height="110" style="display:block;margin:0 auto 4px">${getCandlingSVG(e.svg)}</svg>
+          <div style="font-size:0.75rem;font-weight:bold;color:var(--blue)">${e.l}</div>
+          <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">${e.d}</div>
+        </div>`).join('')}
     </div>`;
 }
 function schierDiag(el, val) {
