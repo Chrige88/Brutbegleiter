@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brutbegleiter – Federkompass</title>
 <link rel="manifest" href="/Brutbegleiter/manifest.json">
-<meta name="theme-color" content="#1a2f6e">
+<meta name="theme-color" content="#1a2f6e"> 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Brutbegleiter">
@@ -193,6 +193,10 @@ header .sub { font-size:0.7rem; color:var(--muted); }
       <path d="M22 33 C20 29 19 26 22 22 C25 26 24 29 22 33Z" fill="#3a4f8e" opacity="0.8"/>
       <circle cx="22" cy="22" r="1.8" fill="#fff" opacity="0.85"/>
     </svg>
+      <button id="push-toggle-btn" onclick="togglePush()"
+    style="background:none;border:1px solid var(--muted);border-radius:20px;color:var(--egg-shell);font-size:0.72rem;cursor:pointer;font-family:inherit;padding:3px 10px;">
+    🔔 Push AN
+  </button>
     <button onclick="logout()" style="background:none;border:none;color:var(--muted);font-size:0.75rem;cursor:pointer;font-family:inherit;">Abmelden</button>
   </div>
 </header>
@@ -481,6 +485,7 @@ function showApp() {
   document.getElementById('app').style.display = 'block';
   loadBruten();
   setTimeout(registerPush, 2000);
+  setTimeout(loadPushStatus, 1000);
 }
 
 // ===== STATE =====
@@ -1078,6 +1083,36 @@ async function registerPush() {
   } catch(e) {
     console.log('Push Fehler:', e);
   }
+}
+
+
+async function togglePush() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data: sub } = await sb.from('push_subscriptions')
+    .select('push_enabled').eq('user_id', user.id).single();
+  if (!sub) return;
+  const newVal = !sub.push_enabled;
+  await sb.from('push_subscriptions')
+    .update({ push_enabled: newVal })
+    .eq('user_id', user.id);
+  updatePushBtn(newVal);
+  alert(newVal ? '🔔 Push-Nachrichten aktiviert!' : '🔕 Push-Nachrichten deaktiviert!');
+}
+
+async function updatePushBtn(enabled) {
+  const btn = document.getElementById('push-toggle-btn');
+  if (!btn) return;
+  btn.textContent = enabled ? '🔔 Push AN' : '🔕 Push AUS';
+  btn.style.opacity = enabled ? '1' : '0.6';
+}
+
+async function loadPushStatus() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data: sub } = await sb.from('push_subscriptions')
+    .select('push_enabled').eq('user_id', user.id).single();
+  if (sub) updatePushBtn(sub.push_enabled);
 }
 
 // ===== INIT =====
