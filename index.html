@@ -7,7 +7,7 @@
 <link rel="manifest" href="/Brutbegleiter/manifest.json">
 <meta name="theme-color" content="#1a2f6e"> 
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-stylhe" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Brutbegleiter">
 <link rel="apple-touch-icon" href="/Brutbegleiter/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -547,7 +547,7 @@ function renderBrutenListe() {
     var schlupfInfo = stat && stat.geschluepft
       ? '🐥 ' + stat.geschluepft + ' geschlüpft (' + Math.round(stat.geschluepft/brut.anzahl*100) + '%)'
       : 'Schlupf: ' + schlupf;
-    html += '<div class="brut-karte ' + cls + '" onclick="openBrut('' + brut.id + '')">';
+    html += '<div class="brut-karte ' + cls + '" onclick="openBrut(\' + brut.id + \')">';
     html += '<div class="brut-karte-header"><div class="brut-karte-titel">🥚 ' + (brut.rasse||'Brut') + '</div>' + badge + '</div>';
     html += '<div class="brut-info">' + brut.anzahl + ' Eier · ' + (brut.typ==='motor'?'Motorbrüter':'Flächenbrüter') + (brut.bemerkung?' · '+brut.bemerkung:'') + '</div>';
     html += '<div class="progress-wrap"><div class="progress-fill" style="width:' + Math.min(100,pct) + '%"></div></div>';
@@ -631,7 +631,7 @@ function renderTagebuch() {
     bruten.forEach(function(b) {
       var day=Math.min(42,getTodayDayForBrut(b));
       var isA=b.id===aktiveBrutId;
-      html+='<button onclick="switchBrut(''+b.id+'')" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid '+(isA?'var(--gold)':'var(--border)')+';background:'+(isA?'var(--gold-light)':'var(--card)')+';font-family:inherit;font-size:0.75rem;color:'+(isA?'var(--blue)':'var(--muted)')+';cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';
+      html+='<button onclick="switchBrut(\'+b.id+\')" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid '+(isA?'var(--gold)':'var(--border)')+';background:'+(isA?'var(--gold-light)':'var(--card)')+';font-family:inherit;font-size:0.75rem;color:'+(isA?'var(--blue)':'var(--muted)')+';cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';
     });
     selectorBar.innerHTML=html;
   } else { selectorBar.style.display='none'; }
@@ -759,7 +759,7 @@ function renderAlerts(brut,d) {
     var savedBefund=savedEntry?savedEntry.schier_befund||'':'';
     var savedNotiz=savedEntry?savedEntry.schier_notiz||'':'';
     var opts=[{val:'lebend',icon:'🟢',label:'Lebend',desc:'Adern, evtl. Bewegung'},{val:'unbefruchtet',icon:'⚪',label:'Unbefruchtet',desc:'Hell, klar'},{val:'blutring',icon:'🔴',label:'Blutring',desc:'Roter Ring'},{val:'unklar',icon:'🟡',label:'Unklar',desc:'Nochmals schieren'}];
-    var optsHtml=opts.map(function(o){return '<div onclick="selectBefund(this,''+o.val+'','+d+')" data-val="'+o.val+'" style="border:2px solid '+(savedBefund===o.val?'var(--gold)':'var(--border)')+';background:'+(savedBefund===o.val?'var(--gold-light)':'var(--card)')+';border-radius:8px;padding:0.55rem;text-align:center;cursor:pointer;"><div style="font-size:1.2rem">'+o.icon+'</div><div style="font-size:0.75rem;font-weight:bold">'+o.label+'</div><div style="font-size:0.68rem;color:var(--muted)">'+o.desc+'</div></div>';}).join('');
+    var optsHtml=opts.map(function(o){return '<div onclick="selectBefund(this,\'+o.val+\','+d+')" data-val="'+o.val+'" style="border:2px solid '+(savedBefund===o.val?'var(--gold)':'var(--border)')+';background:'+(savedBefund===o.val?'var(--gold-light)':'var(--card)')+';border-radius:8px;padding:0.55rem;text-align:center;cursor:pointer;"><div style="font-size:1.2rem">'+o.icon+'</div><div style="font-size:0.75rem;font-weight:bold">'+o.label+'</div><div style="font-size:0.68rem;color:var(--muted)">'+o.desc+'</div></div>';}).join('');
     var block=document.createElement('div');
     block.className='card';
     block.style.borderTop='3px solid var(--gold)';
@@ -910,7 +910,7 @@ function getCandlingSVG(stage) {
 function initSchierTabs() {
   var tabs=[{key:'vor',label:'Vor Einlegen'},{key:'t5',label:'Tag 5-6'},{key:'t7',label:'Tag 7'},{key:'t10',label:'Tag 10'},{key:'t14',label:'Tag 14'},{key:'t18',label:'Tag 18'}];
   var row=document.getElementById('schier-tabs-row');
-  row.innerHTML=tabs.map(function(t,i){return '<button class="schier-tab-btn '+(i===0?'active':'')+'" onclick="showSchierStage(this,''+t.key+'')" style="padding:0.35rem 0.85rem;border-radius:20px;border:1px solid var(--border);background:'+(i===0?'var(--blue)':'var(--card)')+';color:'+(i===0?'#fff':'var(--muted)')+';font-family:inherit;font-size:0.78rem;cursor:pointer;">'+t.label+'</button>';}).join('');
+  row.innerHTML=tabs.map(function(t,i){return '<button class="schier-tab-btn '+(i===0?'active':'')+'" onclick="showSchierStage(this,\'+t.key+\')" style="padding:0.35rem 0.85rem;border-radius:20px;border:1px solid var(--border);background:'+(i===0?'var(--blue)':'var(--card)')+';color:'+(i===0?'#fff':'var(--muted)')+';font-family:inherit;font-size:0.78rem;cursor:pointer;">'+t.label+'</button>';}).join('');
   showSchierStage(null,'vor');
 }
 
@@ -959,7 +959,7 @@ function renderStatistik() {
   document.getElementById('stat-no-brut').style.display='none';
   document.getElementById('stat-content').style.display='block';
   var sel=document.getElementById('stat-brut-select');
-  sel.innerHTML=bruten.map(function(b){var day=Math.min(42,getTodayDayForBrut(b));return '<button onclick="selectStatBrut(''+b.id+'',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';}).join('');
+  sel.innerHTML=bruten.map(function(b){var day=Math.min(42,getTodayDayForBrut(b));return '<button onclick="selectStatBrut(\'+b.id+\',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';}).join('');
   if(aktiveBrutId){var btn=sel.querySelector('[onclick*="'+aktiveBrutId+'"]');if(btn) selectStatBrut(aktiveBrutId,btn);}
 }
 
