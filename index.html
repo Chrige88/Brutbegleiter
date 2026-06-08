@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brutbegleiter – Federkompass</title>
+<link rel="manifest" href="/Brutbegleiter/manifest.json">
+<meta name="theme-color" content="#1a2f6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Brutbegleiter">
+<link rel="apple-touch-icon" href="/Brutbegleiter/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -474,6 +480,7 @@ function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   loadBruten();
+  setTimeout(registerPush, 2000);
 }
 
 // ===== STATE =====
@@ -1031,6 +1038,47 @@ function checkReminder() {
 }
 
 function closeReminder(){document.getElementById('reminder-overlay').classList.remove('open');}
+
+
+// ===== PUSH NOTIFICATIONS =====
+const VAPID_PUBLIC_KEY = 'BLlXwfEATqNFLER0ILeHM2ZYCH3xCUZtzzHaC1tzk9JVi2MkzAV9Mbkbi1TYg3PYaAV4VK2lEDlp-0iKUccgWlQ';
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+async function registerPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    console.log('Push nicht unterstuetzt');
+    return;
+  }
+  try {
+    const reg = await navigator.serviceWorker.register('/Brutbegleiter/service-worker.js');
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    });
+    const { data: { user } } = await sb.auth.getUser();
+    if (user) {
+      await sb.from('push_subscriptions').upsert({
+        user_id: user.id,
+        subscription: subscription.toJSON()
+      }, { onConflict: 'user_id' });
+      console.log('Push registriert!');
+    }
+  } catch(e) {
+    console.log('Push Fehler:', e);
+  }
+}
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', checkSession);
