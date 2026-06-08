@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brutbegleiter – Federkompass</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --bg: #f4f3f0; --card: #fff; --border: #e0dbd2; --text: #2c2416;
@@ -15,127 +16,149 @@
   --egg-shell: #e8dfc8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Georgia, serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 16px; line-height: 1.6; }
+body { font-family: Georgia, serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+/* LOGIN */
+#login-screen { display:none; position:fixed; inset:0; background:var(--bg); z-index:9999; align-items:center; justify-content:center; }
+.login-box { max-width:340px; width:90%; padding:2rem; background:#fff; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.12); border-top:4px solid var(--gold); }
+.login-input { width:100%; padding:0.75rem; margin-bottom:0.75rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; font-family:inherit; background:var(--bg); }
+.login-btn { width:100%; padding:0.85rem; background:var(--blue); color:var(--egg-shell); border:none; border-radius:8px; font-size:1rem; font-family:inherit; cursor:pointer; border-bottom:3px solid var(--gold); font-weight:bold; }
 /* HEADER */
-header { background: var(--blue); color: var(--egg-shell); padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); }
-.logo-area { display: flex; align-items: center; gap: 10px; }
-header h1 { font-size: 1.05rem; font-weight: normal; letter-spacing: 0.04em; }
-header .sub { font-size: 0.7rem; color: var(--muted); }
+header { background:var(--blue); color:var(--egg-shell); padding:0.85rem 1.25rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:3px solid var(--gold); }
+.logo-area { display:flex; align-items:center; gap:10px; }
+header h1 { font-size:1.05rem; font-weight:normal; letter-spacing:0.04em; }
+header .sub { font-size:0.7rem; color:var(--muted); }
 /* TABS */
-.tab-bar { display: flex; background: var(--card); border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; position: sticky; top: 61px; z-index: 90; }
-.tab-bar button { flex: 1; min-width: 68px; padding: 0.65rem 0.3rem; border: none; background: none; font-family: inherit; font-size: 0.72rem; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.2s; }
-.tab-bar button .ti { font-size: 1.1rem; }
-.tab-bar button.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-bar { display:flex; background:var(--card); border-bottom:1px solid var(--border); overflow-x:auto; -webkit-overflow-scrolling:touch; position:sticky; top:61px; z-index:90; }
+.tab-bar button { flex:1; min-width:60px; padding:0.65rem 0.3rem; border:none; background:none; font-family:inherit; font-size:0.68rem; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.tab-bar button .ti { font-size:1rem; }
+.tab-bar button.active { color:var(--gold); border-bottom-color:var(--gold); }
 /* SCREENS */
-.screen { display: none; padding: 1rem; max-width: 680px; margin: 0 auto; }
-.screen.active { display: block; }
+.screen { display:none; padding:1rem; max-width:680px; margin:0 auto; }
+.screen.active { display:block; }
 /* CARDS */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; margin-bottom: 0.9rem; }
-.card-title { font-size: 0.95rem; font-weight: bold; margin-bottom: 0.7rem; display: flex; align-items: center; gap: 8px; color: var(--blue); }
-/* BRUTEN ÜBERSICHT */
-.brut-karte { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; }
-.brut-karte:hover { border-color: var(--gold); box-shadow: 0 2px 12px rgba(200,168,48,0.15); }
-.brut-karte.aktiv { border-left: 4px solid var(--gold); }
-.brut-karte.abgeschlossen { border-left: 4px solid var(--success); opacity: 0.85; }
-.brut-karte-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
-.brut-karte-titel { font-size: 1rem; font-weight: bold; color: var(--blue); }
-.brut-badge { font-size: 0.68rem; padding: 2px 10px; border-radius: 20px; font-weight: bold; }
-.badge-aktiv { background: var(--gold-light); color: var(--gold); border: 1px solid var(--gold); }
-.badge-schlupf { background: #fff0f0; color: var(--danger); border: 1px solid var(--danger); }
-.badge-fertig { background: var(--success-light); color: var(--success); border: 1px solid var(--success); }
-.brut-info { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; }
-.progress-wrap { background: var(--border); border-radius: 6px; height: 7px; }
-.progress-fill { height: 7px; border-radius: 6px; background: linear-gradient(90deg, var(--blue), var(--gold)); transition: width 0.4s; }
-.brut-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
-/* NEUE BRUT BUTTON */
-.neue-brut-btn { width: 100%; padding: 1rem; background: var(--blue); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid var(--gold); margin-bottom: 1rem; }
-.neue-brut-btn:hover { background: #243d8a; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.1rem; margin-bottom:0.9rem; }
+.card-title { font-size:0.95rem; font-weight:bold; margin-bottom:0.7rem; display:flex; align-items:center; gap:8px; color:var(--blue); }
+/* BRUTEN */
+.brut-karte { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.1rem; margin-bottom:0.75rem; cursor:pointer; transition:all 0.15s; }
+.brut-karte:hover { border-color:var(--gold); }
+.brut-karte.aktiv { border-left:4px solid var(--gold); }
+.brut-karte.abgeschlossen { border-left:4px solid var(--success); opacity:0.85; }
+.brut-karte-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem; }
+.brut-karte-titel { font-size:1rem; font-weight:bold; color:var(--blue); }
+.brut-badge { font-size:0.68rem; padding:2px 10px; border-radius:20px; font-weight:bold; }
+.badge-aktiv { background:var(--gold-light); color:var(--gold); border:1px solid var(--gold); }
+.badge-schlupf { background:#fff0f0; color:var(--danger); border:1px solid var(--danger); }
+.badge-fertig { background:var(--success-light); color:var(--success); border:1px solid var(--success); }
+.brut-info { font-size:0.8rem; color:var(--muted); margin-bottom:0.6rem; }
+.progress-wrap { background:var(--border); border-radius:6px; height:7px; }
+.progress-fill { height:7px; border-radius:6px; background:linear-gradient(90deg,var(--blue),var(--gold)); transition:width 0.4s; }
+.brut-meta { display:flex; justify-content:space-between; font-size:0.75rem; color:var(--muted); margin-top:0.4rem; }
+.neue-brut-btn { width:100%; padding:1rem; background:var(--blue); color:#fff; border:none; border-radius:10px; font-family:inherit; font-size:1rem; font-weight:bold; cursor:pointer; border-bottom:3px solid var(--gold); margin-bottom:1rem; }
 /* MODAL */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: flex-end; justify-content: center; padding: 0; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--card); border-radius: 16px 16px 0 0; padding: 1.5rem; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }
-.modal-title { font-size: 1.1rem; font-weight: bold; color: var(--blue); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
-.modal-close { font-size: 1.4rem; cursor: pointer; color: var(--muted); background: none; border: none; }
-/* SETUP ROWS */
-.setup-row { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
-.setup-row:last-child { border-bottom: none; }
-.setup-label { flex: 1; font-size: 0.9rem; }
-.setup-input { padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.9rem; background: var(--bg); color: var(--text); width: 150px; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:flex-end; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--card); border-radius:16px 16px 0 0; padding:1.5rem; width:100%; max-width:680px; max-height:90vh; overflow-y:auto; }
+.modal-title { font-size:1.1rem; font-weight:bold; color:var(--blue); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; }
+.modal-close { font-size:1.4rem; cursor:pointer; color:var(--muted); background:none; border:none; }
+.setup-row { display:flex; align-items:center; gap:10px; padding:0.6rem 0; border-bottom:1px solid var(--border); }
+.setup-row:last-child { border-bottom:none; }
+.setup-label { flex:1; font-size:0.9rem; }
+.setup-input { padding:0.4rem 0.6rem; border:1px solid var(--border); border-radius:6px; font-family:inherit; font-size:0.9rem; background:var(--bg); color:var(--text); width:150px; }
 /* ACCORDION */
-.accordion-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.5rem; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: var(--blue); cursor: pointer; text-align: left; }
-.accordion-btn:hover { background: var(--blue-light); }
-.acc-arrow { font-size: 0.8rem; color: var(--gold); transition: transform 0.2s; }
-.acc-arrow.open { transform: rotate(90deg); }
-.accordion-body { display: none; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; padding: 0 1rem; margin-top: -0.5rem; margin-bottom: 0.75rem; }
-.accordion-body.open { display: block; }
+.accordion-btn { width:100%; display:flex; justify-content:space-between; align-items:center; padding:0.85rem 1rem; background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:0.5rem; font-family:inherit; font-size:0.9rem; font-weight:bold; color:var(--blue); cursor:pointer; text-align:left; }
+.accordion-btn:hover { background:var(--blue-light); }
+.acc-arrow { font-size:0.8rem; color:var(--gold); transition:transform 0.2s; }
+.acc-arrow.open { transform:rotate(90deg); }
+.accordion-body { display:none; background:var(--card); border:1px solid var(--border); border-top:none; border-radius:0 0 10px 10px; padding:0 1rem; margin-top:-0.5rem; margin-bottom:0.75rem; }
+.accordion-body.open { display:block; }
 /* CHECKLIST */
-.checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 0.7rem 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-.checklist-item:last-child { border-bottom: none; }
-.checklist-item input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--gold); margin-top: 2px; }
-.checklist-item label { font-size: 0.88rem; cursor: pointer; line-height: 1.4; }
-.checklist-item label .hint { display: block; font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-.checklist-item.done label { text-decoration: line-through; color: var(--muted); }
-/* START BTN */
-.start-btn { width: 100%; padding: 0.9rem; background: var(--blue); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 0.95rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid var(--gold); margin-top: 0.5rem; }
-.start-btn:disabled { background: var(--muted); border-bottom-color: transparent; cursor: not-allowed; opacity: 0.6; }
+.checklist-item { display:flex; align-items:flex-start; gap:12px; padding:0.7rem 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.checklist-item:last-child { border-bottom:none; }
+.checklist-item input[type=checkbox] { width:20px; height:20px; flex-shrink:0; accent-color:var(--gold); margin-top:2px; }
+.checklist-item label { font-size:0.88rem; cursor:pointer; line-height:1.4; }
+.checklist-item label .hint { display:block; font-size:0.75rem; color:var(--muted); margin-top:2px; }
+.checklist-item.done label { text-decoration:line-through; color:var(--muted); }
+.start-btn { width:100%; padding:0.9rem; background:var(--blue); color:#fff; border:none; border-radius:10px; font-family:inherit; font-size:0.95rem; font-weight:bold; cursor:pointer; border-bottom:3px solid var(--gold); margin-top:0.5rem; }
+.start-btn:disabled { background:var(--muted); border-bottom-color:transparent; cursor:not-allowed; opacity:0.6; }
 /* TAGEBUCH */
-.day-nav { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.75rem; }
-.nav-btn { padding: 0.45rem 1rem; border: 1px solid var(--border); background: var(--card); border-radius: 8px; font-family: inherit; font-size: 0.85rem; cursor: pointer; color: var(--text); }
-.nav-btn:disabled { opacity: 0.3; cursor: default; }
-.day-header { text-align: center; flex: 1; }
-.day-num { font-size: 1.4rem; font-weight: bold; color: var(--blue); line-height: 1.1; }
-.day-date { font-size: 0.9rem; font-weight: bold; color: var(--blue); }
-.day-sub { font-size: 0.72rem; color: var(--muted); }
-.day-dots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 0.5rem; }
-.dot { width: 22px; height: 22px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; cursor: pointer; transition: all 0.15s; color: var(--muted); }
-.dot.today { background: var(--blue); color: #fff; }
-.dot.saved { outline: 2px solid var(--gold); }
-.dot.missing { outline: 2px solid var(--danger); color: var(--danger); }
-.dot.schlupf { background: var(--success); color: #fff; }
+.day-nav { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.75rem; }
+.nav-btn { padding:0.45rem 1rem; border:1px solid var(--border); background:var(--card); border-radius:8px; font-family:inherit; font-size:0.85rem; cursor:pointer; }
+.nav-btn:disabled { opacity:0.3; cursor:default; }
+.day-header { text-align:center; flex:1; }
+.day-num { font-size:1.4rem; font-weight:bold; color:var(--blue); line-height:1.1; }
+.day-date { font-size:0.9rem; font-weight:bold; color:var(--blue); }
+.day-sub { font-size:0.72rem; color:var(--muted); }
+.day-dots { display:flex; flex-wrap:wrap; gap:4px; margin-top:0.5rem; }
+.dot { width:22px; height:22px; border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center; font-size:0.62rem; cursor:pointer; color:var(--muted); }
+.dot.today { background:var(--blue); color:#fff; }
+.dot.saved { outline:2px solid var(--gold); }
+.dot.missing { outline:2px solid var(--danger); color:var(--danger); }
+.dot.schlupf { background:var(--success); color:#fff; }
 /* PARAMETER */
-.param-row { display: flex; align-items: center; gap: 10px; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
-.param-row:last-child { border-bottom: none; }
-.param-label { flex: 1; font-size: 0.88rem; }
-.param-unit { font-size: 0.78rem; color: var(--muted); width: 36px; }
-.param-input { width: 78px; padding: 0.35rem 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.9rem; background: var(--bg); text-align: center; }
-.p-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-.p-ok { background: var(--success); } .p-warn { background: var(--warn); } .p-bad { background: var(--danger); }
+.param-row { display:flex; align-items:center; gap:10px; padding:0.55rem 0; border-bottom:1px solid var(--border); }
+.param-row:last-child { border-bottom:none; }
+.param-label { flex:1; font-size:0.88rem; }
+.param-unit { font-size:0.78rem; color:var(--muted); width:36px; }
+.param-input { width:78px; padding:0.35rem 0.5rem; border:1px solid var(--border); border-radius:6px; font-family:inherit; font-size:0.9rem; background:var(--bg); text-align:center; }
+.p-dot { width:9px; height:9px; border-radius:50%; background:var(--border); flex-shrink:0; }
+.p-ok { background:var(--success); } .p-warn { background:var(--warn); } .p-bad { background:var(--danger); }
 /* ALERTS */
-.alert { border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.83rem; margin-bottom: 0.65rem; display: flex; gap: 9px; align-items: flex-start; line-height: 1.4; }
-.alert-icon { font-size: 1rem; flex-shrink: 0; }
-.alert-info { background: var(--gold-light); border: 1px solid #f0c870; color: #7a5800; }
-.alert-warn { background: var(--warn-light); border: 1px solid #f5c07a; color: var(--warn); }
-.alert-danger { background: var(--danger-light); border: 1px solid #f5a0a0; color: var(--danger); }
-.alert-success { background: var(--success-light); border: 1px solid #90d4a0; color: var(--success); }
-/* SAVE BTN */
-.save-btn { width: 100%; padding: 0.7rem; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-family: inherit; font-size: 0.88rem; cursor: pointer; margin-top: 0.7rem; border-bottom: 2px solid var(--gold); }
-/* PROTOKOLL */
-.protokoll-entry { padding: 0.55rem 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
-.protokoll-entry:last-child { border-bottom: none; }
+.alert { border-radius:8px; padding:0.7rem 0.9rem; font-size:0.83rem; margin-bottom:0.65rem; display:flex; gap:9px; align-items:flex-start; line-height:1.4; }
+.alert-icon { font-size:1rem; flex-shrink:0; }
+.alert-info { background:var(--gold-light); border:1px solid #f0c870; color:#7a5800; }
+.alert-warn { background:var(--warn-light); border:1px solid #f5c07a; color:var(--warn); }
+.alert-danger { background:var(--danger-light); border:1px solid #f5a0a0; color:var(--danger); }
+.alert-success { background:var(--success-light); border:1px solid #90d4a0; color:var(--success); }
+.save-btn { width:100%; padding:0.7rem; background:var(--blue); color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:0.88rem; cursor:pointer; margin-top:0.7rem; border-bottom:2px solid var(--gold); }
+.protokoll-entry { padding:0.55rem 0; border-bottom:1px solid var(--border); font-size:0.82rem; }
+.protokoll-entry:last-child { border-bottom:none; }
 /* KOMPLI */
-.kompli-item { padding: 0.7rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.55rem; cursor: pointer; font-size: 0.88rem; display: flex; justify-content: space-between; background: var(--card); }
-.kompli-detail { display: none; padding: 0.7rem; background: var(--bg); border-radius: 0 0 8px 8px; border: 1px solid var(--border); border-top: none; font-size: 0.83rem; line-height: 1.5; margin-top: -0.55rem; margin-bottom: 0.55rem; }
-.kompli-detail.open { display: block; }
-/* AUFZUCHT TIMELINE */
-.timeline-row { display: flex; align-items: flex-start; gap: 12px; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
-.timeline-row:last-child { border-bottom: none; }
-.timeline-day { font-size: 0.75rem; font-weight: bold; color: var(--gold); min-width: 55px; padding-top: 2px; }
-.timeline-text { font-size: 0.83rem; line-height: 1.4; }
+.kompli-item { padding:0.7rem; border:1px solid var(--border); border-radius:8px; margin-bottom:0.55rem; cursor:pointer; font-size:0.88rem; display:flex; justify-content:space-between; background:var(--card); }
+.kompli-detail { display:none; padding:0.7rem; background:var(--bg); border-radius:0 0 8px 8px; border:1px solid var(--border); border-top:none; font-size:0.83rem; line-height:1.5; margin-top:-0.55rem; margin-bottom:0.55rem; }
+.kompli-detail.open { display:block; }
+/* TIMELINE */
+.timeline-row { display:flex; align-items:flex-start; gap:12px; padding:0.55rem 0; border-bottom:1px solid var(--border); }
+.timeline-row:last-child { border-bottom:none; }
+.timeline-day { font-size:0.75rem; font-weight:bold; color:var(--gold); min-width:55px; padding-top:2px; }
+.timeline-text { font-size:0.83rem; line-height:1.4; }
 /* STATISTIK */
-.stat-bar-wrap { background: var(--border); border-radius: 6px; height: 10px; margin: 4px 0 2px; }
-.stat-bar { height: 10px; border-radius: 6px; background: var(--blue); transition: width 0.5s; }
-/* SCHIER GRID */
-.schier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem; }
-.schier-opt { border: 2px solid var(--border); border-radius: 8px; padding: 0.55rem; text-align: center; cursor: pointer; background: var(--card); transition: all 0.15s; }
-.schier-opt.sel { border-color: var(--gold); background: var(--gold-light); }
+.stat-bar-wrap { background:var(--border); border-radius:6px; height:10px; margin:4px 0 2px; }
+.stat-bar { height:10px; border-radius:6px; background:var(--blue); transition:width 0.5s; }
+/* SCHIEREN */
+.schier-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:0.75rem; }
+.schier-opt { border:2px solid var(--border); border-radius:8px; padding:0.55rem; text-align:center; cursor:pointer; background:var(--card); }
 /* MISC */
-.no-content { text-align: center; padding: 2.5rem 1rem; color: var(--muted); font-size: 0.9rem; }
-.reminder-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
-.reminder-overlay.open { display: flex; }
-.reminder-box { background: var(--card); border-radius: 14px; padding: 1.5rem; max-width: 340px; width: 100%; border-top: 4px solid var(--gold); }
+.no-content { text-align:center; padding:2.5rem 1rem; color:var(--muted); font-size:0.9rem; }
+.reminder-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:300; align-items:center; justify-content:center; padding:1rem; }
+.reminder-overlay.open { display:flex; }
+.reminder-box { background:var(--card); border-radius:14px; padding:1.5rem; max-width:340px; width:100%; border-top:4px solid var(--gold); }
 </style>
 </head>
 <body>
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:flex;">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <svg width="50" height="52" viewBox="0 0 40 42" style="margin:0 auto 0.5rem;display:block;">
+        <path d="M8 28 C8 36 32 36 32 28 L30 24 L10 24 Z" fill="#f0e8d0" stroke="#c8b070" stroke-width="1"/>
+        <path d="M14 24 L17 20 L20 23 L23 19 L26 24" fill="none" stroke="#c8b070" stroke-width="1.2"/>
+        <ellipse cx="20" cy="18" rx="9" ry="8" fill="#f5c842"/>
+        <circle cx="20" cy="10" r="6" fill="#f5c842"/>
+        <circle cx="22" cy="9" r="1.2" fill="#1a1a1a"/>
+        <path d="M24 11 L27 12 L24 13 Z" fill="#e8a020"/>
+      </svg>
+      <h2 style="color:var(--blue);font-size:1.3rem;margin-bottom:0.2rem;">Brutbegleiter</h2>
+      <p style="color:var(--muted);font-size:0.85rem;">Federkompass</p>
+    </div>
+    <input type="email" id="login-email" class="login-input" placeholder="E-Mail" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" id="login-password" class="login-input" placeholder="Passwort" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Anmelden</button>
+    <div id="login-error" style="color:var(--danger);margin-top:0.75rem;font-size:0.85rem;display:none;text-align:center;"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
 <header>
   <div class="logo-area">
     <svg width="34" height="36" viewBox="0 0 40 42">
@@ -153,17 +176,19 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
     </svg>
     <div><h1>Brutbegleiter</h1><div class="sub">Federkompass</div></div>
   </div>
-  <svg width="40" height="40" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="19" fill="none" stroke="#c8a830" stroke-width="1" opacity="0.8"/>
-    <text x="22" y="8" text-anchor="middle" font-size="6" fill="#f5c842" font-family="Georgia">N</text>
-    <text x="22" y="40" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">S</text>
-    <text x="5" y="24" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">W</text>
-    <text x="39" y="24" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">O</text>
-    <path d="M22 11 C20 15 19 18 22 22 C25 18 24 15 22 11Z" fill="#f5c842" opacity="0.95"/>
-    <path d="M22 11 C21.5 15 21.5 18 22 22Z" fill="#c8a020" opacity="0.6"/>
-    <path d="M22 33 C20 29 19 26 22 22 C25 26 24 29 22 33Z" fill="#3a4f8e" opacity="0.8"/>
-    <circle cx="22" cy="22" r="1.8" fill="#fff" opacity="0.85"/>
-  </svg>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <svg width="36" height="36" viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="19" fill="none" stroke="#c8a830" stroke-width="1" opacity="0.8"/>
+      <text x="22" y="8" text-anchor="middle" font-size="6" fill="#f5c842" font-family="Georgia">N</text>
+      <text x="22" y="40" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">S</text>
+      <text x="5" y="24" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">W</text>
+      <text x="39" y="24" text-anchor="middle" font-size="6" fill="#8a9acc" font-family="Georgia">O</text>
+      <path d="M22 11 C20 15 19 18 22 22 C25 18 24 15 22 11Z" fill="#f5c842" opacity="0.95"/>
+      <path d="M22 33 C20 29 19 26 22 22 C25 26 24 29 22 33Z" fill="#3a4f8e" opacity="0.8"/>
+      <circle cx="22" cy="22" r="1.8" fill="#fff" opacity="0.85"/>
+    </svg>
+    <button onclick="logout()" style="background:none;border:none;color:var(--muted);font-size:0.75rem;cursor:pointer;font-family:inherit;">Abmelden</button>
+  </div>
 </header>
 <div class="tab-bar">
   <button id="tab-bruten" class="active" onclick="showTab('bruten',this)"><span class="ti">🥚</span>Bruten</button>
@@ -172,21 +197,22 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
   <button id="tab-probleme" onclick="showTab('probleme',this)"><span class="ti">⚠️</span>Probleme</button>
   <button id="tab-aufzucht" onclick="showTab('aufzucht',this)"><span class="ti">🐥</span>Aufzucht</button>
   <button id="tab-statistik" onclick="showTab('statistik',this)"><span class="ti">📊</span>Statistik</button>
+  <button id="tab-feedback" onclick="showTab('feedback',this)"><span class="ti">💡</span>Feedback</button>
 </div>
-<!-- ===== BRUTEN ÜBERSICHT ===== -->
+<!-- BRUTEN -->
 <div id="screen-bruten" class="screen active">
   <button class="neue-brut-btn" onclick="openNeueBrutModal()">🥚 Neue Brut starten</button>
   <div id="bruten-liste"></div>
 </div>
-<!-- ===== TAGEBUCH ===== -->
+
+<!-- TAGEBUCH -->
 <div id="screen-tagebuch" class="screen">
   <div id="tagebuch-no-brut" class="no-content">
     <div style="font-size:2rem;margin-bottom:0.5rem">📅</div>
     Wähle eine Brut in der Übersicht.
   </div>
   <div id="tagebuch-content" style="display:none">
-    <!-- Brut-Selector wenn mehrere -->
-    <div id="brut-selector-bar" style="display:none; margin-bottom:0.75rem; overflow-x:auto; white-space:nowrap;"></div>
+    <div id="brut-selector-bar" style="display:none;margin-bottom:0.75rem;overflow-x:auto;white-space:nowrap;"></div>
     <div class="card">
       <div class="day-nav">
         <button class="nav-btn" onclick="changeDay(-1)" id="prev-btn">← Zurück</button>
@@ -207,7 +233,6 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
       </div>
       <div id="egg-desc" style="font-size:0.82rem;color:var(--muted);text-align:center;"></div>
     </div>
-    <!-- Vorbereitung (nur wenn Tag 0 / noch nicht gestartet) -->
     <div id="vorb-section" style="display:none">
       <div class="card" style="border-top:3px solid var(--gold)">
         <div class="card-title">📋 Vorbereitung</div>
@@ -222,23 +247,22 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
         </div>
         <button class="accordion-btn" onclick="toggleAcc('vorb2')"><span>⚙️ Phase 2 – Brutautomat</span><span class="acc-arrow" id="arr-vorb2">▶</span></button>
         <div class="accordion-body" id="vorb2">
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Reinigen &amp; desinfizieren<span class="hint">Keimfreie Startbedingung.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Probelauf 24–48h vorher<span class="hint">Temp. und Feuchtigkeit stabilisieren.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Reinigen &amp; desinfizieren</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Probelauf 24–48h vorher</label></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Motorbrüter 37,5°C / Fläche 38,0–38,3°C<span class="hint">Externes Thermometer verwenden!</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Feuchtigkeit 45–55%<span class="hint">Wasserbehälter füllen.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wendemechanismus testen<span class="hint">Mind. 3–5× täglich.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Standort: kein Fenster, kein Zug<span class="hint">Keine direkte Sonneneinstrahlung.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Feuchtigkeit 45–55%</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wendemechanismus testen</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Standort: kein Fenster, kein Zug</label></div>
         </div>
         <button class="accordion-btn" onclick="toggleAcc('vorb3')"><span>🥚 Phase 3 – Einlegen</span><span class="acc-arrow" id="arr-vorb3">▶</span></button>
         <div class="accordion-body" id="vorb3">
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier kennzeichnen (Bleistift)<span class="hint">Luftpolseite markieren.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einlegedatum + Schlupftag notieren<span class="hint">Schlupf = Einlegen + 21 Tage.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier einlegen, Automat schliessen<span class="hint">Erste 6h nicht öffnen.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Erste 3 Tage bei manueller Wendung NICHT wenden<span class="hint">Gefässnetz baut sich auf.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier kennzeichnen (Bleistift)</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einlegedatum + Schlupftag notieren</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier einlegen, Automat schließen</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Erste 3 Tage bei manueller Wendung NICHT wenden</label></div>
         </div>
       </div>
     </div>
-    <!-- Tageseintrag -->
     <div id="entry-section">
       <div class="card">
         <div class="card-title">📋 Tageseintrag <span id="entry-datum" style="font-size:0.72rem;color:var(--muted);font-weight:normal;margin-left:4px;"></span></div>
@@ -277,149 +301,92 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
     </div>
   </div>
 </div>
-<!-- ===== SCHIEREN ===== -->
+<!-- SCHIEREN -->
 <div id="screen-schieren" class="screen">
   <div class="card">
     <div class="card-title"><span>🔦</span> Schier-Leitfaden</div>
-    <p style="font-size:0.83rem;color:var(--muted);margin-bottom:0.75rem">Wähle den Bruttag für Vergleichsgrafiken und Befunde.</p>
+    <p style="font-size:0.83rem;color:var(--muted);margin-bottom:0.75rem">Wähle den Bruttag für Vergleichsgrafiken.</p>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;" id="schier-tabs-row"></div>
     <div id="schier-content"></div>
   </div>
   <div class="card">
     <div class="card-title"><span>❓</span> Was sehe ich? → Diagnose</div>
     <div id="schier-diagnose">
-      <div class="schier-opt" onclick="schierDiag(this,'lebend')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;">
-        <div style="width:12px;height:12px;border-radius:50%;background:var(--success);flex-shrink:0"></div>
-        <div><strong style="font-size:0.85rem">Adern, Bewegung sichtbar</strong><br><span style="font-size:0.75rem;color:var(--muted)">Lebend ✅</span></div>
-      </div>
-      <div class="schier-opt" onclick="schierDiag(this,'unbefruchtet')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;">
-        <div style="width:12px;height:12px;border-radius:50%;background:#ccc;flex-shrink:0"></div>
-        <div><strong style="font-size:0.85rem">Klar und hell, leuchtet durch</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unbefruchtet ⚪</span></div>
-      </div>
-      <div class="schier-opt" onclick="schierDiag(this,'blutring')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;">
-        <div style="width:12px;height:12px;border-radius:50%;background:var(--danger);flex-shrink:0"></div>
-        <div><strong style="font-size:0.85rem">Roter Ring, kein Embryo</strong><br><span style="font-size:0.75rem;color:var(--muted)">Blutring / abgestorben 🔴</span></div>
-      </div>
-      <div class="schier-opt" onclick="schierDiag(this,'unklar')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;">
-        <div style="width:12px;height:12px;border-radius:50%;background:#f5c842;flex-shrink:0"></div>
-        <div><strong style="font-size:0.85rem">Dunkler Klumpen, keine Bewegung</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unklar 🟡</span></div>
-      </div>
+      <div class="schier-opt" onclick="schierDiag(this,'lebend')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--success);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Adern, Bewegung sichtbar</strong><br><span style="font-size:0.75rem;color:var(--muted)">Lebend ✅</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'unbefruchtet')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#ccc;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Klar und hell, leuchtet durch</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unbefruchtet ⚪</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'blutring')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--danger);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Roter Ring, kein Embryo</strong><br><span style="font-size:0.75rem;color:var(--muted)">Blutring 🔴</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'unklar')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#f5c842;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Dunkler Klumpen, keine Bewegung</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unklar 🟡</span></div></div>
       <div id="schier-diag-result"></div>
     </div>
   </div>
   <div class="card">
     <div class="card-title"><span>📅</span> Wann schieren?</div>
-    <div class="timeline-row"><div class="timeline-day">Tag 5–7</div><div class="timeline-text">Erste Kontrolle: Unbefruchtete Eier erkennen. Adernetz sichtbar.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Tag 14</div><div class="timeline-text">Zweite Kontrolle: Abgestorbene entfernen. Luftkammer prüfen.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Tag 18</div><div class="timeline-text">⛔ LETZTE Öffnung! Danach bis Schlupf geschlossen lassen.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Tag 19–21</div><div class="timeline-text">❌ Nicht mehr schieren – Brüter bleibt zu!</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 5–7</div><div class="timeline-text">Erste Kontrolle: Unbefruchtete Eier erkennen.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 14</div><div class="timeline-text">Zweite Kontrolle: Abgestorbene entfernen.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 18</div><div class="timeline-text">⛔ LETZTE Öffnung! Danach zu!</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 19–21</div><div class="timeline-text">❌ Nicht mehr öffnen!</div></div>
   </div>
 </div>
-<!-- ===== PROBLEME ===== -->
+
+<!-- PROBLEME -->
 <div id="screen-probleme" class="screen">
   <div class="card">
-    <div class="card-title"><span>⚠️</span> Häufige Probleme &amp; Lösungen</div>
+    <div class="card-title"><span>⚠️</span> Häufige Probleme</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>🌡️ Temperatur falsch</span><span>▾</span></div>
-    <div class="kompli-detail"><strong>Motorbrüter:</strong> 37,5–37,8°C (Tag 1–17), 37,5°C (Tag 18–21)<br><strong>Flächenbrüter:</strong> 38,0–38,3°C<br><br><strong>Zu hoch:</strong> Missbildungen, Frühschlupf. Nie über 39,4°C!<br><strong>Zu tief:</strong> Spätschlupf, schwache Küken. Nie unter 36,5°C!<br><br><strong>Tipp:</strong> Immer externes Thermometer verwenden – eingebaute oft ±0,7°C ungenau.</div>
+    <div class="kompli-detail"><strong>Motorbrüter:</strong> 37,5–37,8°C | <strong>Flächenbrüter:</strong> 38,0–38,3°C<br><br><strong>Zu hoch:</strong> Missbildungen, Frühschlupf.<br><strong>Zu tief:</strong> Spätschlupf, schwache Küken.<br><br>Immer externes Thermometer verwenden!</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>💧 Feuchtigkeit falsch</span><span>▾</span></div>
-    <div class="kompli-detail"><strong>Tag 1–17:</strong> 45–55% | <strong>Tag 18–21:</strong> 65–70%<br><br><strong>Zu trocken:</strong> Membran klebt am Küken → Schlupfprobleme.<br><strong>Zu feucht:</strong> Embryo ertrinkt, Schimmel, faule Eier.</div>
+    <div class="kompli-detail"><strong>Tag 1–17:</strong> 45–55% | <strong>Tag 18–21:</strong> 65–70%<br><br><strong>Zu trocken:</strong> Membran klebt → Schlupfprobleme.<br><strong>Zu feucht:</strong> Embryo ertrinkt, Schimmel.</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>🔄 Wenden vergessen</span><span>▾</span></div>
-    <div class="kompli-detail">Mind. 3–5× täglich, ungerade Anzahl. Tag 1–3 bei manuell noch nicht wenden. Ab Tag 18 komplett stoppen.</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>💀 Embryo abgestorben (TIS)</span><span>▾</span></div>
-    <div class="kompli-detail"><strong>Erkennbar:</strong> Blutring (früh), regloser Klumpen (spät), fauliger Geruch.<br><strong>Ursachen:</strong> Falsche Parameter, Erschütterungen, Mangelernährung Elterntiere (Vit. A, D, E, B12).</div>
+    <div class="kompli-detail">3–5× täglich, ungerade Anzahl. Erste 3 Tage bei manuell nicht wenden. Ab Tag 18 stoppen.</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>💀 Embryo abgestorben</span><span>▾</span></div>
+    <div class="kompli-detail">Blutring (früh), regloser Klumpen (spät), fauliger Geruch. Sofort entfernen wenn Geruch!</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>🐣 Küken kommt nicht raus</span><span>▾</span></div>
-    <div class="kompli-detail">Feuchtigkeit auf 70–75% erhöhen. 24h warten nach Pip. Brüter NICHT öffnen wenn andere noch schlüpfen!</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>🦠 Faule / explodierende Eier</span><span>▾</span></div>
-    <div class="kompli-detail">Sofort entfernen! Kontaminiert alle anderen. Brüter nach Brut desinfizieren. Vorbeugung: nur rissfreie Eier einlegen.</div>
+    <div class="kompli-detail">Feuchtigkeit auf 70–75%. 24h warten nach Pip. Brüter NICHT öffnen wenn andere schlüpfen!</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>🦠 Faule Eier</span><span>▾</span></div>
+    <div class="kompli-detail">Sofort entfernen! Kontaminiert alle anderen. Brüter danach desinfizieren.</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>⚡ Stromausfall</span><span>▾</span></div>
-    <div class="kompli-detail">Unter 2h: Decke drüber, meist ok. Über 4h: Überlebensrate sinkt stark. Nach Wiederherstellung langsam angleichen.</div>
+    <div class="kompli-detail">Unter 2h: Decke drüber, meist ok. Über 4h: kritisch. Nach Wiederherstellung langsam angleichen.</div>
     <div class="kompli-item" onclick="toggleKompli(this)"><span>🐥 Schwache Küken</span><span>▾</span></div>
-    <div class="kompli-detail">Erst herausnehmen wenn trocken (24–48h nach Schlupf). Aufzuchtraum 35°C vorwärmen. Elterntierernährung prüfen.</div>
+    <div class="kompli-detail">Erst raus wenn trocken (24–48h nach Schlupf). 35°C Aufzuchtraum vorwärmen.</div>
   </div>
 </div>
-<!-- ===== AUFZUCHT ===== -->
+
+<!-- AUFZUCHT -->
 <div id="screen-aufzucht" class="screen">
   <div class="card">
     <div class="card-title"><span>🐥</span> Aufzucht – Richtwerte &amp; Infos</div>
-    <div class="alert alert-info"><span class="alert-icon">ℹ️</span><span>Dies ist ein Basis-Nachschlagewerk für die Zeit nach dem Schlupf. Für die vollständige tägliche Aufzucht-Begleitung erscheint bald ein Zusatzmodul in der App.</span></div>
+    <div class="alert alert-info"><span class="alert-icon">ℹ️</span><span>Basis-Nachschlagewerk. Vollständige Aufzucht-Begleitung erscheint bald als Zusatzmodul.</span></div>
   </div>
   <div class="card">
     <div class="card-title"><span>⏳</span> Küken im Brüter lassen</div>
-    <div style="font-size:0.85rem;line-height:1.6;">
-      Küken zehren in den ersten 48–72h noch vom Dottersack. Sie brauchen in dieser Zeit <strong>kein Futter und kein Wasser</strong>.<br><br>
-      <strong>Erst ab Tag 3 nach dem Schlupf rausnehmen</strong> – wenn sie trocken, fluffig und aktiv sind. Zu frühes Herausnehmen ist der häufigste Anfängerfehler.
-    </div>
+    <div style="font-size:0.85rem;line-height:1.6;"><strong>Erst ab Tag 3 nach Schlupf rausnehmen</strong> – wenn trocken, fluffig und aktiv. Küken zehren 48–72h vom Dottersack.</div>
   </div>
   <div class="card">
     <div class="card-title"><span>🌡️</span> Temperaturplan</div>
-    <div class="timeline-row"><div class="timeline-day">Woche 1</div><div class="timeline-text">35°C unter Wärmequelle. Küken sollen selbst wählen – weder gedrängt noch weit weg.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Woche 2</div><div class="timeline-text">32°C – wöchentlich um 3°C reduzieren.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Woche 1</div><div class="timeline-text">35°C unter Wärmequelle.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Woche 2</div><div class="timeline-text">32°C – wöchentlich -3°C.</div></div>
     <div class="timeline-row"><div class="timeline-day">Woche 3</div><div class="timeline-text">29°C</div></div>
     <div class="timeline-row"><div class="timeline-day">Woche 4</div><div class="timeline-text">26°C</div></div>
-    <div class="timeline-row"><div class="timeline-day">5–6 Wo.</div><div class="timeline-text">Federn vollständig → können sich selbst wärmen → Hühnertraktor möglich.</div></div>
-    <div class="timeline-row"><div class="timeline-day">ab Woche 8</div><div class="timeline-text">Langsame Integration – erst durch Zaun getrennt, damit beide Gruppen sich beschnuppern.</div></div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span>🍽️</span> Fütterung &amp; Wasser</div>
-    <div style="font-size:0.85rem;line-height:1.6;">
-      <strong>Futter:</strong> Spezielles Küken-Aufzuchtfutter (Krümel/Mehl). Kein normales Hühnerfutter – zu grob, falsche Nährstoffe.<br><br>
-      <strong>Wasser:</strong> Flache Tränke – Küken können in tiefen Tränken ertrinken. Optional: wenige Tropfen Apfelessig für die Darmgesundheit.<br><br>
-      <strong>Einstreu:</strong> Grobe Hobelspäne. Kein Zeitungspapier → Spreizbeinen möglich.
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span>💉</span> Impfungen</div>
-    <div style="font-size:0.85rem;line-height:1.6;">
-      <strong>Marek-Krankheit:</strong> Impfung am 1. Lebenstag beim Tierarzt – besonders wenn Küken zu bestehender Herde kommen.<br><br>
-      <strong>Kokzidiose:</strong> Impfung möglich oder Kokzidiostatikum im Futter – mit Tierarzt besprechen.
-    </div>
+    <div class="timeline-row"><div class="timeline-day">5–6 Wo.</div><div class="timeline-text">Federn → selbst wärmen → Hühnertraktor.</div></div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,#fff 70%,var(--gold-light));border:1px solid var(--gold);">
     <div class="card-title" style="color:var(--blue)"><span>✨</span> Aufzucht-Modul – Bald verfügbar</div>
-    <div style="font-size:0.85rem;line-height:1.6;color:#555;margin-bottom:0.75rem;">
-      Tägliche Begleitung von Woche 1–6: Temperatur-Checks, Gesundheits-Kontrollen, Fütterungsplan, Integration in die Herde und mehr – als Zusatzmodul direkt in der App.
-    </div>
-    <div style="text-align:center;padding:0.75rem;background:var(--gold-light);border-radius:8px;font-size:0.85rem;color:var(--blue);font-weight:bold;">
-      🐣 Demnächst verfügbar im Federkompass
-    </div>
+    <div style="text-align:center;padding:0.75rem;background:var(--gold-light);border-radius:8px;font-size:0.85rem;color:var(--blue);font-weight:bold;">🐣 Demnächst im Federkompass</div>
   </div>
 </div>
-<!-- ===== STATISTIK ===== -->
+<!-- STATISTIK -->
 <div id="screen-statistik" class="screen">
-  <div id="stat-no-brut" class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">📊</div>Noch keine Bruten vorhanden.</div>
+  <div id="stat-no-brut" class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">📊</div>Noch keine Bruten.</div>
   <div id="stat-content" style="display:none">
-    <div class="card">
-      <div class="card-title"><span>✏️</span> Brut auswählen</div>
-      <div id="stat-brut-select"></div>
-    </div>
+    <div class="card"><div class="card-title"><span>✏️</span> Brut wählen</div><div id="stat-brut-select"></div></div>
     <div id="stat-ergebnis" style="display:none">
       <div class="card">
         <div class="card-title"><span>📊</span> Auswertung</div>
-        <div style="margin-bottom:0.75rem">
-          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>🥚 Befruchtungsrate</span><strong id="pct-bf">–%</strong></div>
-          <div class="stat-bar-wrap"><div class="stat-bar" id="bar-bf" style="width:0%"></div></div>
-          <div id="txt-bf" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div>
-        </div>
-        <div style="margin-bottom:0.75rem">
-          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>❤️ Überlebensrate bis Tag 14</span><strong id="pct-lb">–%</strong></div>
-          <div class="stat-bar-wrap"><div class="stat-bar" id="bar-lb" style="width:0%"></div></div>
-          <div id="txt-lb" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>🐥 Schlupfrate</span><strong id="pct-sl">–%</strong></div>
-          <div class="stat-bar-wrap"><div class="stat-bar" id="bar-sl" style="width:0%;background:var(--gold)"></div></div>
-          <div id="txt-sl" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div>
-        </div>
+        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>🥚 Befruchtungsrate</span><strong id="pct-bf">–%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-bf" style="width:0%"></div></div><div id="txt-bf" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
+        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>❤️ Überlebensrate Tag 14</span><strong id="pct-lb">–%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-lb" style="width:0%"></div></div><div id="txt-lb" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>🐥 Schlupfrate</span><strong id="pct-sl">–%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-sl" style="width:0%;background:var(--gold)"></div></div><div id="txt-sl" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
       </div>
       <div class="card"><div class="card-title"><span>🎯</span> Bewertung</div><div id="stat-bew" style="font-size:0.85rem;line-height:1.6;"></div></div>
-      <div class="card">
-        <div class="card-title"><span>📈</span> Richtwerte Hobby</div>
-        <div style="font-size:0.82rem;line-height:1.8;color:#555;">
-          <div>🥚 Befruchtungsrate: <strong>80–95%</strong> (gut: >85%)</div>
-          <div>❤️ Überlebensrate Tag 14: <strong>85–95%</strong> der Befruchteten</div>
-          <div>🐥 Schlupfrate: <strong>70–85%</strong> (gut: >75%)</div>
-        </div>
-      </div>
       <div class="card">
         <div class="card-title"><span>✏️</span> Zahlen erfassen</div>
         <div class="param-row"><span class="param-label">Eier eingelegt</span><input type="number" class="param-input" id="st-eingelegt" placeholder="12"></div>
@@ -431,40 +398,38 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
     </div>
   </div>
 </div>
-<!-- ===== NEUE BRUT MODAL ===== -->
+
+<!-- FEEDBACK -->
+<div id="screen-feedback" class="screen">
+  <div class="card">
+    <div class="card-title"><span>💡</span> Feedback &amp; Ideen</div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Idee, Fehler oder Wunsch? Schreib es hier – wir lesen alles!</p>
+    <div class="setup-row"><span class="setup-label">Typ</span><select id="fb-typ" class="setup-input"><option value="idee">💡 Idee</option><option value="bug">🐛 Fehler</option><option value="wunsch">⭐ Wunsch</option><option value="lob">👍 Lob</option></select></div>
+    <div class="setup-row"><span class="setup-label">Titel</span><input type="text" id="fb-titel" class="setup-input" placeholder="Kurze Beschreibung"></div>
+    <div style="padding:0.6rem 0;"><textarea id="fb-beschreibung" rows="3" style="width:100%;padding:0.5rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.85rem;background:var(--bg);resize:vertical;" placeholder="Details (optional)…"></textarea></div>
+    <button class="save-btn" onclick="sendFeedback()">📨 Senden</button>
+    <div id="fb-success" class="alert alert-success" style="display:none;margin-top:0.75rem"><span class="alert-icon">✅</span><span>Danke! Wir melden uns.</span></div>
+  </div>
+  <div class="card" id="fb-liste-card" style="display:none">
+    <div class="card-title"><span>📋</span> Eingaben <span id="fb-count" style="font-size:0.72rem;color:var(--muted);font-weight:normal;"></span></div>
+    <div id="fb-liste"></div>
+  </div>
+</div>
+
+<!-- NEUE BRUT MODAL -->
 <div class="modal-overlay" id="neue-brut-modal">
   <div class="modal">
-    <div class="modal-title">
-      Neue Brut starten
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="setup-row">
-      <span class="setup-label">Brutgerät-Typ</span>
-      <select id="m-typ" class="setup-input">
-        <option value="motor">Motorbrüter (mit Lüfter)</option>
-        <option value="flaeche">Flächenbrüter (ohne Lüfter)</option>
-      </select>
-    </div>
-    <div class="setup-row">
-      <span class="setup-label">Einlegedatum</span>
-      <input type="date" id="m-datum" class="setup-input">
-    </div>
-    <div class="setup-row">
-      <span class="setup-label">Anzahl Eier</span>
-      <input type="number" id="m-anzahl" class="setup-input" placeholder="z.B. 12" min="1" max="200">
-    </div>
-    <div class="setup-row">
-      <span class="setup-label">Rasse</span>
-      <input type="text" id="m-rasse" class="setup-input" placeholder="Mechelse Koekoek">
-    </div>
-    <div class="setup-row">
-      <span class="setup-label">Bemerkung</span>
-      <input type="text" id="m-bemerkung" class="setup-input" placeholder="Optional">
-    </div>
+    <div class="modal-title">Neue Brut starten<button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="setup-row"><span class="setup-label">Brutgerät-Typ</span><select id="m-typ" class="setup-input"><option value="motor">Motorbrüter (mit Lüfter)</option><option value="flaeche">Flächenbrüter (ohne Lüfter)</option></select></div>
+    <div class="setup-row"><span class="setup-label">Einlegedatum</span><input type="date" id="m-datum" class="setup-input"></div>
+    <div class="setup-row"><span class="setup-label">Anzahl Eier</span><input type="number" id="m-anzahl" class="setup-input" placeholder="z.B. 12" min="1" max="200"></div>
+    <div class="setup-row"><span class="setup-label">Rasse</span><input type="text" id="m-rasse" class="setup-input" placeholder="Mechelse Koekoek"></div>
+    <div class="setup-row"><span class="setup-label">Bemerkung</span><input type="text" id="m-bemerkung" class="setup-input" placeholder="Optional"></div>
     <button class="start-btn" onclick="createBrut()" style="margin-top:1rem">🥚 Brut starten</button>
   </div>
 </div>
-<!-- ===== ERINNERUNGS-POPUP ===== -->
+
+<!-- REMINDER -->
 <div class="reminder-overlay" id="reminder-overlay">
   <div class="reminder-box">
     <div style="font-size:2rem;text-align:center;margin-bottom:0.4rem" id="rem-icon">⏰</div>
@@ -473,20 +438,49 @@ header .sub { font-size: 0.7rem; color: var(--muted); }
     <button onclick="closeReminder()" style="width:100%;padding:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.88rem;font-weight:bold;cursor:pointer;border-bottom:2px solid var(--gold)">✓ Verstanden</button>
   </div>
 </div>
+
+</div><!-- end #app -->
 <script>
-// ===== DATENSTRUKTUR =====
-let bruten = JSON.parse(localStorage.getItem('brutbegleiter_bruten') || '[]');
-let aktiveBrutId = localStorage.getItem('brutbegleiter_aktiv') || null;
+// ===== SUPABASE =====
+const SUPABASE_URL = 'https://lklgwftgttyngdiduhln.supabase.co';
+const SUPABASE_KEY = 'HIER_ANON_KEY_EINSETZEN';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===== AUTH =====
+async function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; }
+  else { showApp(); }
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) { showApp(); }
+  else { document.getElementById('login-screen').style.display = 'flex'; }
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadBruten();
+}
+
+// ===== STATE =====
+let bruten = [];
+let aktiveBrutId = null;
 let currentDay = 1;
-function saveBruten() {
-  localStorage.setItem('brutbegleiter_bruten', JSON.stringify(bruten));
-}
-function getAktiveBrut() {
-  return bruten.find(b => b.id === aktiveBrutId) || null;
-}
-function getBrutById(id) {
-  return bruten.find(b => b.id === id) || null;
-}
+
 // ===== TABS =====
 function showTab(tab, btn) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -497,663 +491,549 @@ function showTab(tab, btn) {
   if (tab === 'tagebuch') renderTagebuch();
   if (tab === 'schieren') initSchierTabs();
   if (tab === 'statistik') renderStatistik();
+  if (tab === 'feedback') loadFeedback();
 }
-// ===== BRUTEN ÜBERSICHT =====
+
+// ===== BRUTEN LADEN =====
+async function loadBruten() {
+  const { data, error } = await sb.from('bruten')
+    .select('*, tageseintraege(*)')
+    .order('start', { ascending: false });
+  if (data) {
+    bruten = data.map(b => ({
+      ...b,
+      tage: Object.fromEntries((b.tageseintraege || []).map(t => [t.tag_nummer, t]))
+    }));
+  }
+  renderBrutenListe();
+  checkReminder();
+}
+
+function getAktiveBrut() { return bruten.find(b => b.id === aktiveBrutId) || null; }
+function getBrutById(id) { return bruten.find(b => b.id === id) || null; }
+
+// ===== BRUTEN LISTE =====
 function renderBrutenListe() {
   const liste = document.getElementById('bruten-liste');
-  if (bruten.length === 0) {
-    liste.innerHTML = '<div class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">🐓</div>Noch keine Brut gestartet.<br>Tippe oben auf «Neue Brut starten».</div>';
+  if (!bruten.length) {
+    liste.innerHTML = '<div class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">🐓</div>Noch keine Brut.<br>Tippe auf «Neue Brut starten».</div>';
     return;
   }
-  const sorted = [...bruten].sort((a, b) => new Date(b.start) - new Date(a.start));
-  liste.innerHTML = sorted.map(brut => {
-    const todayDay = getTodayDayForBrut(brut);
-    const pct = Math.min(100, Math.round((todayDay / 21) * 100));
-    const schlupf = getSchlupfDatumForBrut(brut);
-    const isAbgeschlossen = todayDay > 21;
-    const isSchlupf = todayDay >= 19 && todayDay <= 21;
-    let badge = '';
-    let cls = 'aktiv';
-    if (isAbgeschlossen) {
-      badge = '<span class="brut-badge badge-fertig">✅ Abgeschlossen</span>';
-      cls = 'abgeschlossen';
-    } else if (isSchlupf) {
-      badge = '<span class="brut-badge badge-schlupf">🐣 Schlupf!</span>';
-    } else {
-      badge = '<span class="brut-badge badge-aktiv">▶ Tag ' + todayDay + '</span>';
-    }
-    const stat = brut.statistik;
-    const schlupfInfo = stat && stat.geschluepft
-      ? `<span>🐥 ${stat.geschluepft} geschlüpft (${Math.round(stat.geschluepft/brut.anzahl*100)}%)</span>`
-      : `<span>Schlupf: ${schlupf}</span>`;
-    return `<div class="brut-karte ${cls}" onclick="openBrut('${brut.id}')">
-      <div class="brut-karte-header">
-        <div class="brut-karte-titel">🥚 ${brut.rasse || 'Brut'}</div>
-        ${badge}
-      </div>
-      <div class="brut-info">${brut.anzahl} Eier · ${brut.typ === 'motor' ? 'Motorbrüter' : 'Flächenbrüter'}${brut.bemerkung ? ' · ' + brut.bemerkung : ''}</div>
-      <div class="progress-wrap"><div class="progress-fill" style="width:${Math.min(100,pct)}%"></div></div>
-      <div class="brut-meta">
-        <span>Eingelegt: ${new Date(brut.start).toLocaleDateString('de-CH')}</span>
-        ${schlupfInfo}
-      </div>
-    </div>`;
-  }).join('');
+  const sorted = [...bruten].sort((a,b) => new Date(b.start) - new Date(a.start));
+  var html = '';
+  sorted.forEach(function(brut) {
+    var todayDay = getTodayDayForBrut(brut);
+    var pct = Math.min(100, Math.round(todayDay/21*100));
+    var schlupf = getSchlupfDatumForBrut(brut);
+    var isAb = todayDay > 21;
+    var isSchlupf = todayDay >= 19 && todayDay <= 21;
+    var badge = isAb ? '<span class="brut-badge badge-fertig">✅ Abgeschlossen</span>'
+                : isSchlupf ? '<span class="brut-badge badge-schlupf">🐣 Schlupf!</span>'
+                : '<span class="brut-badge badge-aktiv">▶ Tag ' + todayDay + '</span>';
+    var cls = isAb ? 'abgeschlossen' : 'aktiv';
+    var stat = brut.statistik;
+    var schlupfInfo = stat && stat.geschluepft
+      ? '🐥 ' + stat.geschluepft + ' geschlüpft (' + Math.round(stat.geschluepft/brut.anzahl*100) + '%)'
+      : 'Schlupf: ' + schlupf;
+    html += '<div class="brut-karte ' + cls + '" onclick="openBrut('' + brut.id + '')">';
+    html += '<div class="brut-karte-header"><div class="brut-karte-titel">🥚 ' + (brut.rasse||'Brut') + '</div>' + badge + '</div>';
+    html += '<div class="brut-info">' + brut.anzahl + ' Eier · ' + (brut.typ==='motor'?'Motorbrüter':'Flächenbrüter') + (brut.bemerkung?' · '+brut.bemerkung:'') + '</div>';
+    html += '<div class="progress-wrap"><div class="progress-fill" style="width:' + Math.min(100,pct) + '%"></div></div>';
+    html += '<div class="brut-meta"><span>Eingelegt: ' + new Date(brut.start).toLocaleDateString('de-CH') + '</span><span>' + schlupfInfo + '</span></div>';
+    html += '</div>';
+  });
+  liste.innerHTML = html;
 }
+
 function openBrut(id) {
   aktiveBrutId = id;
-  localStorage.setItem('brutbegleiter_aktiv', id);
-  const brut = getBrutById(id);
-  currentDay = Math.min(21, Math.max(1, getTodayDayForBrut(brut)));
+  var brut = getBrutById(id);
+  currentDay = Math.min(42, Math.max(1, getTodayDayForBrut(brut)));
   showTab('tagebuch', document.getElementById('tab-tagebuch'));
 }
+
 // ===== NEUE BRUT =====
 function openNeueBrutModal() {
   document.getElementById('m-datum').value = new Date().toISOString().split('T')[0];
   document.getElementById('neue-brut-modal').classList.add('open');
 }
-function closeModal() {
-  document.getElementById('neue-brut-modal').classList.remove('open');
-}
-function createBrut() {
+
+function closeModal() { document.getElementById('neue-brut-modal').classList.remove('open'); }
+
+async function createBrut() {
   const datum = document.getElementById('m-datum').value;
   const anzahl = parseInt(document.getElementById('m-anzahl').value);
-  const rasse = document.getElementById('m-rasse').value || 'Huhn';
-  const typ = document.getElementById('m-typ').value;
-  const bemerkung = document.getElementById('m-bemerkung').value;
-  if (!datum || !anzahl) { alert('Bitte Datum und Anzahl Eier eingeben.'); return; }
-  const neueBrut = {
-    id: Date.now().toString(),
-    start: datum,
-    anzahl,
-    rasse,
-    typ,
-    bemerkung,
-    tage: {},
-    statistik: null,
-    erstellt_am: new Date().toISOString()
-  };
-  bruten.push(neueBrut);
-  saveBruten();
+  if (!datum || !anzahl) { alert('Bitte Datum und Anzahl eingeben.'); return; }
+  const { data: { user } } = await sb.auth.getUser();
+  const { data, error } = await sb.from('bruten').insert({
+    user_id: user.id,
+    rasse: document.getElementById('m-rasse').value || 'Huhn',
+    anzahl: anzahl,
+    typ: document.getElementById('m-typ').value,
+    bemerkung: document.getElementById('m-bemerkung').value,
+    start: datum
+  }).select().single();
+  if (error) { alert('Fehler: ' + error.message); return; }
+  bruten.push({ ...data, tage: {} });
+  aktiveBrutId = data.id;
   closeModal();
-  aktiveBrutId = neueBrut.id;
-  localStorage.setItem('brutbegleiter_aktiv', neueBrut.id);
-  currentDay = getTodayDayForBrut(neueBrut);
+  currentDay = getTodayDayForBrut(data);
   showTab('tagebuch', document.getElementById('tab-tagebuch'));
 }
+
 // ===== DATUM HELPERS =====
 function getTodayDayForBrut(brut) {
-  const start = new Date(brut.start);
-  const today = new Date();
+  var start = new Date(brut.start);
+  var today = new Date();
   return Math.max(1, Math.floor((today - start) / 86400000) + 1);
 }
+
 function getSchlupfDatumForBrut(brut) {
-  const d = new Date(brut.start);
-  d.setDate(d.getDate() + 21);
+  var d = new Date(brut.start); d.setDate(d.getDate()+21);
   return d.toLocaleDateString('de-CH');
 }
+
 function getDayDate(brut, dayNum) {
-  const d = new Date(brut.start);
-  d.setDate(d.getDate() + dayNum - 1);
-  return d;
+  var d = new Date(brut.start); d.setDate(d.getDate()+dayNum-1); return d;
 }
+
 function formatDatum(date) {
-  const t = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-  const m = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  return t[date.getDay()] + ', ' + date.getDate() + '. ' + m[date.getMonth()] + ' ' + date.getFullYear();
+  var t=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  var m=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  return t[date.getDay()]+', '+date.getDate()+'. '+m[date.getMonth()]+' '+date.getFullYear();
 }
 // ===== TAGEBUCH =====
 function renderTagebuch() {
-  const brut = getAktiveBrut();
+  var brut = getAktiveBrut();
   if (!brut) {
-    document.getElementById('tagebuch-no-brut').style.display = 'block';
-    document.getElementById('tagebuch-content').style.display = 'none';
+    document.getElementById('tagebuch-no-brut').style.display='block';
+    document.getElementById('tagebuch-content').style.display='none';
     return;
   }
-  document.getElementById('tagebuch-no-brut').style.display = 'none';
-  document.getElementById('tagebuch-content').style.display = 'block';
-  const selectorBar = document.getElementById('brut-selector-bar');
+  document.getElementById('tagebuch-no-brut').style.display='none';
+  document.getElementById('tagebuch-content').style.display='block';
+  var selectorBar = document.getElementById('brut-selector-bar');
   if (bruten.length > 1) {
-    selectorBar.style.display = 'block';
-    selectorBar.innerHTML = bruten.map(b => {
-      const day = Math.min(21, getTodayDayForBrut(b));
-      const isAktiv = b.id === aktiveBrutId;
-      return `<button onclick="switchBrut('${b.id}')" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid ${isAktiv?'var(--gold)':'var(--border)'};background:${isAktiv?'var(--gold-light)':'var(--card)'};font-family:inherit;font-size:0.75rem;color:${isAktiv?'var(--blue)':'var(--muted)'};cursor:pointer;font-weight:${isAktiv?'bold':'normal'}">
-        🥚 ${b.rasse} (T${day})
-      </button>`;
-    }).join('');
-  } else {
-    selectorBar.style.display = 'none';
-  }
+    selectorBar.style.display='block';
+    var html='';
+    bruten.forEach(function(b) {
+      var day=Math.min(42,getTodayDayForBrut(b));
+      var isA=b.id===aktiveBrutId;
+      html+='<button onclick="switchBrut(''+b.id+'')" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid '+(isA?'var(--gold)':'var(--border)')+';background:'+(isA?'var(--gold-light)':'var(--card)')+';font-family:inherit;font-size:0.75rem;color:'+(isA?'var(--blue)':'var(--muted)')+';cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';
+    });
+    selectorBar.innerHTML=html;
+  } else { selectorBar.style.display='none'; }
   renderDay();
 }
+
 function switchBrut(id) {
-  aktiveBrutId = id;
-  localStorage.setItem('brutbegleiter_aktiv', id);
-  const brut = getBrutById(id);
-  currentDay = Math.min(21, getTodayDayForBrut(brut));
+  aktiveBrutId=id;
+  var brut=getBrutById(id);
+  currentDay=Math.min(42,getTodayDayForBrut(brut));
   renderTagebuch();
 }
+
 function changeDay(delta) {
-  currentDay = Math.max(1, Math.min(42, currentDay + delta));
+  currentDay=Math.max(1,Math.min(42,currentDay+delta));
   renderDay();
 }
+
 function renderDay() {
-  const brut = getAktiveBrut();
+  var brut=getAktiveBrut();
   if (!brut) return;
-  const d = currentDay;
-  const todayDay = getTodayDayForBrut(brut);
-  const dayDate = getDayDate(brut, d);
-  document.getElementById('day-num').textContent = 'Tag ' + d;
-  document.getElementById('day-date').textContent = formatDatum(dayDate);
-  document.getElementById('day-sub').textContent = 'Bruttag ' + d + ' von 21 · Schlupf: ' + getSchlupfDatumForBrut(brut);
-  document.getElementById('entry-datum').textContent = dayDate.toLocaleDateString('de-CH');
-  document.getElementById('prev-btn').disabled = d <= 1;
-  document.getElementById('next-btn').disabled = d >= 21;
-  const dotsEl = document.getElementById('day-dots');
-  dotsEl.innerHTML = '';
-  for (let i = 1; i <= 42; i++) {
-    const dot = document.createElement('div');
-    const saved = brut.tage && brut.tage[i] && brut.tage[i].temp;
-    const missing = i < todayDay && i <= 21 && !saved;
-    let cls = 'dot';
-    if (i === d) cls += ' today';
-    if (saved) cls += ' saved';
-    if (missing) cls += ' missing';
-    if (i >= 19 && i <= 21) cls += ' schlupf';
-    if (i > 21) dot.style.background = '#e8f5e8';
-    dot.className = cls;
-    dot.textContent = i;
-    dot.title = i <= 21 ? 'Bruttag ' + i : 'Tag ' + i + ' (nach Schlupf)';
-    dot.onclick = () => { currentDay = i; renderDay(); };
+  var d=currentDay;
+  var todayDay=getTodayDayForBrut(brut);
+  var dayDate=getDayDate(brut,d);
+  document.getElementById('day-num').textContent='Tag '+d;
+  document.getElementById('day-date').textContent=formatDatum(dayDate);
+  document.getElementById('day-sub').textContent='Bruttag '+d+' von 21 · Schlupf: '+getSchlupfDatumForBrut(brut);
+  document.getElementById('entry-datum').textContent=dayDate.toLocaleDateString('de-CH');
+  document.getElementById('prev-btn').disabled=d<=1;
+  document.getElementById('next-btn').disabled=d>=42;
+  var dotsEl=document.getElementById('day-dots');
+  dotsEl.innerHTML='';
+  for(var i=1;i<=42;i++){
+    var dot=document.createElement('div');
+    var saved=brut.tage&&brut.tage[i]&&brut.tage[i].temp;
+    var missing=i<todayDay&&i<=21&&!saved;
+    var cls='dot'+(i===d?' today':'')+(saved?' saved':'')+(missing?' missing':'')+(i>=19&&i<=21?' schlupf':'');
+    dot.className=cls;
+    dot.textContent=i;
+    if(i>21) dot.style.background='#e8f5e8';
+    dot.title=i<=21?'Bruttag '+i:'Tag '+i+' (nach Schlupf)';
+    (function(day){dot.onclick=function(){currentDay=day;renderDay();};})(i);
     dotsEl.appendChild(dot);
   }
-  renderMissingWarn(brut, d, todayDay);
-  renderAlerts(brut, d);
+  renderMissingWarn(brut,d,todayDay);
+  renderAlerts(brut,d);
   renderEgg(d);
-  document.getElementById('humi-schlupf').style.display = d >= 18 ? 'flex' : 'none';
-  const saved = brut.tage && brut.tage[d];
-  document.getElementById('p-temp').value = saved ? saved.temp || '' : '';
-  document.getElementById('p-humi').value = saved ? saved.humi || '' : '';
-  document.getElementById('p-notiz').value = saved ? saved.notiz || '' : '';
-  document.getElementById('cb-wenden').checked = saved ? saved.wenden || false : false;
-  document.getElementById('cb-geschiert').checked = saved ? saved.geschiert || false : false;
-  document.getElementById('cb-wasser').checked = saved ? saved.wasser || false : false;
+  document.getElementById('humi-schlupf').style.display=d>=18?'flex':'none';
+  var saved=brut.tage&&brut.tage[d];
+  document.getElementById('p-temp').value=saved?saved.temp||'':'';
+  document.getElementById('p-humi').value=saved?saved.humi||'':'';
+  document.getElementById('p-notiz').value=saved?saved.notiz||'':'';
+  document.getElementById('cb-wenden').checked=saved?saved.wenden||false:false;
+  document.getElementById('cb-geschiert').checked=saved?saved.geschiert||false:false;
+  document.getElementById('cb-wasser').checked=saved?saved.wasser||false:false;
   renderProtokolll(brut);
   validateParams(brut);
 }
-function renderMissingWarn(brut, currentD, todayDay) {
-  const proModus = localStorage.getItem('pro_modus') === 'true';
-  const box = document.getElementById('missing-warn');
-  box.innerHTML = '';
-  if (proModus) return;
-  const missing = [];
-  for (let i = 1; i < todayDay; i++) {
-    const e = brut.tage && brut.tage[i];
-    if (!e || !e.temp) missing.push(i);
+
+function renderMissingWarn(brut,currentD,todayDay) {
+  var proModus=localStorage.getItem('pro_modus')==='true';
+  var box=document.getElementById('missing-warn');
+  box.innerHTML='';
+  if(proModus) return;
+  var missing=[];
+  for(var i=1;i<todayDay;i++){
+    var e=brut.tage&&brut.tage[i];
+    if(!e||!e.temp) missing.push(i);
   }
-  if (!missing.length) return;
-  const links = missing.map(i => `<span onclick="currentDay=${i};renderDay()" style="display:inline-block;background:#fdf0f0;border:1px solid #f5a0a0;color:var(--danger);border-radius:4px;padding:1px 7px;margin:2px;cursor:pointer;font-size:0.75rem;">Tag ${i}</span>`).join('');
-  box.innerHTML = `<div class="card" style="border-left:3px solid var(--danger);margin-bottom:0.75rem">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-      <div>
-        <div style="font-size:0.83rem;font-weight:bold;color:var(--danger);margin-bottom:3px">⚠️ ${missing.length} Tag${missing.length>1?'e':''} nicht ausgefüllt</div>
-        <div style="font-size:0.78rem;color:#666;margin-bottom:5px">Temperatur fehlt:</div>
-        <div>${links}</div>
-      </div>
-      <button onclick="toggleProModus()" style="flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:#f5f5f5;font-family:inherit;font-size:0.7rem;color:#888;cursor:pointer;white-space:nowrap;">🎓 Pro-Modus</button>
-    </div>
-  </div>`;
+  if(!missing.length) return;
+  var links=missing.map(function(i){return '<span onclick="currentDay='+i+';renderDay()" style="display:inline-block;background:#fdf0f0;border:1px solid #f5a0a0;color:var(--danger);border-radius:4px;padding:1px 7px;margin:2px;cursor:pointer;font-size:0.75rem;">Tag '+i+'</span>';}).join('');
+  box.innerHTML='<div class="card" style="border-left:3px solid var(--danger);margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><div><div style="font-size:0.83rem;font-weight:bold;color:var(--danger);margin-bottom:3px">⚠️ '+missing.length+' Tag'+(missing.length>1?'e':'')+' nicht ausgefüllt</div><div style="font-size:0.78rem;color:#666;margin-bottom:5px">Temperatur fehlt:</div><div>'+links+'</div></div><button onclick="toggleProModus()" style="flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:#f5f5f5;font-family:inherit;font-size:0.7rem;color:#888;cursor:pointer;">🎓 Pro-Modus</button></div></div>';
 }
+
 function toggleProModus() {
-  const val = localStorage.getItem('pro_modus') === 'true';
-  localStorage.setItem('pro_modus', (!val).toString());
+  var val=localStorage.getItem('pro_modus')==='true';
+  localStorage.setItem('pro_modus',(!val).toString());
   renderDay();
 }
-function renderAlerts(brut, d) {
-  const box = document.getElementById('day-alerts');
-  box.innerHTML = '';
-  const alerts = [];
+function renderAlerts(brut,d) {
+  var box=document.getElementById('day-alerts');
+  box.innerHTML='';
+  var alerts=[];
   if(d===1) alerts.push({t:'info',i:'🥚',m:'Tag 1: Brut gestartet! Brüter erste 6h nicht öffnen.'});
-  if(d===3) alerts.push({t:'info',i:'🔬',m:'Ab heute wenden – mind. 3–5× täglich. Gefässnetz stabil.'});
+  if(d===3) alerts.push({t:'info',i:'🔬',m:'Ab heute wenden – mind. 3–5× täglich.'});
   if(d===17) alerts.push({t:'warn',i:'⚠️',m:'MORGEN: Wenden einstellen, Feuchtigkeit auf 65–70%!'});
   if(d===18) alerts.push({t:'danger',i:'🛑',m:'TAG 18: Wenden STOPP! Feuchtigkeit 65–70%. Eier auf Schlupfhorde. Brüter zu!'});
   if(d===19) alerts.push({t:'warn',i:'🐣',m:'Schlupfphase! Brüter NICHT öffnen. Pip möglich – 12–24h Geduld.'});
   if(d===20) alerts.push({t:'warn',i:'🐣',m:'Hauptschlupftag. Nicht helfen – 24h nach Pip warten.'});
-  if(d===21) alerts.push({t:'success',i:'🐥',m:'Schlupftag! Küken bleiben noch mind. 3 Tage im Brüter – erst ab Tag 24 rausnehmen!'});
-  if(d===22) alerts.push({t:'warn',i:'🐥',m:'Küken noch im Brüter lassen! Noch ' + (24-d) + ' Tage bis zum Rausnehmen. Jetzt Aufzuchtraum vorbereiten!'});
-  if(d===23) alerts.push({t:'warn',i:'🐥',m:'Noch 1 Tag! Morgen können die Küken raus. Aufzuchtraum fertig vorbereitet?'});
-  if(d>=24) alerts.push({t:'success',i:'🐥',m:'Küken können jetzt raus! Aufzuchtraum auf 35°C, flache Tränke, Küken-Futter bereit?'});
-  alerts.forEach(x => {
-    const div = document.createElement('div');
-    div.className = 'alert alert-' + x.t;
-    div.innerHTML = '<span class="alert-icon">' + x.i + '</span><span>' + x.m + '</span>';
+  if(d===21) alerts.push({t:'success',i:'🐥',m:'Schlupftag! Küken bleiben noch 3 Tage im Brüter!'});
+  if(d===22) alerts.push({t:'warn',i:'🐥',m:'Küken noch im Brüter! Aufzuchtraum vorbereiten.'});
+  if(d===23) alerts.push({t:'warn',i:'🐥',m:'Morgen können die Küken raus!'});
+  if(d>=24) alerts.push({t:'success',i:'🐥',m:'Küken können jetzt raus! Aufzuchtraum 35°C bereit?'});
+  alerts.forEach(function(x){
+    var div=document.createElement('div');
+    div.className='alert alert-'+x.t;
+    div.innerHTML='<span class="alert-icon">'+x.i+'</span><span>'+x.m+'</span>';
     box.appendChild(div);
   });
-  if (d >= 19 && d <= 23) {
-    const prepBlock = document.createElement('div');
-    prepBlock.className = 'card';
-    prepBlock.style.borderTop = '3px solid var(--success)';
-    prepBlock.innerHTML = `
-      <div class="card-title" style="color:var(--success)"><span>🏠</span> Aufzuchtraum vorbereiten</div>
-      <div class="alert alert-warn" style="margin-bottom:0.75rem">
-        <span class="alert-icon">⏳</span>
-        <span><strong>Küken noch im Brüter lassen!</strong> Erst ab Tag 24 (3 Tage nach Schlupf) rausnehmen. Nutze die Zeit zur Vorbereitung.</span>
-      </div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wärmelampe oder Wärmeplatte installiert<span class="hint">35°C direkt darunter – Küken sollen wählen können.</span></label></div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einstreu eingelegt (grobe Hobelspäne)<span class="hint">Kein Zeitungspapier – Spreizbeinen möglich!</span></label></div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Flache Küken-Tränke bereit<span class="hint">Tiefe Tränken vermeiden – Küken können ertrinken.</span></label></div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Küken-Aufzuchtfutter besorgt<span class="hint">Kein normales Hühnerfutter – zu grob und falsche Nährstoffe.</span></label></div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Gehege sicher und zugluftfrei<span class="hint">Keine Lücken, kein Zug, kein direktes Sonnenlicht.</span></label></div>
-      <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Tierarzt für Marek-Impfung kontaktiert<span class="hint">Impfung am 1. Lebenstag empfohlen.</span></label></div>
-    `;
+  if(d>=19&&d<=23){
+    var prepBlock=document.createElement('div');
+    prepBlock.className='card';
+    prepBlock.style.borderTop='3px solid var(--success)';
+    prepBlock.innerHTML='<div class="card-title" style="color:var(--success)"><span>🏠</span> Aufzuchtraum vorbereiten</div><div class="alert alert-warn" style="margin-bottom:0.75rem"><span class="alert-icon">⏳</span><span><strong>Küken noch im Brüter!</strong> Erst ab Tag 24 rausnehmen.</span></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wärmelampe/Wärmeplatte (35°C)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einstreu (grobe Hobelsпäne)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Flache Küken-Tränke</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Küken-Aufzuchtfutter</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Marek-Impfung Tierarzt kontaktiert</label></div>';
     box.appendChild(prepBlock);
   }
-  if (d >= 24) {
-    const teaser = document.createElement('div');
-    teaser.className = 'card';
-    teaser.style.borderTop = '3px solid var(--gold)';
-    teaser.style.background = 'linear-gradient(135deg, #fff 80%, var(--gold-light))';
-    teaser.innerHTML = `
-      <div class="card-title" style="color:var(--blue)"><span>🐥</span> Küken können jetzt raus!</div>
-      <div class="alert alert-success" style="margin-bottom:0.75rem">
-        <span class="alert-icon">✅</span>
-        <span>Die Küken sind mind. 3 Tage alt. Aufzuchtraum bereit? Dann können sie jetzt umziehen!</span>
-      </div>
-      <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:0.4rem">🐣➡️🐔</div>
-        <div style="font-weight:bold;color:var(--blue);font-size:0.9rem;margin-bottom:0.4rem">Aufzucht-Begleitung</div>
-        <div style="font-size:0.8rem;color:#666;margin-bottom:0.75rem">Tägliche Begleitung von Woche 1–6, Temperaturplan, Fütterung, Gesundheits-Checks und mehr.</div>
-        <div style="font-size:0.75rem;color:var(--gold);font-weight:bold;">✨ Separates Modul im Federkompass</div>
-      </div>
-    `;
+  if(d>=24){
+    var teaser=document.createElement('div');
+    teaser.className='card';
+    teaser.style.borderTop='3px solid var(--gold)';
+    teaser.innerHTML='<div class="card-title"><span>🐥</span> Küken können raus!</div><div class="alert alert-success" style="margin-bottom:0.75rem"><span class="alert-icon">✅</span><span>Mind. 3 Tage alt – jetzt umziehen!</span></div><div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--blue);font-weight:bold;">✨ Aufzucht-Modul – Demnächst im Federkompass</div>';
     box.appendChild(teaser);
   }
-  const schierTage = {
-    5:  {titel:'Tag 5–6: Erste Schier-Möglichkeit', tipp:'Bei hellen Eiern ab Tag 4–5 sichtbar. Noch früh – im Zweifel 2 Tage warten.'},
-    6:  {titel:'Tag 6: Schieren empfohlen', tipp:'«Spinnennetz» aus Adern sollte sichtbar sein. Klare helle Eier = unbefruchtet.'},
-    7:  {titel:'🔦 Tag 7: Erste Hauptkontrolle – Jetzt schieren!', tipp:'Idealer Zeitpunkt. Unbefruchtete Eier klar erkennbar und entfernen.'},
-    8:  {titel:'Tag 8: Nachkontrolle', tipp:'Gestern unklar? Heute nochmals. Klare Eier ohne Adern = unbefruchtet, entfernen.'},
-    14: {titel:'🔦 Tag 14: Zweite Hauptkontrolle – Jetzt schieren!', tipp:'Abgestorbene entfernen. Luftkammer ca. 1/3 des Eis = gut.'},
-    18: {titel:'🔦 Tag 18: ⛔ LETZTE Öffnung bis zum Schlupf!', tipp:'ACHTUNG: Das ist die LETZTE Öffnung! Schieren, dann auf Schlupfhorde – und Brüter bis Tag 21 NICHT mehr öffnen! Feuchtigkeit auf 65–70%, Wenden stopp!'}
+  var schierTage={
+    5:{titel:'Tag 5–6: Erste Schier-Möglichkeit',tipp:'Bei hellen Eiern ab Tag 4–5. Noch früh – im Zweifel 2 Tage warten.'},
+    6:{titel:'Tag 6: Schieren empfohlen',tipp:'Spinnennetz aus Adern sollte sichtbar sein.'},
+    7:{titel:'🔦 Tag 7: Erste Hauptkontrolle!',tipp:'Idealer Zeitpunkt. Unbefruchtete Eier entfernen.'},
+    8:{titel:'Tag 8: Nachkontrolle',tipp:'Gestern unklar? Heute nochmals schieren.'},
+    14:{titel:'🔦 Tag 14: Zweite Hauptkontrolle!',tipp:'Abgestorbene entfernen. Luftkammer ca. 1/3 des Eis.'},
+    18:{titel:'🔦 Tag 18: ⛔ LETZTE Öffnung!',tipp:'ACHTUNG: LETZTE Öffnung bis zum Schlupf! Schieren, Schlupfhorde, Brüter ZU!'}
   };
-  if (schierTage[d]) {
-    const s = schierTage[d];
-    const savedEntry = brut.tage && brut.tage[d];
-    const savedBefund = savedEntry ? savedEntry.schier_befund || '' : '';
-    const savedNotiz = savedEntry ? savedEntry.schier_notiz || '' : '';
-    const block = document.createElement('div');
-    block.className = 'card';
-    block.style.borderTop = '3px solid var(--gold)';
-    block.innerHTML = `
-      <div class="card-title" style="color:var(--gold)"><span>🔦</span> ${s.titel}</div>
-      <div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">💡</span><span>${s.tipp}</span></div>
-      <div style="font-size:0.83rem;font-weight:bold;margin-bottom:0.5rem;color:var(--blue);">Was siehst du?</div>
-      <div class="schier-grid">
-        ${[
-          {val:'lebend',icon:'🟢',label:'Lebend',desc:'Adern, evtl. Bewegung'},
-          {val:'unbefruchtet',icon:'⚪',label:'Unbefruchtet',desc:'Hell, klar, kein Adernetz'},
-          {val:'blutring',icon:'🔴',label:'Blutring / Tot',desc:'Roter Ring, kein Embryo'},
-          {val:'unklar',icon:'🟡',label:'Unklar',desc:'Schwer zu beurteilen'}
-        ].map(o => `<div onclick="selectBefund(this,'${o.val}',${d})" data-val="${o.val}"
-          style="border:2px solid ${savedBefund===o.val?'var(--gold)':'var(--border)'};background:${savedBefund===o.val?'var(--gold-light)':'var(--card)'};border-radius:8px;padding:0.55rem;text-align:center;cursor:pointer;">
-          <div style="font-size:1.2rem">${o.icon}</div>
-          <div style="font-size:0.75rem;font-weight:bold">${o.label}</div>
-          <div style="font-size:0.68rem;color:var(--muted)">${o.desc}</div>
-        </div>`).join('')}
-      </div>
-      <div id="befund-result-${d}" style="margin-bottom:0.6rem"></div>
-      <div style="font-size:0.8rem;margin-bottom:3px;color:#555;">📝 Schier-Notiz:</div>
-      <textarea id="schier-notiz-${d}" rows="2" style="width:100%;padding:0.4rem 0.6rem;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.8rem;background:var(--bg);resize:vertical;" placeholder="z.B. Ei 3 und 7 unbefruchtet entfernt…">${savedNotiz}</textarea>
-    `;
+  if(schierTage[d]){
+    var s=schierTage[d];
+    var savedEntry=brut.tage&&brut.tage[d];
+    var savedBefund=savedEntry?savedEntry.schier_befund||'':'';
+    var savedNotiz=savedEntry?savedEntry.schier_notiz||'':'';
+    var opts=[{val:'lebend',icon:'🟢',label:'Lebend',desc:'Adern, evtl. Bewegung'},{val:'unbefruchtet',icon:'⚪',label:'Unbefruchtet',desc:'Hell, klar'},{val:'blutring',icon:'🔴',label:'Blutring',desc:'Roter Ring'},{val:'unklar',icon:'🟡',label:'Unklar',desc:'Nochmals schieren'}];
+    var optsHtml=opts.map(function(o){return '<div onclick="selectBefund(this,''+o.val+'','+d+')" data-val="'+o.val+'" style="border:2px solid '+(savedBefund===o.val?'var(--gold)':'var(--border)')+';background:'+(savedBefund===o.val?'var(--gold-light)':'var(--card)')+';border-radius:8px;padding:0.55rem;text-align:center;cursor:pointer;"><div style="font-size:1.2rem">'+o.icon+'</div><div style="font-size:0.75rem;font-weight:bold">'+o.label+'</div><div style="font-size:0.68rem;color:var(--muted)">'+o.desc+'</div></div>';}).join('');
+    var block=document.createElement('div');
+    block.className='card';
+    block.style.borderTop='3px solid var(--gold)';
+    block.innerHTML='<div class="card-title" style="color:var(--gold)"><span>🔦</span> '+s.titel+'</div><div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">💡</span><span>'+s.tipp+'</span></div><div style="font-size:0.83rem;font-weight:bold;margin-bottom:0.5rem;color:var(--blue);">Was siehst du?</div><div class="schier-grid">'+optsHtml+'</div><div id="befund-result-'+d+'" style="margin-bottom:0.6rem"></div><div style="font-size:0.8rem;margin-bottom:3px;color:#555;">📝 Schier-Notiz:</div><textarea id="schier-notiz-'+d+'" rows="2" style="width:100%;padding:0.4rem 0.6rem;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.8rem;background:var(--bg);resize:vertical;" placeholder="z.B. Ei 3 unbefruchtet entfernt…">'+savedNotiz+'</textarea>';
     box.appendChild(block);
-    if (savedBefund) setTimeout(() => showBefundResult(savedBefund, d), 50);
+    if(savedBefund) setTimeout(function(){showBefundResult(savedBefund,d);},50);
   }
-}
-function selectBefund(el, val, day) {
-  el.closest('.schier-grid').querySelectorAll('[data-val]').forEach(o => {
-    o.style.border = '2px solid var(--border)';
-    o.style.background = 'var(--card)';
-  });
-  el.style.border = '2px solid var(--gold)';
-  el.style.background = 'var(--gold-light)';
-  showBefundResult(val, day);
-  const brut = getAktiveBrut();
-  if (brut) {
-    if (!brut.tage) brut.tage = {};
-    if (!brut.tage[day]) brut.tage[day] = {};
-    brut.tage[day].schier_befund = val;
-    saveBruten();
-  }
-}
-function showBefundResult(val, day) {
-  const box = document.getElementById('befund-result-' + day);
-  if (!box) return;
-  const r = {
-    lebend:       {cls:'alert-success', t:'✅ <strong>Lebend!</strong> Ei zurück in den Brüter.'},
-    unbefruchtet: {cls:'alert-warn',    t:'⚪ <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},
-    blutring:     {cls:'alert-danger',  t:'🔴 <strong>Abgestorben.</strong> Sofort entfernen!'},
-    unklar:       {cls:'alert-info',    t:'🟡 <strong>Unklar.</strong> In 2 Tagen nochmals schieren.'}
-  }[val];
-  if (r) box.innerHTML = `<div class="alert ${r.cls}" style="margin:0 0 0.5rem">${r.t}</div>`;
-}
-function saveDay() {
-  const brut = getAktiveBrut();
-  if (!brut) return;
-  const d = currentDay;
-  const dayDate = getDayDate(brut, d);
-  if (!brut.tage) brut.tage = {};
-  const existing = brut.tage[d] || {};
-  brut.tage[d] = {
-    ...existing,
-    brut_id: brut.id,
-    tag_nummer: d,
-    datum: dayDate.toISOString().split('T')[0],
-    datum_anzeige: formatDatum(dayDate),
-    temp: document.getElementById('p-temp').value,
-    humi: document.getElementById('p-humi').value,
-    wenden: document.getElementById('cb-wenden').checked,
-    geschiert: document.getElementById('cb-geschiert').checked,
-    wasser: document.getElementById('cb-wasser').checked,
-    schier_befund: existing.schier_befund || null,
-    schier_notiz: document.getElementById('schier-notiz-' + d) ? document.getElementById('schier-notiz-' + d).value : (existing.schier_notiz || null),
-    notiz: document.getElementById('p-notiz').value,
-    gespeichert_am: new Date().toISOString()
-  };
-  saveBruten();
-  renderProtokolll(brut);
-  const btn = event.currentTarget;
-  btn.textContent = '✅ Gespeichert!';
-  setTimeout(() => btn.textContent = '💾 Tag speichern', 1500);
-}
-function renderProtokolll(brut) {
-  const card = document.getElementById('protokoll-card');
-  const list = document.getElementById('protokoll-list');
-  const entries = Object.entries(brut.tage || {}).sort((a,b) => b[0]-a[0]);
-  if (!entries.length) { card.style.display = 'none'; return; }
-  card.style.display = 'block';
-  document.getElementById('protokoll-count').textContent = '(' + entries.length + ' Einträge)';
-  list.innerHTML = entries.map(([day, val]) => {
-    const checks = [val.wenden?'🔄':'', val.geschiert?'🔦':'', val.wasser?'💧':''].filter(Boolean).join(' ');
-    const befunde = {lebend:'Lebend ✅', unbefruchtet:'Unbefruchtet ⚪', blutring:'Blutring 🔴', unklar:'Unklar 🟡'};
-    return `<div class="protokoll-entry">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-weight:bold;color:var(--blue)">Tag ${day} · ${val.datum_anzeige||val.datum||''}</span>
-        <span style="font-size:0.75rem">${checks}</span>
-      </div>
-      <div style="color:#555;font-size:0.8rem">
-        ${val.temp?'🌡️ '+val.temp+'°C':''} ${val.humi?'· 💧 '+val.humi+'%':''}
-        ${val.schier_befund?'· 🔦 '+befunde[val.schier_befund]:''}
-        ${val.notiz?'<div style="font-style:italic;color:#666;margin-top:2px">📝 '+val.notiz+'</div>':''}
-        ${val.schier_notiz?'<div style="font-style:italic;color:#888;margin-top:1px">🔦 '+val.schier_notiz+'</div>':''}
-      </div>
-    </div>`;
-  }).join('');
-}
-function validateParams(brut) {
-  const temp = parseFloat(document.getElementById('p-temp').value);
-  const humi = parseFloat(document.getElementById('p-humi').value);
-  const isMotor = brut && brut.typ === 'motor';
-  const sTemp = document.getElementById('s-temp');
-  const sHumi = document.getElementById('s-humi');
-  if (!isNaN(temp)) {
-    const ok = isMotor ? (temp>=37.4&&temp<=37.9) : (temp>=37.8&&temp<=38.4);
-    const warn = isMotor ? (temp>=37.0&&temp<=38.2) : (temp>=37.5&&temp<=38.6);
-    sTemp.className = 'p-dot ' + (ok?'p-ok':warn?'p-warn':'p-bad');
-  } else sTemp.className = 'p-dot';
-  if (!isNaN(humi)) {
-    sHumi.className = 'p-dot ' + (humi>=45&&humi<=58?'p-ok':humi>=40&&humi<=65?'p-warn':'p-bad');
-  } else sHumi.className = 'p-dot';
-}
-document.getElementById('p-temp').addEventListener('input', () => validateParams(getAktiveBrut()));
-document.getElementById('p-humi').addEventListener('input', () => validateParams(getAktiveBrut()));
-// ===== EI SVG =====
-function renderEgg(d) {
-  const svg = document.getElementById('egg-svg');
-  const desc = document.getElementById('egg-desc');
-  let c = `<ellipse cx="100" cy="125" rx="65" ry="85" fill="#f5e8c8" stroke="#d4b896" stroke-width="2"/>`;
-  const ac = Math.min(30, 18+d);
-  c += `<ellipse cx="100" cy="52" rx="${ac}" ry="13" fill="#e8d4aa" opacity="0.8"/>`;
-  c += `<text x="100" y="43" text-anchor="middle" font-size="8" fill="#8a7a5a">Luftkammer</text>`;
-  if(d<=3){c+=`<circle cx="100" cy="130" r="4" fill="#f5c842" opacity="0.5"/>`;desc.textContent='Tag '+d+': Blastoderma. Im Ei noch nichts erkennbar.';}
-  else if(d<=7){const s=8+d*2;c+=`<ellipse cx="100" cy="130" rx="${s}" ry="${s*1.3}" fill="#c8854a" opacity="0.75"/>`;c+=`<line x1="100" y1="112" x2="72" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/>`;c+=`<line x1="100" y1="112" x2="128" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/>`;c+=`<line x1="100" y1="118" x2="78" y2="148" stroke="#a06040" stroke-width="1" opacity="0.5"/>`;c+=`<line x1="100" y1="118" x2="122" y2="148" stroke="#a06040" stroke-width="1" opacity="0.5"/>`;desc.textContent='Tag '+d+': Adernetz, Herz schlägt, Embryo beweglich.';}
-  else if(d<=14){const cov=Math.min(0.9,0.35+(d-7)*0.08);c+=`<ellipse cx="100" cy="138" rx="52" ry="66" fill="#8b5e3c" opacity="${cov}"/>`;c+=`<ellipse cx="100" cy="142" rx="28" ry="35" fill="#5a3520" opacity="${Math.min(cov*0.8,0.6)}"/>`;desc.textContent='Tag '+d+': Küken wächst, Ei verdunkelt sich.';}
-  else if(d<=17){c+=`<ellipse cx="100" cy="143" rx="58" ry="74" fill="#4a2510" opacity="0.9"/>`;c+=`<ellipse cx="100" cy="150" rx="38" ry="52" fill="#2c1005" opacity="0.7"/>`;desc.textContent='Tag '+d+': Fast komplett dunkel. Nur Luftkammer hell.';}
-  else{c+=`<ellipse cx="100" cy="145" rx="60" ry="80" fill="#1e0a00" opacity="0.97"/>`;if(d>=19)c+=`<path d="M 82 78 L 98 68 L 112 73 L 102 63" stroke="#f5e8c8" stroke-width="2.5" fill="none"/>`;if(d>=20)c+=`<circle cx="94" cy="70" r="5" fill="#f5c842"/>`;desc.textContent=d===21?'🐣 Schlupftag!':'Tag '+d+': Pip – Küken bricht durch!';}
-  svg.innerHTML = c;
-}
-// ===== ACCORDION / CHECKLIST HELPERS =====
-function toggleAcc(id) {
-  const body = document.getElementById(id);
-  const arrow = document.getElementById('arr-' + id);
-  const open = body.classList.toggle('open');
-  if(arrow) arrow.classList.toggle('open', open);
-}
-function toggleCheck(item) {
-  const cb = item.querySelector('input[type=checkbox]');
-  cb.checked = !cb.checked;
-  item.classList.toggle('done', cb.checked);
-}
-// ===== SCHIEREN TAB =====
-function initSchierTabs() {
-  const tabs = [
-    {key:'vor', label:'Vor Einlegen'},
-    {key:'t5', label:'Tag 5–6'},
-    {key:'t7', label:'Tag 7'},
-    {key:'t10', label:'Tag 10'},
-    {key:'t14', label:'Tag 14'},
-    {key:'t18', label:'Tag 18'},
-  ];
-  const row = document.getElementById('schier-tabs-row');
-  row.innerHTML = tabs.map((t,i) =>
-    `<button class="schier-tab-btn ${i===0?'active':''}" onclick="showSchierStage(this,'${t.key}')" style="padding:0.35rem 0.85rem;border-radius:20px;border:1px solid var(--border);background:${i===0?'var(--blue)':'var(--card)'};color:${i===0?'#fff':'var(--muted)'};font-family:inherit;font-size:0.78rem;cursor:pointer;">${t.label}</button>`
-  ).join('');
-  showSchierStage(null, 'vor');
-}
-function getCandlingSVG(stage) {
-  const bg = '<rect width="120" height="150" fill="#1a0f05" rx="8"/>';
-  const egg = (fill, op, stroke) => '<ellipse cx="60" cy="80" rx="38" ry="52" fill="' + fill + '" opacity="' + (op||1) + '" stroke="' + (stroke||'#8a6a30') + '" stroke-width="1.5"/>';
-  const ac = (size, alpha) => '<ellipse cx="60" cy="38" rx="' + (size||12) + '" ry="8" fill="#f5e8a0" opacity="' + (alpha||0.9) + '"/>';
-  const lbl = (t, col) => '<text x="60" y="143" text-anchor="middle" font-size="8" fill="' + (col||'#90d090') + '" font-family="Georgia">' + t + '</text>';
-  const svgs = {
-    'vor_ok':       bg+egg('#f5d87a',0.85)+'<ellipse cx="60" cy="90" rx="16" ry="14" fill="#e8a820" opacity="0.6"/>'+ac(10)+lbl('Normal','#90d090'),
-    'vor_riss':     bg+egg('#f5d87a',0.8)+ac(10)+'<line x1="45" y1="55" x2="55" y2="75" stroke="#fff" stroke-width="1.5" opacity="0.8"/><line x1="55" y1="75" x2="60" y2="95" stroke="#fff" stroke-width="1" opacity="0.6"/>'+lbl('Riss!','#f08080'),
-    'vor_lk':       bg+egg('#f5d87a',0.8)+'<ellipse cx="75" cy="55" rx="10" ry="7" fill="#f5e8a0" opacity="0.9"/>'+lbl('LK seitlich!','#f0a050'),
-    'vor_dd':       bg+egg('#f5d87a',0.8)+'<ellipse cx="48" cy="85" rx="11" ry="10" fill="#e8a820" opacity="0.6"/><ellipse cx="72" cy="82" rx="11" ry="10" fill="#e8a820" opacity="0.6"/>'+lbl('Doppeldotter','#aaa'),
-    't5_ja':        bg+egg('#c8853a',0.5)+ac(9,0.85)+'<circle cx="60" cy="82" r="5" fill="#e05020" opacity="0.9"/><line x1="60" y1="77" x2="42" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="78" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="45" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/><line x1="60" y1="77" x2="75" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/>'+lbl('Spinnennetz ✓','#90d090'),
-    't5_nein':      bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d060" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="85" rx="18" ry="16" fill="#e8a820" opacity="0.5"/>'+lbl('Unbefruchtet','#f08080'),
-    't5_ring':      bg+egg('#3a1a08',0.8)+ac(8,0.7)+'<ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/>'+lbl('Blutring!','#f08080'),
-    't5_unklar':    bg+egg('#a06030',0.7)+ac(9,0.7)+'<ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/>'+lbl('Unklar','#f0c060'),
-    't7_ja':        bg+egg('#a05020',0.6)+ac(10,0.85)+'<ellipse cx="60" cy="85" rx="14" ry="18" fill="#7a3010" opacity="0.8"/><line x1="60" y1="67" x2="35" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/><line x1="60" y1="67" x2="85" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/>'+lbl('Lebend ✓','#90d090'),
-    't7_nein':      bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f0cc50" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="86" rx="18" ry="16" fill="#dda020" opacity="0.5"/>'+lbl('Raus!','#f08080'),
-    't7_ring':      bg+egg('#3a1a08',0.8)+ac(8,0.7)+'<ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/>'+lbl('Blutring!','#f08080'),
-    't7_unklar':    bg+egg('#a06030',0.7)+ac(9,0.7)+'<ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/>'+lbl('Unklar','#f0c060'),
-    't10_ja':       bg+egg('#5a2808',0.85)+ac(12,0.85)+'<ellipse cx="60" cy="95" rx="28" ry="36" fill="#3a1505" opacity="0.8"/>'+lbl('Lebend ✓','#90d090'),
-    't10_tot':      bg+egg('#4a2008',0.9)+ac(11,0.6)+'<ellipse cx="60" cy="92" rx="25" ry="32" fill="#1a0500" opacity="0.9"/>'+lbl('Abgestorben?','#f08080'),
-    't10_nein':     bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#e8c040" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/>'+lbl('Raus!','#f08080'),
-    't10_lk':       bg+egg('#5a2808',0.75)+'<ellipse cx="60" cy="38" rx="14" ry="10" fill="#f5e8a0" opacity="0.9"/>'+lbl('LK 1/5','#f0c060'),
-    't14_ja':       bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.97" stroke="#5a3010" stroke-width="1.5"/>'+ac(15,0.9)+lbl('Perfekt ✓','#90d090'),
-    't14_tot':      bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/>'+ac(12,0.4)+lbl('Kein Leben!','#f08080'),
-    't14_lk_klein': bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="8" ry="6" fill="#f5e8a0" opacity="0.9"/>'+lbl('Zu feucht!','#f0a050'),
-    't14_lk_gross': bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="44" rx="22" ry="17" fill="#f5e8a0" opacity="0.9"/>'+lbl('Zu trocken!','#f0a050'),
-    't18_ok':       bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/>'+lbl('Schlupfbereit','#90d090'),
-    't18_pip':      bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/><circle cx="60" cy="40" r="3" fill="none" stroke="#fff" stroke-width="1.5"/>'+lbl('Pip!','#90d090'),
-    't18_tot':      bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1a0803" opacity="0.97" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="10" ry="7" fill="#f5e8a0" opacity="0.4"/>'+lbl('Abgestorben','#f08080'),
-    't18_nein':     bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#d0a030" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/>'+lbl('Raus!','#f08080')
-  };
-  return svgs[stage] || bg+egg('#5a3020',0.7)+ac(10);
 }
 
-function showSchierStage(btn, key) {
-  document.querySelectorAll('.schier-tab-btn').forEach(b => {
-    b.style.background = 'var(--card)'; b.style.color = 'var(--muted)';
-  });
-  if (btn) { btn.style.background = 'var(--blue)'; btn.style.color = '#fff'; }
-  const content = document.getElementById('schier-content');
-  const stages = {
-    vor:  { info:'Vor dem Einlegen: Risse, schwimmende Luftkammer, Doppeldotter erkennen.',
-            eggs:[{l:'Gutes Ei',d:'Intakt, Luftkammer oben',svg:'vor_ok',c:'#90d4a0'},
-                  {l:'Riss / defekt',d:'Licht tritt durch Schale',svg:'vor_riss',c:'#f5a0a0'},
-                  {l:'LK schwimmt',d:'Bewegt sich beim Drehen',svg:'vor_lk',c:'#f5a0a0'},
-                  {l:'Doppeldotter',d:'Zwei Dotter sichtbar',svg:'vor_dd',c:'#ddd'}]},
-    t5:   { info:'Tag 5-6: Erstes Adernetz erkennbar. Bei braunen Eiern später sichtbar.',
-            eggs:[{l:'Befruchtet',d:'Rotes Spinnennetz, dunkler Punkt',svg:'t5_ja',c:'#90d4a0'},
-                  {l:'Unbefruchtet',d:'Klar wie frisches Ei',svg:'t5_nein',c:'#f5a0a0'},
-                  {l:'Blutring',d:'Embryo früh abgestorben',svg:'t5_ring',c:'#f5a0a0'},
-                  {l:'Unklar',d:'Zu früh, nochmals in 2T',svg:'t5_unklar',c:'#f5c842'}]},
-    t7:   { info:'Tag 7: Erste Hauptkontrolle. Unbefruchtete Eier klar erkennbar.',
-            eggs:[{l:'Lebend',d:'Deutliches Adernetz, Bewegung',svg:'t7_ja',c:'#90d4a0'},
-                  {l:'Unbefruchtet',d:'Hell, klar, kein Netz',svg:'t7_nein',c:'#f5a0a0'},
-                  {l:'Blutring',d:'Roter Ring, kein Embryo',svg:'t7_ring',c:'#f5a0a0'},
-                  {l:'Unklar',d:'Drin lassen, nochmals',svg:'t7_unklar',c:'#f5c842'}]},
-    t10:  { info:'Tag 10: Kücken wächst sichtbar. Bewegungen erkennbar. Ei verdunkelt sich.',
-            eggs:[{l:'Lebend',d:'Dunkel, evtl. Bewegung',svg:'t10_ja',c:'#90d4a0'},
-                  {l:'Abgestorben',d:'Dunkel, keine Bewegung',svg:'t10_tot',c:'#f5a0a0'},
-                  {l:'Unbefruchtet',d:'Immer noch hell und klar',svg:'t10_nein',c:'#f5a0a0'},
-                  {l:'LK-Groesse',d:'Ca. 1/5 des Eis = normal',svg:'t10_lk',c:'#f5c842'}]},
-    t14:  { info:'Tag 14: Zweite Kontrolle. Luftkammer sollte ca. 1/3 des Eis einnehmen.',
-            eggs:[{l:'Perfekt',d:'Fast schwarz, LK 1/3',svg:'t14_ja',c:'#90d4a0'},
-                  {l:'Abgestorben',d:'Kein Leben, evtl. Geruch',svg:'t14_tot',c:'#f5a0a0'},
-                  {l:'LK zu klein',d:'Zu feucht',svg:'t14_lk_klein',c:'#f5c842'},
-                  {l:'LK zu gross',d:'Zu trocken',svg:'t14_lk_gross',c:'#f5c842'}]},
-    t18:  { info:'LETZTE Oeffnung! Danach bleibt der Brueter bis zum Schlupf ZU!',
-            eggs:[{l:'Schlupfbereit',d:'Fast schwarz, LK gross',svg:'t18_ok',c:'#90d4a0'},
-                  {l:'Pip sichtbar',d:'Kleiner Riss = Kücken da!',svg:'t18_pip',c:'#90d4a0'},
-                  {l:'Abgestorben',d:'Dunkel, keine Reaktion',svg:'t18_tot',c:'#f5a0a0'},
-                  {l:'Unbefruchtet',d:'Noch hell',svg:'t18_nein',c:'#f5a0a0'}]}
+function selectBefund(el,val,day) {
+  el.closest('.schier-grid').querySelectorAll('[data-val]').forEach(function(o){o.style.border='2px solid var(--border)';o.style.background='var(--card)';});
+  el.style.border='2px solid var(--gold)';el.style.background='var(--gold-light)';
+  showBefundResult(val,day);
+  var brut=getAktiveBrut();
+  if(brut){if(!brut.tage)brut.tage={};if(!brut.tage[day])brut.tage[day]={};brut.tage[day].schier_befund=val;}
+}
+
+function showBefundResult(val,day) {
+  var box=document.getElementById('befund-result-'+day);
+  if(!box) return;
+  var r={lebend:{cls:'alert-success',t:'✅ <strong>Lebend!</strong> Zurück in den Brüter.'},unbefruchtet:{cls:'alert-warn',t:'⚪ <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'🔴 <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'🟡 <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
+  if(r[val]) box.innerHTML='<div class="alert '+r[val].cls+'" style="margin:0 0 0.5rem">'+r[val].t+'</div>';
+}
+async function saveDay() {
+  var brut=getAktiveBrut();
+  if(!brut) return;
+  var d=currentDay;
+  var dayDate=getDayDate(brut,d);
+  var existing=brut.tage&&brut.tage[d]||{};
+  var { data: { user } } = await sb.auth.getUser();
+  var eintrag={
+    brut_id:brut.id,
+    user_id:user.id,
+    tag_nummer:d,
+    datum:dayDate.toISOString().split('T')[0],
+    datum_anzeige:formatDatum(dayDate),
+    temp:parseFloat(document.getElementById('p-temp').value)||null,
+    humi:parseInt(document.getElementById('p-humi').value)||null,
+    wenden:document.getElementById('cb-wenden').checked,
+    geschiert:document.getElementById('cb-geschiert').checked,
+    wasser:document.getElementById('cb-wasser').checked,
+    schier_befund:existing.schier_befund||null,
+    schier_notiz:document.getElementById('schier-notiz-'+d)?document.getElementById('schier-notiz-'+d).value:null,
+    notiz:document.getElementById('p-notiz').value,
+    gespeichert_am:new Date().toISOString()
   };
-  const s = stages[key];
-  if (!s) return;
-  var html = '<div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">💡</span><span>' + s.info + '</span></div>';
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">';
-  s.eggs.forEach(function(e) {
-    html += '<div style="border:2px solid ' + e.c + ';border-radius:8px;padding:0.5rem;text-align:center;background:var(--card)">';
-    html += '<svg viewBox="0 0 120 150" width="88" height="110" style="display:block;margin:0 auto 4px">' + getCandlingSVG(e.svg) + '</svg>';
-    html += '<div style="font-size:0.75rem;font-weight:bold;color:var(--blue)">' + e.l + '</div>';
-    html += '<div style="font-size:0.68rem;color:var(--muted);margin-top:2px">' + e.d + '</div>';
-    html += '</div>';
-  });
-  html += '</div>';
-  content.innerHTML = html;
+  var { data, error } = await sb.from('tageseintraege')
+    .upsert(eintrag,{onConflict:'brut_id,tag_nummer'})
+    .select().single();
+  if(error){alert('Fehler beim Speichern: '+error.message);return;}
+  if(!brut.tage) brut.tage={};
+  brut.tage[d]=data;
+  renderProtokolll(brut);
+  var btn=event.currentTarget;
+  btn.textContent='✅ Gespeichert!';
+  setTimeout(function(){btn.textContent='💾 Tag speichern';},1500);
 }
-function schierDiag(el, val) {
-  document.querySelectorAll('#schier-diagnose .schier-opt').forEach(o => {
-    o.style.background = 'var(--card)'; o.style.border = '2px solid var(--border)';
-  });
-  el.style.background = 'var(--gold-light)'; el.style.border = '2px solid var(--gold)';
-  const r = {
-    lebend:       {cls:'alert-success', t:'✅ <strong>Lebend!</strong> Zurück in den Brüter.'},
-    unbefruchtet: {cls:'alert-warn',    t:'⚪ <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},
-    blutring:     {cls:'alert-danger',  t:'🔴 <strong>Abgestorben.</strong> Sofort entfernen!'},
-    unklar:       {cls:'alert-info',    t:'🟡 <strong>Unklar.</strong> In 2 Tagen nochmals schieren.'}
-  }[val];
-  document.getElementById('schier-diag-result').innerHTML = `<div class="alert ${r.cls}" style="margin-top:0.5rem">${r.t}</div>`;
+
+function renderProtokolll(brut) {
+  var card=document.getElementById('protokoll-card');
+  var list=document.getElementById('protokoll-list');
+  var entries=Object.entries(brut.tage||{}).sort(function(a,b){return b[0]-a[0];});
+  if(!entries.length){card.style.display='none';return;}
+  card.style.display='block';
+  document.getElementById('protokoll-count').textContent='('+entries.length+' Einträge)';
+  var befunde={lebend:'Lebend ✅',unbefruchtet:'Unbefruchtet ⚪',blutring:'Blutring 🔴',unklar:'Unklar 🟡'};
+  list.innerHTML=entries.map(function(e){
+    var day=e[0],val=e[1];
+    var checks=[val.wenden?'🔄':'',val.geschiert?'🔦':'',val.wasser?'💧':''].filter(Boolean).join(' ');
+    return '<div class="protokoll-entry"><div style="display:flex;justify-content:space-between"><span style="font-weight:bold;color:var(--blue)">Tag '+day+' · '+(val.datum_anzeige||val.datum||'')+'</span><span style="font-size:0.75rem">'+checks+'</span></div><div style="color:#555;font-size:0.8rem">'+(val.temp?'🌡️ '+val.temp+'°C':'')+' '+(val.humi?'· 💧 '+val.humi+'%':'')+(val.schier_befund?'· 🔦 '+(befunde[val.schier_befund]||val.schier_befund):'')+(val.notiz?'<div style="font-style:italic;color:#666;margin-top:2px">📝 '+val.notiz+'</div>':'')+'</div></div>';
+  }).join('');
 }
-// ===== KOMPLIKATIONEN =====
+
+function validateParams(brut) {
+  var temp=parseFloat(document.getElementById('p-temp').value);
+  var humi=parseFloat(document.getElementById('p-humi').value);
+  var isMotor=brut&&brut.typ==='motor';
+  var sTemp=document.getElementById('s-temp');
+  var sHumi=document.getElementById('s-humi');
+  if(!isNaN(temp)){var ok=isMotor?(temp>=37.4&&temp<=37.9):(temp>=37.8&&temp<=38.4);var warn=isMotor?(temp>=37.0&&temp<=38.2):(temp>=37.5&&temp<=38.6);sTemp.className='p-dot '+(ok?'p-ok':warn?'p-warn':'p-bad');}else sTemp.className='p-dot';
+  if(!isNaN(humi)){sHumi.className='p-dot '+(humi>=45&&humi<=58?'p-ok':humi>=40&&humi<=65?'p-warn':'p-bad');}else sHumi.className='p-dot';
+}
+
+document.getElementById('p-temp').addEventListener('input',function(){validateParams(getAktiveBrut());});
+document.getElementById('p-humi').addEventListener('input',function(){validateParams(getAktiveBrut());});
+
+// ===== EI SVG =====
+function renderEgg(d) {
+  var svg=document.getElementById('egg-svg');
+  var desc=document.getElementById('egg-desc');
+  var c='<ellipse cx="100" cy="125" rx="65" ry="85" fill="#f5e8c8" stroke="#d4b896" stroke-width="2"/>';
+  var ac=Math.min(30,18+d);
+  c+='<ellipse cx="100" cy="52" rx="'+ac+'" ry="13" fill="#e8d4aa" opacity="0.8"/>';
+  c+='<text x="100" y="43" text-anchor="middle" font-size="8" fill="#8a7a5a">Luftkammer</text>';
+  if(d<=3){c+='<circle cx="100" cy="130" r="4" fill="#f5c842" opacity="0.5"/>';desc.textContent='Tag '+d+': Blastoderma. Im Ei noch nichts erkennbar.';}
+  else if(d<=7){var s=8+d*2;c+='<ellipse cx="100" cy="130" rx="'+s+'" ry="'+(s*1.3)+'" fill="#c8854a" opacity="0.75"/>';c+='<line x1="100" y1="112" x2="72" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/><line x1="100" y1="112" x2="128" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/>';desc.textContent='Tag '+d+': Adernetz, Herz schlägt, Embryo beweglich.';}
+  else if(d<=14){var cov=Math.min(0.9,0.35+(d-7)*0.08);c+='<ellipse cx="100" cy="138" rx="52" ry="66" fill="#8b5e3c" opacity="'+cov+'"/><ellipse cx="100" cy="142" rx="28" ry="35" fill="#5a3520" opacity="'+Math.min(cov*0.8,0.6)+'"/>';desc.textContent='Tag '+d+': Küken wächst, Ei verdunkelt sich.';}
+  else if(d<=17){c+='<ellipse cx="100" cy="143" rx="58" ry="74" fill="#4a2510" opacity="0.9"/><ellipse cx="100" cy="150" rx="38" ry="52" fill="#2c1005" opacity="0.7"/>';desc.textContent='Tag '+d+': Fast komplett dunkel.';}
+  else{c+='<ellipse cx="100" cy="145" rx="60" ry="80" fill="#1e0a00" opacity="0.97"/>';if(d>=19)c+='<path d="M 82 78 L 98 68 L 112 73 L 102 63" stroke="#f5e8c8" stroke-width="2.5" fill="none"/>';if(d>=20)c+='<circle cx="94" cy="70" r="5" fill="#f5c842"/>';desc.textContent=d===21?'🐣 Schlupftag!':'Tag '+d+': Pip – Küken bricht durch!';}
+  svg.innerHTML=c;
+}
+
+// ===== ACCORDION / CHECKLIST =====
+function toggleAcc(id) {
+  var body=document.getElementById(id);
+  var arrow=document.getElementById('arr-'+id);
+  var open=body.classList.toggle('open');
+  if(arrow) arrow.classList.toggle('open',open);
+}
+
+function toggleCheck(item) {
+  var cb=item.querySelector('input[type=checkbox]');
+  cb.checked=!cb.checked;
+  item.classList.toggle('done',cb.checked);
+}
+// ===== SCHIEREN TAB =====
+function getCandlingSVG(stage) {
+  var bg='<rect width="120" height="150" fill="#1a0f05" rx="8"/>';
+  var svgs={
+    'vor_ok':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d87a" opacity="0.85" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="10" ry="8" fill="#f5e8a0" opacity="0.9"/><ellipse cx="60" cy="90" rx="16" ry="14" fill="#e8a820" opacity="0.6"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Normal</text>',
+    'vor_riss': bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d87a" opacity="0.8" stroke="#8a6a30" stroke-width="1.5"/><line x1="45" y1="55" x2="55" y2="75" stroke="#fff" stroke-width="1.5" opacity="0.8"/><line x1="55" y1="75" x2="60" y2="95" stroke="#fff" stroke-width="1" opacity="0.6"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Riss!</text>',
+    'vor_lk':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d87a" opacity="0.8" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="75" cy="55" rx="10" ry="7" fill="#f5e8a0" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0a050" font-family="Georgia">LK seitlich!</text>',
+    'vor_dd':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d87a" opacity="0.8" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="48" cy="85" rx="11" ry="10" fill="#e8a820" opacity="0.6"/><ellipse cx="72" cy="82" rx="11" ry="10" fill="#e8a820" opacity="0.6"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#aaa" font-family="Georgia">Doppeldotter</text>',
+    't5_ja':    bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#c8853a" opacity="0.5" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="9" ry="8" fill="#f5e8a0" opacity="0.85"/><circle cx="60" cy="82" r="5" fill="#e05020" opacity="0.9"/><line x1="60" y1="77" x2="42" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="78" y2="62" stroke="#d04020" stroke-width="1.2" opacity="0.8"/><line x1="60" y1="77" x2="45" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/><line x1="60" y1="77" x2="75" y2="96" stroke="#d04020" stroke-width="1" opacity="0.7"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Spinnennetz</text>',
+    't5_nein':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f5d060" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="85" rx="18" ry="16" fill="#e8a820" opacity="0.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Unbefruchtet</text>',
+    't5_ring':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#3a1a08" opacity="0.8" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="8" ry="8" fill="#f5e8a0" opacity="0.7"/><ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Blutring!</text>',
+    't5_unklar':bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#a06030" opacity="0.7" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="9" ry="8" fill="#f5e8a0" opacity="0.7"/><ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0c060" font-family="Georgia">Unklar</text>',
+    't7_ja':    bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#a05020" opacity="0.6" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="10" ry="8" fill="#f5e8a0" opacity="0.85"/><ellipse cx="60" cy="85" rx="14" ry="18" fill="#7a3010" opacity="0.8"/><line x1="60" y1="67" x2="35" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/><line x1="60" y1="67" x2="85" y2="50" stroke="#d04020" stroke-width="1.2" opacity="0.7"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Lebend</text>',
+    't7_nein':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#f0cc50" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="62" cy="86" rx="18" ry="16" fill="#dda020" opacity="0.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Raus!</text>',
+    't7_ring':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#3a1a08" opacity="0.8" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="8" ry="8" fill="#f5e8a0" opacity="0.7"/><ellipse cx="60" cy="80" rx="28" ry="36" fill="none" stroke="#e03020" stroke-width="2.5" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Blutring!</text>',
+    't7_unklar':bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#a06030" opacity="0.7" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="82" rx="12" ry="14" fill="#8a4020" opacity="0.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0c060" font-family="Georgia">Unklar</text>',
+    't10_ja':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#5a2808" opacity="0.85" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="12" ry="8" fill="#f5e8a0" opacity="0.85"/><ellipse cx="60" cy="95" rx="28" ry="36" fill="#3a1505" opacity="0.8"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Lebend</text>',
+    't10_tot':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#4a2008" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="92" rx="25" ry="32" fill="#1a0500" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Abgestorben?</text>',
+    't10_nein': bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#e8c040" opacity="0.95" stroke="#8a6a30" stroke-width="1.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Raus!</text>',
+    't10_lk':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#5a2808" opacity="0.75" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="14" ry="10" fill="#f5e8a0" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0c060" font-family="Georgia">LK 1/5</text>',
+    't14_ja':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.97" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="15" ry="8" fill="#f5e8a0" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Perfekt</text>',
+    't14_tot':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="38" rx="12" ry="8" fill="#f5e8a0" opacity="0.4"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Kein Leben!</text>',
+    't14_lk_klein':bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="8" ry="6" fill="#f5e8a0" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0a050" font-family="Georgia">Zu feucht!</text>',
+    't14_lk_gross':bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1e0803" opacity="0.95" stroke="#5a3010" stroke-width="1.5"/><ellipse cx="60" cy="44" rx="22" ry="17" fill="#f5e8a0" opacity="0.9"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f0a050" font-family="Georgia">Zu trocken!</text>',
+    't18_ok':   bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Schlupfbereit</text>',
+    't18_pip':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#0e0400" opacity="0.98" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="65" cy="37" rx="18" ry="13" fill="#f5e8a0" opacity="0.92"/><circle cx="60" cy="40" r="3" fill="none" stroke="#fff" stroke-width="1.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#90d090" font-family="Georgia">Pip!</text>',
+    't18_tot':  bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#1a0803" opacity="0.97" stroke="#4a2808" stroke-width="1.5"/><ellipse cx="60" cy="36" rx="10" ry="7" fill="#f5e8a0" opacity="0.4"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Abgestorben</text>',
+    't18_nein': bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#d0a030" opacity="0.9" stroke="#8a6a30" stroke-width="1.5"/><text x="60" y="143" text-anchor="middle" font-size="8" fill="#f08080" font-family="Georgia">Raus!</text>'
+  };
+  return svgs[stage]||bg+'<ellipse cx="60" cy="80" rx="38" ry="52" fill="#5a3020" opacity="0.7" stroke="#8a6a30" stroke-width="1.5"/>';
+}
+
+function initSchierTabs() {
+  var tabs=[{key:'vor',label:'Vor Einlegen'},{key:'t5',label:'Tag 5-6'},{key:'t7',label:'Tag 7'},{key:'t10',label:'Tag 10'},{key:'t14',label:'Tag 14'},{key:'t18',label:'Tag 18'}];
+  var row=document.getElementById('schier-tabs-row');
+  row.innerHTML=tabs.map(function(t,i){return '<button class="schier-tab-btn '+(i===0?'active':'')+'" onclick="showSchierStage(this,''+t.key+'')" style="padding:0.35rem 0.85rem;border-radius:20px;border:1px solid var(--border);background:'+(i===0?'var(--blue)':'var(--card)')+';color:'+(i===0?'#fff':'var(--muted)')+';font-family:inherit;font-size:0.78rem;cursor:pointer;">'+t.label+'</button>';}).join('');
+  showSchierStage(null,'vor');
+}
+
+function showSchierStage(btn,key) {
+  document.querySelectorAll('.schier-tab-btn').forEach(function(b){b.style.background='var(--card)';b.style.color='var(--muted)';});
+  if(btn){btn.style.background='var(--blue)';btn.style.color='#fff';}
+  var content=document.getElementById('schier-content');
+  var stages={
+    vor:{info:'Vor dem Einlegen: Risse, schwimmende Luftkammer, Doppeldotter erkennen.',eggs:[{l:'Gutes Ei',d:'Intakt, LK oben',svg:'vor_ok',c:'#90d4a0'},{l:'Riss',d:'Licht tritt aus',svg:'vor_riss',c:'#f5a0a0'},{l:'LK schwimmt',d:'Dreht sich',svg:'vor_lk',c:'#f5a0a0'},{l:'Doppeldotter',d:'Zwei Dotter',svg:'vor_dd',c:'#ddd'}]},
+    t5:{info:'Tag 5-6: Erstes Adernetz erkennbar.',eggs:[{l:'Befruchtet',d:'Spinnennetz, Punkt',svg:'t5_ja',c:'#90d4a0'},{l:'Unbefruchtet',d:'Klar wie frisch',svg:'t5_nein',c:'#f5a0a0'},{l:'Blutring',d:'Früh abgestorben',svg:'t5_ring',c:'#f5a0a0'},{l:'Unklar',d:'Nochmals in 2T',svg:'t5_unklar',c:'#f5c842'}]},
+    t7:{info:'Tag 7: Erste Hauptkontrolle. Unbefruchtete entfernen.',eggs:[{l:'Lebend',d:'Adernetz, Bewegung',svg:'t7_ja',c:'#90d4a0'},{l:'Unbefruchtet',d:'Hell, klar',svg:'t7_nein',c:'#f5a0a0'},{l:'Blutring',d:'Roter Ring',svg:'t7_ring',c:'#f5a0a0'},{l:'Unklar',d:'Drin lassen',svg:'t7_unklar',c:'#f5c842'}]},
+    t10:{info:'Tag 10: Küken wächst. Bewegung erkennbar.',eggs:[{l:'Lebend',d:'Dunkel, Bewegung',svg:'t10_ja',c:'#90d4a0'},{l:'Abgestorben',d:'Dunkel, still',svg:'t10_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Immer noch hell',svg:'t10_nein',c:'#f5a0a0'},{l:'LK-Grösse',d:'1/5 = normal',svg:'t10_lk',c:'#f5c842'}]},
+    t14:{info:'Tag 14: Zweite Kontrolle. LK ca. 1/3 des Eis.',eggs:[{l:'Perfekt',d:'Schwarz, LK 1/3',svg:'t14_ja',c:'#90d4a0'},{l:'Abgestorben',d:'Kein Leben',svg:'t14_tot',c:'#f5a0a0'},{l:'LK zu klein',d:'Zu feucht',svg:'t14_lk_klein',c:'#f5c842'},{l:'LK zu gross',d:'Zu trocken',svg:'t14_lk_gross',c:'#f5c842'}]},
+    t18:{info:'LETZTE Öffnung! Danach Brüter ZU bis Schlupf!',eggs:[{l:'Schlupfbereit',d:'Schwarz, LK gross',svg:'t18_ok',c:'#90d4a0'},{l:'Pip!',d:'Riss sichtbar',svg:'t18_pip',c:'#90d4a0'},{l:'Abgestorben',d:'Keine Reaktion',svg:'t18_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Noch hell',svg:'t18_nein',c:'#f5a0a0'}]}
+  };
+  var s=stages[key];
+  if(!s) return;
+  var html='<div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">💡</span><span>'+s.info+'</span></div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">';
+  s.eggs.forEach(function(e){
+    html+='<div style="border:2px solid '+e.c+';border-radius:8px;padding:0.5rem;text-align:center;background:var(--card)">';
+    html+='<svg viewBox="0 0 120 150" width="88" height="110" style="display:block;margin:0 auto 4px">'+getCandlingSVG(e.svg)+'</svg>';
+    html+='<div style="font-size:0.75rem;font-weight:bold;color:var(--blue)">'+e.l+'</div>';
+    html+='<div style="font-size:0.68rem;color:var(--muted);margin-top:2px">'+e.d+'</div></div>';
+  });
+  html+='</div>';
+  content.innerHTML=html;
+}
+
+function schierDiag(el,val) {
+  document.querySelectorAll('#schier-diagnose .schier-opt').forEach(function(o){o.style.background='var(--card)';o.style.border='2px solid var(--border)';});
+  el.style.background='var(--gold-light)';el.style.border='2px solid var(--gold)';
+  var r={lebend:{cls:'alert-success',t:'✅ <strong>Lebend!</strong> Zurück in den Brüter.'},unbefruchtet:{cls:'alert-warn',t:'⚪ <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'🔴 <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'🟡 <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
+  document.getElementById('schier-diag-result').innerHTML='<div class="alert '+r[val].cls+'" style="margin-top:0.5rem">'+r[val].t+'</div>';
+}
+
 function toggleKompli(el) {
-  const d = el.nextElementSibling;
-  const open = d.classList.contains('open');
-  document.querySelectorAll('.kompli-detail').forEach(x => x.classList.remove('open'));
-  if (!open) d.classList.add('open');
+  var d=el.nextElementSibling;
+  var open=d.classList.contains('open');
+  document.querySelectorAll('.kompli-detail').forEach(function(x){x.classList.remove('open');});
+  if(!open) d.classList.add('open');
 }
 // ===== STATISTIK =====
 function renderStatistik() {
-  if (!bruten.length) {
-    document.getElementById('stat-no-brut').style.display = 'block';
-    document.getElementById('stat-content').style.display = 'none';
-    return;
-  }
-  document.getElementById('stat-no-brut').style.display = 'none';
-  document.getElementById('stat-content').style.display = 'block';
-  const sel = document.getElementById('stat-brut-select');
-  sel.innerHTML = bruten.map(b => {
-    const day = Math.min(21, getTodayDayForBrut(b));
-    return `<button onclick="selectStatBrut('${b.id}',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">
-      🥚 ${b.rasse} (T${day})
-    </button>`;
-  }).join('');
+  if(!bruten.length){document.getElementById('stat-no-brut').style.display='block';document.getElementById('stat-content').style.display='none';return;}
+  document.getElementById('stat-no-brut').style.display='none';
+  document.getElementById('stat-content').style.display='block';
+  var sel=document.getElementById('stat-brut-select');
+  sel.innerHTML=bruten.map(function(b){var day=Math.min(42,getTodayDayForBrut(b));return '<button onclick="selectStatBrut(''+b.id+'',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">🥚 '+b.rasse+' (T'+day+')</button>';}).join('');
+  if(aktiveBrutId){var btn=sel.querySelector('[onclick*="'+aktiveBrutId+'"]');if(btn) selectStatBrut(aktiveBrutId,btn);}
 }
-function selectStatBrut(id, btn) {
-  document.querySelectorAll('#stat-brut-select button').forEach(b => {
-    b.style.background = 'var(--card)'; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--border)';
-  });
-  if (btn) { btn.style.background = 'var(--blue-light)'; btn.style.color = 'var(--blue)'; btn.style.borderColor = 'var(--blue)'; }
-  const brut = getBrutById(id);
-  document.getElementById('stat-ergebnis').style.display = 'block';
-  if (brut) {
-    document.getElementById('st-eingelegt').value = brut.anzahl || '';
-    if (brut.statistik) {
-      document.getElementById('st-befruchtet').value = brut.statistik.befruchtet || '';
-      document.getElementById('st-lebend').value = brut.statistik.lebend14 || '';
-      document.getElementById('st-geschluepft').value = brut.statistik.geschluepft || '';
-      berechneStatistik(id);
-    }
+
+function selectStatBrut(id,btn) {
+  document.querySelectorAll('#stat-brut-select button').forEach(function(b){b.style.background='var(--card)';b.style.color='var(--muted)';b.style.borderColor='var(--border)';});
+  if(btn){btn.style.background='var(--blue-light)';btn.style.color='var(--blue)';btn.style.borderColor='var(--blue)';}
+  var brut=getBrutById(id);
+  document.getElementById('stat-ergebnis').style.display='block';
+  if(brut){
+    document.getElementById('st-eingelegt').value=brut.anzahl||'';
+    if(brut.statistik){document.getElementById('st-befruchtet').value=brut.statistik.befruchtet||'';document.getElementById('st-lebend').value=brut.statistik.lebend14||'';document.getElementById('st-geschluepft').value=brut.statistik.geschluepft||'';berechneStatistik(id);}
   }
 }
+
 function berechneStatistik(brutId) {
-  const id = brutId || aktiveBrutId;
-  const brut = getBrutById(id);
-  const eingelegt = parseInt(document.getElementById('st-eingelegt').value) || 0;
-  const befruchtet = parseInt(document.getElementById('st-befruchtet').value) || 0;
-  const lebend14 = parseInt(document.getElementById('st-lebend').value) || 0;
-  const geschluepft = parseInt(document.getElementById('st-geschluepft').value) || 0;
-  if (!eingelegt) { alert('Bitte Anzahl eingelegter Eier eingeben.'); return; }
-  const pB = Math.round(befruchtet/eingelegt*100);
-  const pL = befruchtet>0 ? Math.round(lebend14/befruchtet*100) : 0;
-  const pS = Math.round(geschluepft/eingelegt*100);
-  document.getElementById('pct-bf').textContent = pB+'%';
-  document.getElementById('pct-lb').textContent = pL+'%';
-  document.getElementById('pct-sl').textContent = pS+'%';
-  setTimeout(() => {
-    document.getElementById('bar-bf').style.width = pB+'%';
-    document.getElementById('bar-lb').style.width = pL+'%';
-    document.getElementById('bar-sl').style.width = pS+'%';
-  }, 50);
-  document.getElementById('txt-bf').textContent = befruchtet+' von '+eingelegt+' Eiern befruchtet';
-  document.getElementById('txt-lb').textContent = lebend14+' von '+befruchtet+' Befruchteten lebend an Tag 14';
-  document.getElementById('txt-sl').textContent = geschluepft+' von '+eingelegt+' eingelegten Eiern geschlüpft';
-  let bew = '';
-  bew += pB>=85?'✅ <strong>Befruchtungsrate sehr gut</strong> – Elterntiere gesund.<br>':pB>=70?'🟡 <strong>Befruchtungsrate mässig</strong> – Hahn-Henne-Verhältnis prüfen.<br>':'🔴 <strong>Befruchtungsrate tief</strong> – Hahn aktiv? Ernährung prüfen.<br>';
-  bew += pL>=90?'✅ <strong>Überlebensrate sehr gut</strong> – Brutbedingungen optimal.<br>':pL>=75?'🟡 <strong>Überlebensrate mässig</strong> – Temp. und Feuchtigkeit prüfen.<br>':'🔴 <strong>Viele abgestorben</strong> – Wenden, Temp., Lagerung überdenken.<br>';
-  bew += pS>=75?'✅ <strong>Schlupfrate sehr gut</strong> – Gratulation!':pS>=60?'🟡 <strong>Schlupfrate mässig</strong> – Feuchtigkeit ab Tag 18 prüfen.':'🔴 <strong>Schlupfrate tief</strong> – Membran zu trocken? Feuchtigkeit erhöhen.';
-  document.getElementById('stat-bew').innerHTML = bew;
-  if (brut) {
-    brut.statistik = { eingelegt, befruchtet, lebend14, geschluepft };
-    saveBruten();
-    renderBrutenListe();
-  }
+  var id=brutId||aktiveBrutId;
+  var brut=getBrutById(id);
+  var eingelegt=parseInt(document.getElementById('st-eingelegt').value)||0;
+  var befruchtet=parseInt(document.getElementById('st-befruchtet').value)||0;
+  var lebend14=parseInt(document.getElementById('st-lebend').value)||0;
+  var geschluepft=parseInt(document.getElementById('st-geschluepft').value)||0;
+  if(!eingelegt){alert('Bitte Anzahl eingeben.');return;}
+  var pB=Math.round(befruchtet/eingelegt*100);
+  var pL=befruchtet>0?Math.round(lebend14/befruchtet*100):0;
+  var pS=Math.round(geschluepft/eingelegt*100);
+  document.getElementById('pct-bf').textContent=pB+'%';
+  document.getElementById('pct-lb').textContent=pL+'%';
+  document.getElementById('pct-sl').textContent=pS+'%';
+  setTimeout(function(){document.getElementById('bar-bf').style.width=pB+'%';document.getElementById('bar-lb').style.width=pL+'%';document.getElementById('bar-sl').style.width=pS+'%';},50);
+  document.getElementById('txt-bf').textContent=befruchtet+' von '+eingelegt+' Eiern';
+  document.getElementById('txt-lb').textContent=lebend14+' von '+befruchtet+' Befruchteten';
+  document.getElementById('txt-sl').textContent=geschluepft+' von '+eingelegt+' geschlüpft';
+  var bew='';
+  bew+=pB>=85?'✅ <strong>Befruchtungsrate sehr gut</strong><br>':pB>=70?'🟡 <strong>Befruchtungsrate mässig</strong><br>':'🔴 <strong>Befruchtungsrate tief</strong><br>';
+  bew+=pL>=90?'✅ <strong>Überlebensrate sehr gut</strong><br>':pL>=75?'🟡 <strong>Überlebensrate mässig</strong><br>':'🔴 <strong>Viele abgestorben</strong><br>';
+  bew+=pS>=75?'✅ <strong>Schlupfrate sehr gut!</strong>':pS>=60?'🟡 <strong>Schlupfrate mässig</strong>':'🔴 <strong>Schlupfrate tief</strong>';
+  document.getElementById('stat-bew').innerHTML=bew;
+  if(brut){brut.statistik={eingelegt,befruchtet,lebend14,geschluepft};renderBrutenListe();}
 }
+
+// ===== FEEDBACK =====
+async function sendFeedback() {
+  var typ=document.getElementById('fb-typ').value;
+  var titel=document.getElementById('fb-titel').value.trim();
+  var beschreibung=document.getElementById('fb-beschreibung').value.trim();
+  if(!titel){alert('Bitte Titel eingeben.');return;}
+  var { data: { user } } = await sb.auth.getUser();
+  var { error } = await sb.from('feedback').insert({user_id:user?user.id:null,typ,titel,beschreibung,status:'neu'});
+  if(!error){
+    document.getElementById('fb-titel').value='';
+    document.getElementById('fb-beschreibung').value='';
+    document.getElementById('fb-success').style.display='flex';
+    setTimeout(function(){document.getElementById('fb-success').style.display='none';},4000);
+    loadFeedback();
+  } else { alert('Fehler: '+error.message); }
+}
+
+async function loadFeedback() {
+  var { data } = await sb.from('feedback').select('*').order('erstellt_am',{ascending:false}).limit(50);
+  if(!data||!data.length) return;
+  var card=document.getElementById('fb-liste-card');
+  var liste=document.getElementById('fb-liste');
+  var count=document.getElementById('fb-count');
+  card.style.display='block';
+  count.textContent='('+data.length+' Einträge)';
+  var typen={idee:'💡',bug:'🐛',wunsch:'⭐',lob:'👍'};
+  var statusMap={neu:'🔵 Neu',gelesen:'👁️ Gesehen',erledigt:'✅ Erledigt',abgelehnt:'❌ Abgelehnt'};
+  liste.innerHTML=data.map(function(f){return '<div style="padding:0.65rem 0;border-bottom:1px solid var(--border);"><div style="display:flex;justify-content:space-between;"><span style="font-weight:bold;font-size:0.85rem;">'+(typen[f.typ]||'💡')+' '+f.titel+'</span><span style="font-size:0.7rem;color:var(--muted);">'+(statusMap[f.status]||f.status)+'</span></div>'+(f.beschreibung?'<div style="font-size:0.78rem;color:#666;margin-top:2px;">'+f.beschreibung+'</div>':'')+'<div style="font-size:0.7rem;color:var(--muted);margin-top:3px;">'+new Date(f.erstellt_am).toLocaleDateString('de-CH')+'</div></div>';}).join('');
+}
+
 // ===== ERINNERUNGEN =====
 function checkReminder() {
-  const brut = getAktiveBrut();
-  if (!brut) return;
-  const today = new Date().toDateString();
-  if (localStorage.getItem('last_reminder') === today) return;
-  const day = getTodayDayForBrut(brut);
-  const reminders = {
-    1:  {i:'🥚', t:'Brut gestartet!', m:'Temperatur und Feuchtigkeit kontrolliert? Brüter erste 6h nicht öffnen.'},
-    7:  {i:'🔦', t:'Zeit zum Schieren!', m:'Tag 7: Erste Schier-Kontrolle. Unbefruchtete Eier entfernen.'},
-    14: {i:'🔦', t:'Zweite Schier-Kontrolle', m:'Abgestorbene entfernen. Luftkammer prüfen – ca. 1/3 des Eis.'},
-    17: {i:'⚠️', t:'Morgen: Wenden stoppen!', m:'Ab Tag 18 kein Wenden mehr. Feuchtigkeit auf 65–70% erhöhen.'},
-    18: {i:'🛑', t:'Wenden STOPP – heute!', m:'Wenden abstellen, Feuchtigkeit 65–70%, Eier auf Schlupfhorde. Brüter zu!'},
-    19: {i:'🐣', t:'Schlupfphase beginnt!', m:'Brüter NICHT öffnen. Pip möglich – Geduld.'},
-    21: {i:'🐥', t:'Schlupftag!', m:'Küken erst raus wenn trocken – mind. 24h warten.'}
-  };
-  const r = reminders[day];
-  if (r) {
-    document.getElementById('rem-icon').textContent = r.i;
-    document.getElementById('rem-title').textContent = r.t;
-    document.getElementById('rem-text').textContent = r.m;
-    document.getElementById('reminder-overlay').classList.add('open');
-    localStorage.setItem('last_reminder', today);
-  }
+  var brut=getAktiveBrut();
+  if(!brut) return;
+  var today=new Date().toDateString();
+  if(localStorage.getItem('last_reminder')===today) return;
+  var day=getTodayDayForBrut(brut);
+  var reminders={1:{i:'🥚',t:'Brut gestartet!',m:'Temperatur und Feuchtigkeit kontrolliert?'},7:{i:'🔦',t:'Zeit zum Schieren!',m:'Tag 7: Erste Kontrolle. Unbefruchtete entfernen.'},14:{i:'🔦',t:'Zweite Schier-Kontrolle',m:'Abgestorbene entfernen. Luftkammer prüfen.'},17:{i:'⚠️',t:'Morgen: Wenden stoppen!',m:'Ab Tag 18 kein Wenden. Feuchtigkeit 65–70%.'},18:{i:'🛑',t:'Wenden STOPP!',m:'Wenden abstellen, 65–70%, Schlupfhorde. Brüter zu!'},19:{i:'🐣',t:'Schlupfphase!',m:'Brüter NICHT öffnen. Pip möglich.'},21:{i:'🐥',t:'Schlupftag!',m:'Küken erst raus nach 3 Tagen!'}};
+  var r=reminders[day];
+  if(r){document.getElementById('rem-icon').textContent=r.i;document.getElementById('rem-title').textContent=r.t;document.getElementById('rem-text').textContent=r.m;document.getElementById('reminder-overlay').classList.add('open');localStorage.setItem('last_reminder',today);}
 }
-function closeReminder() {
-  document.getElementById('reminder-overlay').classList.remove('open');
-}
+
+function closeReminder(){document.getElementById('reminder-overlay').classList.remove('open');}
+
 // ===== INIT =====
-showTab('bruten', document.getElementById('tab-bruten'));
-checkReminder();
+document.addEventListener('DOMContentLoaded', checkSession);
 </script>
 </body>
 </html>
