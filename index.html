@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brutbegleiter â Federkompass</title>
+<title>Brutbegleiter Ã¢ÂÂ Federkompass</title>
 <link rel="manifest" href="/Brutbegleiter/manifest.json">
 <meta name="theme-color" content="#1a2f6e"> 
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -195,43 +195,43 @@ header .sub { font-size:0.7rem; color:var(--muted); }
     </svg>
       <button id="push-toggle-btn" onclick="togglePush()"
     style="background:none;border:1px solid var(--muted);border-radius:20px;color:var(--egg-shell);font-size:0.72rem;cursor:pointer;font-family:inherit;padding:3px 10px;">
-    ð Push AN
+    Ã°ÂÂÂ Push AN
   </button>
     <button onclick="logout()" style="background:none;border:none;color:var(--muted);font-size:0.75rem;cursor:pointer;font-family:inherit;">Abmelden</button>
   </div>
 </header>
 <div class="tab-bar">
-  <button id="tab-bruten" class="active" onclick="showTab('bruten',this)"><span class="ti">ð¥</span>Bruten</button>
-  <button id="tab-tagebuch" onclick="showTab('tagebuch',this)"><span class="ti">ð</span>Tagebuch</button>
-  <button id="tab-schieren" onclick="showTab('schieren',this)"><span class="ti">ð¦</span>Schieren</button>
-  <button id="tab-probleme" onclick="showTab('probleme',this)"><span class="ti">â ï¸</span>Probleme</button>
-  <button id="tab-aufzucht" onclick="showTab('aufzucht',this)"><span class="ti">ð¥</span>Aufzucht</button>
-  <button id="tab-statistik" onclick="showTab('statistik',this)"><span class="ti">ð</span>Statistik</button>
-  <button id="tab-feedback" onclick="showTab('feedback',this)"><span class="ti">ð¡</span>Feedback</button>
+  <button id="tab-bruten" class="active" onclick="showTab('bruten',this)"><span class="ti">Ã°ÂÂ¥Â</span>Bruten</button>
+  <button id="tab-tagebuch" onclick="showTab('tagebuch',this)"><span class="ti">Ã°ÂÂÂ</span>Tagebuch</button>
+  <button id="tab-schieren" onclick="showTab('schieren',this)"><span class="ti">Ã°ÂÂÂ¦</span>Schieren</button>
+  <button id="tab-probleme" onclick="showTab('probleme',this)"><span class="ti">Ã¢ÂÂ Ã¯Â¸Â</span>Probleme</button>
+  <button id="tab-aufzucht" onclick="showTab('aufzucht',this)"><span class="ti">Ã°ÂÂÂ¥</span>Aufzucht</button>
+  <button id="tab-statistik" onclick="showTab('statistik',this)"><span class="ti">Ã°ÂÂÂ</span>Statistik</button>
+  <button id="tab-feedback" onclick="showTab('feedback',this)"><span class="ti">Ã°ÂÂÂ¡</span>Feedback</button>
 </div>
 <!-- BRUTEN -->
 <div id="screen-bruten" class="screen active">
-  <button class="neue-brut-btn" onclick="openNeueBrutModal()">ð¥ Neue Brut starten</button>
+  <button class="neue-brut-btn" onclick="openNeueBrutModal()">Ã°ÂÂ¥Â Neue Brut starten</button>
   <div id="bruten-liste"></div>
 </div>
 
 <!-- TAGEBUCH -->
 <div id="screen-tagebuch" class="screen">
   <div id="tagebuch-no-brut" class="no-content">
-    <div style="font-size:2rem;margin-bottom:0.5rem">ð</div>
-    WÃ¤hle eine Brut in der Ãbersicht.
+    <div style="font-size:2rem;margin-bottom:0.5rem">Ã°ÂÂÂ</div>
+    WÃÂ¤hle eine Brut in der ÃÂbersicht.
   </div>
   <div id="tagebuch-content" style="display:none">
     <div id="brut-selector-bar" style="display:none;margin-bottom:0.75rem;overflow-x:auto;white-space:nowrap;"></div>
     <div class="card">
       <div class="day-nav">
-        <button class="nav-btn" onclick="changeDay(-1)" id="prev-btn">â ZurÃ¼ck</button>
+        <button class="nav-btn" onclick="changeDay(-1)" id="prev-btn">Ã¢ÂÂ ZurÃÂ¼ck</button>
         <div class="day-header">
           <div class="day-num" id="day-num">Tag 1</div>
           <div class="day-date" id="day-date"></div>
           <div class="day-sub" id="day-sub"></div>
         </div>
-        <button class="nav-btn" onclick="changeDay(1)" id="next-btn">Weiter â</button>
+        <button class="nav-btn" onclick="changeDay(1)" id="next-btn">Weiter Ã¢ÂÂ</button>
       </div>
       <div class="day-dots" id="day-dots"></div>
     </div>
@@ -245,46 +245,46 @@ header .sub { font-size:0.7rem; color:var(--muted); }
     </div>
     <div id="vorb-section" style="display:none">
       <div class="card" style="border-top:3px solid var(--gold)">
-        <div class="card-title">ð Vorbereitung</div>
-        <button class="accordion-btn" onclick="toggleAcc('vorb1')"><span>ð Phase 1 â Eier sammeln &amp; prÃ¼fen</span><span class="acc-arrow" id="arr-vorb1">â¶</span></button>
+        <div class="card-title">Ã°ÂÂÂ Vorbereitung</div>
+        <button class="accordion-btn" onclick="toggleAcc('vorb1')"><span>Ã°ÂÂÂ Phase 1 Ã¢ÂÂ Eier sammeln &amp; prÃÂ¼fen</span><span class="acc-arrow" id="arr-vorb1">Ã¢ÂÂ¶</span></button>
         <div class="accordion-body" id="vorb1">
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier tÃ¤glich sammeln<span class="hint">Max. 7 Tage alt â frischer ist besser.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Gewicht prÃ¼fen (50â75g ideal)<span class="hint">Sehr kleine oder grosse aussortieren.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Schale auf Risse prÃ¼fen<span class="hint">Rissige Eier nicht einlegen.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Form prÃ¼fen (gleichmÃ¤ssig oval)<span class="hint">Missgeformte aussortieren.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Lagerung: 10â15Â°C, 60â75% LF<span class="hint">Nicht im KÃ¼hlschrank. TÃ¤glich wenden.</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>6â8h vor Einlegen auf Zimmertemp.<span class="hint">Kondenswasser vermeiden.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier tÃÂ¤glich sammeln<span class="hint">Max. 7 Tage alt Ã¢ÂÂ frischer ist besser.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Gewicht prÃÂ¼fen (50Ã¢ÂÂ75g ideal)<span class="hint">Sehr kleine oder grosse aussortieren.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Schale auf Risse prÃÂ¼fen<span class="hint">Rissige Eier nicht einlegen.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Form prÃÂ¼fen (gleichmÃÂ¤ssig oval)<span class="hint">Missgeformte aussortieren.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Lagerung: 10Ã¢ÂÂ15ÃÂ°C, 60Ã¢ÂÂ75% LF<span class="hint">Nicht im KÃÂ¼hlschrank. TÃÂ¤glich wenden.</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>6Ã¢ÂÂ8h vor Einlegen auf Zimmertemp.<span class="hint">Kondenswasser vermeiden.</span></label></div>
         </div>
-        <button class="accordion-btn" onclick="toggleAcc('vorb2')"><span>âï¸ Phase 2 â Brutautomat</span><span class="acc-arrow" id="arr-vorb2">â¶</span></button>
+        <button class="accordion-btn" onclick="toggleAcc('vorb2')"><span>Ã¢ÂÂÃ¯Â¸Â Phase 2 Ã¢ÂÂ Brutautomat</span><span class="acc-arrow" id="arr-vorb2">Ã¢ÂÂ¶</span></button>
         <div class="accordion-body" id="vorb2">
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Reinigen &amp; desinfizieren</label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Probelauf 24â48h vorher</label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>MotorbrÃ¼ter 37,5Â°C / FlÃ¤che 38,0â38,3Â°C<span class="hint">Externes Thermometer verwenden!</span></label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Feuchtigkeit 45â55%</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Probelauf 24Ã¢ÂÂ48h vorher</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>MotorbrÃÂ¼ter 37,5ÃÂ°C / FlÃÂ¤che 38,0Ã¢ÂÂ38,3ÃÂ°C<span class="hint">Externes Thermometer verwenden!</span></label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Feuchtigkeit 45Ã¢ÂÂ55%</label></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Wendemechanismus testen</label></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Standort: kein Fenster, kein Zug</label></div>
         </div>
-        <button class="accordion-btn" onclick="toggleAcc('vorb3')"><span>ð¥ Phase 3 â Einlegen</span><span class="acc-arrow" id="arr-vorb3">â¶</span></button>
+        <button class="accordion-btn" onclick="toggleAcc('vorb3')"><span>Ã°ÂÂ¥Â Phase 3 Ã¢ÂÂ Einlegen</span><span class="acc-arrow" id="arr-vorb3">Ã¢ÂÂ¶</span></button>
         <div class="accordion-body" id="vorb3">
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier kennzeichnen (Bleistift)</label></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einlegedatum + Schlupftag notieren</label></div>
-          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier einlegen, Automat schlieÃen</label></div>
+          <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Eier einlegen, Automat schlieÃÂen</label></div>
           <div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Erste 3 Tage bei manueller Wendung NICHT wenden</label></div>
         </div>
       </div>
     </div>
     <div id="entry-section">
       <div class="card">
-        <div class="card-title">ð Tageseintrag <span id="entry-datum" style="font-size:0.72rem;color:var(--muted);font-weight:normal;margin-left:4px;"></span></div>
+        <div class="card-title">Ã°ÂÂÂ Tageseintrag <span id="entry-datum" style="font-size:0.72rem;color:var(--muted);font-weight:normal;margin-left:4px;"></span></div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem;">
-          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-wenden" style="width:17px;height:17px;accent-color:var(--gold)"> ð Gewendet</label>
-          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-geschiert" style="width:17px;height:17px;accent-color:var(--gold)"> ð¦ Geschiert</label>
-          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-wasser" style="width:17px;height:17px;accent-color:var(--gold)"> ð§ Wasser</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-wenden" style="width:17px;height:17px;accent-color:var(--gold)"> Ã°ÂÂÂ Gewendet</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-geschiert" style="width:17px;height:17px;accent-color:var(--gold)"> Ã°ÂÂÂ¦ Geschiert</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:0.83rem;cursor:pointer;"><input type="checkbox" id="cb-wasser" style="width:17px;height:17px;accent-color:var(--gold)"> Ã°ÂÂÂ§ Wasser</label>
         </div>
         <div class="param-row">
           <span class="param-label">Temperatur</span>
           <input type="number" class="param-input" id="p-temp" step="0.1" placeholder="37.8">
-          <span class="param-unit">Â°C</span>
+          <span class="param-unit">ÃÂ°C</span>
           <div class="p-dot" id="s-temp"></div>
         </div>
         <div class="param-row">
@@ -294,18 +294,18 @@ header .sub { font-size:0.7rem; color:var(--muted); }
           <div class="p-dot" id="s-humi"></div>
         </div>
         <div class="param-row" id="humi-schlupf" style="display:none">
-          <span class="param-label" style="color:var(--danger);font-size:0.83rem">â ï¸ Schlupf-Feuchtigkeit</span>
+          <span class="param-label" style="color:var(--danger);font-size:0.83rem">Ã¢ÂÂ Ã¯Â¸Â Schlupf-Feuchtigkeit</span>
           <input type="number" class="param-input" id="p-humi2" placeholder="68">
           <span class="param-unit">%</span>
         </div>
         <div style="padding:0.55rem 0;">
-          <div style="font-size:0.83rem;margin-bottom:4px;color:#555;">ð Notizen</div>
-          <textarea id="p-notiz" rows="3" style="width:100%;padding:0.45rem 0.6rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.83rem;background:var(--bg);resize:vertical;" placeholder="Beobachtungen, Besonderheitenâ¦"></textarea>
+          <div style="font-size:0.83rem;margin-bottom:4px;color:#555;">Ã°ÂÂÂ Notizen</div>
+          <textarea id="p-notiz" rows="3" style="width:100%;padding:0.45rem 0.6rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.83rem;background:var(--bg);resize:vertical;" placeholder="Beobachtungen, BesonderheitenÃ¢ÂÂ¦"></textarea>
         </div>
-        <button class="save-btn" onclick="saveDay()">ð¾ Tag speichern</button>
+        <button class="save-btn" onclick="saveDay()">Ã°ÂÂÂ¾ Tag speichern</button>
       </div>
       <div id="protokoll-card" class="card" style="display:none">
-        <div class="card-title">ð Brutprotokoll <span id="protokoll-count" style="font-size:0.72rem;color:var(--muted);font-weight:normal;"></span></div>
+        <div class="card-title">Ã°ÂÂÂ Brutprotokoll <span id="protokoll-count" style="font-size:0.72rem;color:var(--muted);font-weight:normal;"></span></div>
         <div id="protokoll-list"></div>
       </div>
     </div>
@@ -314,96 +314,96 @@ header .sub { font-size:0.7rem; color:var(--muted); }
 <!-- SCHIEREN -->
 <div id="screen-schieren" class="screen">
   <div class="card">
-    <div class="card-title"><span>ð¦</span> Schier-Leitfaden</div>
-    <p style="font-size:0.83rem;color:var(--muted);margin-bottom:0.75rem">WÃ¤hle den Bruttag fÃ¼r Vergleichsgrafiken.</p>
+    <div class="card-title"><span>Ã°ÂÂÂ¦</span> Schier-Leitfaden</div>
+    <p style="font-size:0.83rem;color:var(--muted);margin-bottom:0.75rem">WÃÂ¤hle den Bruttag fÃÂ¼r Vergleichsgrafiken.</p>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;" id="schier-tabs-row"></div>
     <div id="schier-content"></div>
   </div>
   <div class="card">
-    <div class="card-title"><span>â</span> Was sehe ich? â Diagnose</div>
+    <div class="card-title"><span>Ã¢ÂÂ</span> Was sehe ich? Ã¢ÂÂ Diagnose</div>
     <div id="schier-diagnose">
-      <div class="schier-opt" onclick="schierDiag(this,'lebend')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--success);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Adern, Bewegung sichtbar</strong><br><span style="font-size:0.75rem;color:var(--muted)">Lebend â</span></div></div>
-      <div class="schier-opt" onclick="schierDiag(this,'unbefruchtet')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#ccc;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Klar und hell, leuchtet durch</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unbefruchtet âª</span></div></div>
-      <div class="schier-opt" onclick="schierDiag(this,'blutring')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--danger);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Roter Ring, kein Embryo</strong><br><span style="font-size:0.75rem;color:var(--muted)">Blutring ð´</span></div></div>
-      <div class="schier-opt" onclick="schierDiag(this,'unklar')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#f5c842;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Dunkler Klumpen, keine Bewegung</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unklar ð¡</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'lebend')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--success);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Adern, Bewegung sichtbar</strong><br><span style="font-size:0.75rem;color:var(--muted)">Lebend Ã¢ÂÂ</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'unbefruchtet')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#ccc;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Klar und hell, leuchtet durch</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unbefruchtet Ã¢ÂÂª</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'blutring')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:var(--danger);flex-shrink:0"></div><div><strong style="font-size:0.85rem">Roter Ring, kein Embryo</strong><br><span style="font-size:0.75rem;color:var(--muted)">Blutring Ã°ÂÂÂ´</span></div></div>
+      <div class="schier-opt" onclick="schierDiag(this,'unklar')" style="display:flex;align-items:center;gap:10px;padding:0.6rem;border-radius:8px;margin-bottom:0.4rem;border:2px solid var(--border);cursor:pointer;"><div style="width:12px;height:12px;border-radius:50%;background:#f5c842;flex-shrink:0"></div><div><strong style="font-size:0.85rem">Dunkler Klumpen, keine Bewegung</strong><br><span style="font-size:0.75rem;color:var(--muted)">Unklar Ã°ÂÂÂ¡</span></div></div>
       <div id="schier-diag-result"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-title"><span>ð</span> Wann schieren?</div>
-    <div class="timeline-row"><div class="timeline-day">Tag 5â7</div><div class="timeline-text">Erste Kontrolle: Unbefruchtete Eier erkennen.</div></div>
+    <div class="card-title"><span>Ã°ÂÂÂ</span> Wann schieren?</div>
+    <div class="timeline-row"><div class="timeline-day">Tag 5Ã¢ÂÂ7</div><div class="timeline-text">Erste Kontrolle: Unbefruchtete Eier erkennen.</div></div>
     <div class="timeline-row"><div class="timeline-day">Tag 14</div><div class="timeline-text">Zweite Kontrolle: Abgestorbene entfernen.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Tag 18</div><div class="timeline-text">â LETZTE Ãffnung! Danach zu!</div></div>
-    <div class="timeline-row"><div class="timeline-day">Tag 19â21</div><div class="timeline-text">â Nicht mehr Ã¶ffnen!</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 18</div><div class="timeline-text">Ã¢ÂÂ LETZTE ÃÂffnung! Danach zu!</div></div>
+    <div class="timeline-row"><div class="timeline-day">Tag 19Ã¢ÂÂ21</div><div class="timeline-text">Ã¢ÂÂ Nicht mehr ÃÂ¶ffnen!</div></div>
   </div>
 </div>
 
 <!-- PROBLEME -->
 <div id="screen-probleme" class="screen">
   <div class="card">
-    <div class="card-title"><span>â ï¸</span> HÃ¤ufige Probleme</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð¡ï¸ Temperatur falsch</span><span>â¾</span></div>
-    <div class="kompli-detail"><strong>MotorbrÃ¼ter:</strong> 37,5â37,8Â°C | <strong>FlÃ¤chenbrÃ¼ter:</strong> 38,0â38,3Â°C<br><br><strong>Zu hoch:</strong> Missbildungen, FrÃ¼hschlupf.<br><strong>Zu tief:</strong> SpÃ¤tschlupf, schwache KÃ¼ken.<br><br>Immer externes Thermometer verwenden!</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð§ Feuchtigkeit falsch</span><span>â¾</span></div>
-    <div class="kompli-detail"><strong>Tag 1â17:</strong> 45â55% | <strong>Tag 18â21:</strong> 65â70%<br><br><strong>Zu trocken:</strong> Membran klebt â Schlupfprobleme.<br><strong>Zu feucht:</strong> Embryo ertrinkt, Schimmel.</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð Wenden vergessen</span><span>â¾</span></div>
-    <div class="kompli-detail">3â5Ã tÃ¤glich, ungerade Anzahl. Erste 3 Tage bei manuell nicht wenden. Ab Tag 18 stoppen.</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð Embryo abgestorben</span><span>â¾</span></div>
-    <div class="kompli-detail">Blutring (frÃ¼h), regloser Klumpen (spÃ¤t), fauliger Geruch. Sofort entfernen wenn Geruch!</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð£ KÃ¼ken kommt nicht raus</span><span>â¾</span></div>
-    <div class="kompli-detail">Feuchtigkeit auf 70â75%. 24h warten nach Pip. BrÃ¼ter NICHT Ã¶ffnen wenn andere schlÃ¼pfen!</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð¦  Faule Eier</span><span>â¾</span></div>
-    <div class="kompli-detail">Sofort entfernen! Kontaminiert alle anderen. BrÃ¼ter danach desinfizieren.</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>â¡ Stromausfall</span><span>â¾</span></div>
-    <div class="kompli-detail">Unter 2h: Decke drÃ¼ber, meist ok. Ãber 4h: kritisch. Nach Wiederherstellung langsam angleichen.</div>
-    <div class="kompli-item" onclick="toggleKompli(this)"><span>ð¥ Schwache KÃ¼ken</span><span>â¾</span></div>
-    <div class="kompli-detail">Erst raus wenn trocken (24â48h nach Schlupf). 35Â°C Aufzuchtraum vorwÃ¤rmen.</div>
+    <div class="card-title"><span>Ã¢ÂÂ Ã¯Â¸Â</span> HÃÂ¤ufige Probleme</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ¡Ã¯Â¸Â Temperatur falsch</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail"><strong>MotorbrÃÂ¼ter:</strong> 37,5Ã¢ÂÂ37,8ÃÂ°C | <strong>FlÃÂ¤chenbrÃÂ¼ter:</strong> 38,0Ã¢ÂÂ38,3ÃÂ°C<br><br><strong>Zu hoch:</strong> Missbildungen, FrÃÂ¼hschlupf.<br><strong>Zu tief:</strong> SpÃÂ¤tschlupf, schwache KÃÂ¼ken.<br><br>Immer externes Thermometer verwenden!</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ§ Feuchtigkeit falsch</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail"><strong>Tag 1Ã¢ÂÂ17:</strong> 45Ã¢ÂÂ55% | <strong>Tag 18Ã¢ÂÂ21:</strong> 65Ã¢ÂÂ70%<br><br><strong>Zu trocken:</strong> Membran klebt Ã¢ÂÂ Schlupfprobleme.<br><strong>Zu feucht:</strong> Embryo ertrinkt, Schimmel.</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ Wenden vergessen</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">3Ã¢ÂÂ5ÃÂ tÃÂ¤glich, ungerade Anzahl. Erste 3 Tage bei manuell nicht wenden. Ab Tag 18 stoppen.</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ Embryo abgestorben</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">Blutring (frÃÂ¼h), regloser Klumpen (spÃÂ¤t), fauliger Geruch. Sofort entfernen wenn Geruch!</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ£ KÃÂ¼ken kommt nicht raus</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">Feuchtigkeit auf 70Ã¢ÂÂ75%. 24h warten nach Pip. BrÃÂ¼ter NICHT ÃÂ¶ffnen wenn andere schlÃÂ¼pfen!</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂ¦Â  Faule Eier</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">Sofort entfernen! Kontaminiert alle anderen. BrÃÂ¼ter danach desinfizieren.</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã¢ÂÂ¡ Stromausfall</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">Unter 2h: Decke drÃÂ¼ber, meist ok. ÃÂber 4h: kritisch. Nach Wiederherstellung langsam angleichen.</div>
+    <div class="kompli-item" onclick="toggleKompli(this)"><span>Ã°ÂÂÂ¥ Schwache KÃÂ¼ken</span><span>Ã¢ÂÂ¾</span></div>
+    <div class="kompli-detail">Erst raus wenn trocken (24Ã¢ÂÂ48h nach Schlupf). 35ÃÂ°C Aufzuchtraum vorwÃÂ¤rmen.</div>
   </div>
 </div>
 
 <!-- AUFZUCHT -->
 <div id="screen-aufzucht" class="screen">
   <div class="card">
-    <div class="card-title"><span>ð¥</span> Aufzucht â Richtwerte &amp; Infos</div>
-    <div class="alert alert-info"><span class="alert-icon">â¹ï¸</span><span>Basis-Nachschlagewerk. VollstÃ¤ndige Aufzucht-Begleitung erscheint bald als Zusatzmodul.</span></div>
+    <div class="card-title"><span>Ã°ÂÂÂ¥</span> Aufzucht Ã¢ÂÂ Richtwerte &amp; Infos</div>
+    <div class="alert alert-info"><span class="alert-icon">Ã¢ÂÂ¹Ã¯Â¸Â</span><span>Basis-Nachschlagewerk. VollstÃÂ¤ndige Aufzucht-Begleitung erscheint bald als Zusatzmodul.</span></div>
   </div>
   <div class="card">
-    <div class="card-title"><span>â³</span> KÃ¼ken im BrÃ¼ter lassen</div>
-    <div style="font-size:0.85rem;line-height:1.6;"><strong>Erst ab Tag 3 nach Schlupf rausnehmen</strong> â wenn trocken, fluffig und aktiv. KÃ¼ken zehren 48â72h vom Dottersack.</div>
+    <div class="card-title"><span>Ã¢ÂÂ³</span> KÃÂ¼ken im BrÃÂ¼ter lassen</div>
+    <div style="font-size:0.85rem;line-height:1.6;"><strong>Erst ab Tag 3 nach Schlupf rausnehmen</strong> Ã¢ÂÂ wenn trocken, fluffig und aktiv. KÃÂ¼ken zehren 48Ã¢ÂÂ72h vom Dottersack.</div>
   </div>
   <div class="card">
-    <div class="card-title"><span>ð¡ï¸</span> Temperaturplan</div>
-    <div class="timeline-row"><div class="timeline-day">Woche 1</div><div class="timeline-text">35Â°C unter WÃ¤rmequelle.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Woche 2</div><div class="timeline-text">32Â°C â wÃ¶chentlich -3Â°C.</div></div>
-    <div class="timeline-row"><div class="timeline-day">Woche 3</div><div class="timeline-text">29Â°C</div></div>
-    <div class="timeline-row"><div class="timeline-day">Woche 4</div><div class="timeline-text">26Â°C</div></div>
-    <div class="timeline-row"><div class="timeline-day">5â6 Wo.</div><div class="timeline-text">Federn â selbst wÃ¤rmen â HÃ¼hnertraktor.</div></div>
+    <div class="card-title"><span>Ã°ÂÂÂ¡Ã¯Â¸Â</span> Temperaturplan</div>
+    <div class="timeline-row"><div class="timeline-day">Woche 1</div><div class="timeline-text">35ÃÂ°C unter WÃÂ¤rmequelle.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Woche 2</div><div class="timeline-text">32ÃÂ°C Ã¢ÂÂ wÃÂ¶chentlich -3ÃÂ°C.</div></div>
+    <div class="timeline-row"><div class="timeline-day">Woche 3</div><div class="timeline-text">29ÃÂ°C</div></div>
+    <div class="timeline-row"><div class="timeline-day">Woche 4</div><div class="timeline-text">26ÃÂ°C</div></div>
+    <div class="timeline-row"><div class="timeline-day">5Ã¢ÂÂ6 Wo.</div><div class="timeline-text">Federn Ã¢ÂÂ selbst wÃÂ¤rmen Ã¢ÂÂ HÃÂ¼hnertraktor.</div></div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,#fff 70%,var(--gold-light));border:1px solid var(--gold);">
-    <div class="card-title" style="color:var(--blue)"><span>â¨</span> Aufzucht-Modul â Bald verfÃ¼gbar</div>
-    <div style="text-align:center;padding:0.75rem;background:var(--gold-light);border-radius:8px;font-size:0.85rem;color:var(--blue);font-weight:bold;">ð£ DemnÃ¤chst im Federkompass</div>
+    <div class="card-title" style="color:var(--blue)"><span>Ã¢ÂÂ¨</span> Aufzucht-Modul Ã¢ÂÂ Bald verfÃÂ¼gbar</div>
+    <div style="text-align:center;padding:0.75rem;background:var(--gold-light);border-radius:8px;font-size:0.85rem;color:var(--blue);font-weight:bold;">Ã°ÂÂÂ£ DemnÃÂ¤chst im Federkompass</div>
   </div>
 </div>
 <!-- STATISTIK -->
 <div id="screen-statistik" class="screen">
-  <div id="stat-no-brut" class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">ð</div>Noch keine Bruten.</div>
+  <div id="stat-no-brut" class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">Ã°ÂÂÂ</div>Noch keine Bruten.</div>
   <div id="stat-content" style="display:none">
-    <div class="card"><div class="card-title"><span>âï¸</span> Brut wÃ¤hlen</div><div id="stat-brut-select"></div></div>
+    <div class="card"><div class="card-title"><span>Ã¢ÂÂÃ¯Â¸Â</span> Brut wÃÂ¤hlen</div><div id="stat-brut-select"></div></div>
     <div id="stat-ergebnis" style="display:none">
       <div class="card">
-        <div class="card-title"><span>ð</span> Auswertung</div>
-        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>ð¥ Befruchtungsrate</span><strong id="pct-bf">â%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-bf" style="width:0%"></div></div><div id="txt-bf" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
-        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>â¤ï¸ Ãberlebensrate Tag 14</span><strong id="pct-lb">â%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-lb" style="width:0%"></div></div><div id="txt-lb" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
-        <div><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>ð¥ Schlupfrate</span><strong id="pct-sl">â%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-sl" style="width:0%;background:var(--gold)"></div></div><div id="txt-sl" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
+        <div class="card-title"><span>Ã°ÂÂÂ</span> Auswertung</div>
+        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>Ã°ÂÂ¥Â Befruchtungsrate</span><strong id="pct-bf">Ã¢ÂÂ%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-bf" style="width:0%"></div></div><div id="txt-bf" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
+        <div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>Ã¢ÂÂ¤Ã¯Â¸Â ÃÂberlebensrate Tag 14</span><strong id="pct-lb">Ã¢ÂÂ%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-lb" style="width:0%"></div></div><div id="txt-lb" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:3px"><span>Ã°ÂÂÂ¥ Schlupfrate</span><strong id="pct-sl">Ã¢ÂÂ%</strong></div><div class="stat-bar-wrap"><div class="stat-bar" id="bar-sl" style="width:0%;background:var(--gold)"></div></div><div id="txt-sl" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div></div>
       </div>
-      <div class="card"><div class="card-title"><span>ð¯</span> Bewertung</div><div id="stat-bew" style="font-size:0.85rem;line-height:1.6;"></div></div>
+      <div class="card"><div class="card-title"><span>Ã°ÂÂÂ¯</span> Bewertung</div><div id="stat-bew" style="font-size:0.85rem;line-height:1.6;"></div></div>
       <div class="card">
-        <div class="card-title"><span>âï¸</span> Zahlen erfassen</div>
+        <div class="card-title"><span>Ã¢ÂÂÃ¯Â¸Â</span> Zahlen erfassen</div>
         <div class="param-row"><span class="param-label">Eier eingelegt</span><input type="number" class="param-input" id="st-eingelegt" placeholder="12"></div>
         <div class="param-row"><span class="param-label">Befruchtet (Tag 7)</span><input type="number" class="param-input" id="st-befruchtet" placeholder="10"></div>
         <div class="param-row"><span class="param-label">Lebend (Tag 14)</span><input type="number" class="param-input" id="st-lebend" placeholder="9"></div>
-        <div class="param-row"><span class="param-label">GeschlÃ¼pft</span><input type="number" class="param-input" id="st-geschluepft" placeholder="8"></div>
-        <button class="save-btn" onclick="berechneStatistik()">ð Auswerten</button>
+        <div class="param-row"><span class="param-label">GeschlÃÂ¼pft</span><input type="number" class="param-input" id="st-geschluepft" placeholder="8"></div>
+        <button class="save-btn" onclick="berechneStatistik()">Ã°ÂÂÂ Auswerten</button>
       </div>
     </div>
   </div>
@@ -412,16 +412,16 @@ header .sub { font-size:0.7rem; color:var(--muted); }
 <!-- FEEDBACK -->
 <div id="screen-feedback" class="screen">
   <div class="card">
-    <div class="card-title"><span>ð¡</span> Feedback &amp; Ideen</div>
-    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Idee, Fehler oder Wunsch? Schreib es hier â wir lesen alles!</p>
-    <div class="setup-row"><span class="setup-label">Typ</span><select id="fb-typ" class="setup-input"><option value="idee">ð¡ Idee</option><option value="bug">ð Fehler</option><option value="wunsch">â­ Wunsch</option><option value="lob">ð Lob</option></select></div>
+    <div class="card-title"><span>Ã°ÂÂÂ¡</span> Feedback &amp; Ideen</div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Idee, Fehler oder Wunsch? Schreib es hier Ã¢ÂÂ wir lesen alles!</p>
+    <div class="setup-row"><span class="setup-label">Typ</span><select id="fb-typ" class="setup-input"><option value="idee">Ã°ÂÂÂ¡ Idee</option><option value="bug">Ã°ÂÂÂ Fehler</option><option value="wunsch">Ã¢Â­Â Wunsch</option><option value="lob">Ã°ÂÂÂ Lob</option></select></div>
     <div class="setup-row"><span class="setup-label">Titel</span><input type="text" id="fb-titel" class="setup-input" placeholder="Kurze Beschreibung"></div>
-    <div style="padding:0.6rem 0;"><textarea id="fb-beschreibung" rows="3" style="width:100%;padding:0.5rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.85rem;background:var(--bg);resize:vertical;" placeholder="Details (optional)â¦"></textarea></div>
-    <button class="save-btn" onclick="sendFeedback()">ð¨ Senden</button>
-    <div id="fb-success" class="alert alert-success" style="display:none;margin-top:0.75rem"><span class="alert-icon">â</span><span>Danke! Wir melden uns.</span></div>
+    <div style="padding:0.6rem 0;"><textarea id="fb-beschreibung" rows="3" style="width:100%;padding:0.5rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.85rem;background:var(--bg);resize:vertical;" placeholder="Details (optional)Ã¢ÂÂ¦"></textarea></div>
+    <button class="save-btn" onclick="sendFeedback()">Ã°ÂÂÂ¨ Senden</button>
+    <div id="fb-success" class="alert alert-success" style="display:none;margin-top:0.75rem"><span class="alert-icon">Ã¢ÂÂ</span><span>Danke! Wir melden uns.</span></div>
   </div>
   <div class="card" id="fb-liste-card" style="display:none">
-    <div class="card-title"><span>ð</span> Eingaben <span id="fb-count" style="font-size:0.72rem;color:var(--muted);font-weight:normal;"></span></div>
+    <div class="card-title"><span>Ã°ÂÂÂ</span> Eingaben <span id="fb-count" style="font-size:0.72rem;color:var(--muted);font-weight:normal;"></span></div>
     <div id="fb-liste"></div>
   </div>
 </div>
@@ -429,23 +429,23 @@ header .sub { font-size:0.7rem; color:var(--muted); }
 <!-- NEUE BRUT MODAL -->
 <div class="modal-overlay" id="neue-brut-modal">
   <div class="modal">
-    <div class="modal-title">Neue Brut starten<button class="modal-close" onclick="closeModal()">â</button></div>
-    <div class="setup-row"><span class="setup-label">BrutgerÃ¤t-Typ</span><select id="m-typ" class="setup-input"><option value="motor">MotorbrÃ¼ter (mit LÃ¼fter)</option><option value="flaeche">FlÃ¤chenbrÃ¼ter (ohne LÃ¼fter)</option></select></div>
+    <div class="modal-title">Neue Brut starten<button class="modal-close" onclick="closeModal()">Ã¢ÂÂ</button></div>
+    <div class="setup-row"><span class="setup-label">BrutgerÃÂ¤t-Typ</span><select id="m-typ" class="setup-input"><option value="motor">MotorbrÃÂ¼ter (mit LÃÂ¼fter)</option><option value="flaeche">FlÃÂ¤chenbrÃÂ¼ter (ohne LÃÂ¼fter)</option></select></div>
     <div class="setup-row"><span class="setup-label">Einlegedatum</span><input type="date" id="m-datum" class="setup-input"></div>
     <div class="setup-row"><span class="setup-label">Anzahl Eier</span><input type="number" id="m-anzahl" class="setup-input" placeholder="z.B. 12" min="1" max="200"></div>
     <div class="setup-row"><span class="setup-label">Rasse</span><input type="text" id="m-rasse" class="setup-input" placeholder="Mechelse Koekoek"></div>
     <div class="setup-row"><span class="setup-label">Bemerkung</span><input type="text" id="m-bemerkung" class="setup-input" placeholder="Optional"></div>
-    <button class="start-btn" onclick="createBrut()" style="margin-top:1rem">ð¥ Brut starten</button>
+    <button class="start-btn" onclick="createBrut()" style="margin-top:1rem">Ã°ÂÂ¥Â Brut starten</button>
   </div>
 </div>
 
 <!-- REMINDER -->
 <div class="reminder-overlay" id="reminder-overlay">
   <div class="reminder-box">
-    <div style="font-size:2rem;text-align:center;margin-bottom:0.4rem" id="rem-icon">â°</div>
+    <div style="font-size:2rem;text-align:center;margin-bottom:0.4rem" id="rem-icon">Ã¢ÂÂ°</div>
     <div style="font-size:1rem;font-weight:bold;color:var(--blue);text-align:center;margin-bottom:0.6rem" id="rem-title"></div>
     <div style="font-size:0.85rem;line-height:1.5;color:#444;text-align:center;margin-bottom:1.1rem" id="rem-text"></div>
-    <button onclick="closeReminder()" style="width:100%;padding:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.88rem;font-weight:bold;cursor:pointer;border-bottom:2px solid var(--gold)">â Verstanden</button>
+    <button onclick="closeReminder()" style="width:100%;padding:0.7rem;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.88rem;font-weight:bold;cursor:pointer;border-bottom:2px solid var(--gold)">Ã¢ÂÂ Verstanden</button>
   </div>
 </div>
 
@@ -528,7 +528,7 @@ function getBrutById(id) { return bruten.find(b => b.id === id) || null; }
 function renderBrutenListe() {
   const liste = document.getElementById('bruten-liste');
   if (!bruten.length) {
-    liste.innerHTML = '<div class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">ð</div>Noch keine Brut.<br>Tippe auf Â«Neue Brut startenÂ».</div>';
+    liste.innerHTML = '<div class="no-content"><div style="font-size:2rem;margin-bottom:0.5rem">Ã°ÂÂÂ</div>Noch keine Brut.<br>Tippe auf ÃÂ«Neue Brut startenÃÂ».</div>';
     return;
   }
   const sorted = [...bruten].sort((a,b) => new Date(b.start) - new Date(a.start));
@@ -539,20 +539,20 @@ function renderBrutenListe() {
     var schlupf = getSchlupfDatumForBrut(brut);
     var isAb = todayDay > 21;
     var isSchlupf = todayDay >= 19 && todayDay <= 21;
-    var badge = isAb ? '<span class="brut-badge badge-fertig">â Abgeschlossen</span>'
-                : isSchlupf ? '<span class="brut-badge badge-schlupf">ð£ Schlupf!</span>'
-                : '<span class="brut-badge badge-aktiv">â¶ Tag ' + todayDay + '</span>';
+    var badge = isAb ? '<span class="brut-badge badge-fertig">Ã¢ÂÂ Abgeschlossen</span>'
+                : isSchlupf ? '<span class="brut-badge badge-schlupf">Ã°ÂÂÂ£ Schlupf!</span>'
+                : '<span class="brut-badge badge-aktiv">Ã¢ÂÂ¶ Tag ' + todayDay + '</span>';
     var cls = isAb ? 'abgeschlossen' : 'aktiv';
     var stat = brut.statistik;
     var schlupfInfo = stat && stat.geschluepft
-      ? 'ð¥ ' + stat.geschluepft + ' geschlÃ¼pft (' + Math.round(stat.geschluepft/brut.anzahl*100) + '%)'
+      ? 'Ã°ÂÂÂ¥ ' + stat.geschluepft + ' geschlÃÂ¼pft (' + Math.round(stat.geschluepft/brut.anzahl*100) + '%)'
       : 'Schlupf: ' + schlupf;
-    html += '<div class="brut-karte ' + cls + '" onclick="openBrut(\'"+brut.id+"\')">';
-    html += '<div class="brut-karte-header"><div class="brut-karte-titel">ð¥ ' + (brut.rasse||'Brut') + '</div>' + badge + '</div>';
-    html += '<div class="brut-info">' + brut.anzahl + ' Eier Â· ' + (brut.typ==='motor'?'MotorbrÃ¼ter':'FlÃ¤chenbrÃ¼ter') + (brut.bemerkung?' Â· '+brut.bemerkung:'') + '</div>';
+            html += '<div class="brut-karte ' + cls + '" data-id="' + brut.id + '" onclick="openBrut(this.dataset.id)">';
+    html += '<div class="brut-karte-header"><div class="brut-karte-titel">Ã°ÂÂ¥Â ' + (brut.rasse||'Brut') + '</div>' + badge + '</div>';
+    html += '<div class="brut-info">' + brut.anzahl + ' Eier ÃÂ· ' + (brut.typ==='motor'?'MotorbrÃÂ¼ter':'FlÃÂ¤chenbrÃÂ¼ter') + (brut.bemerkung?' ÃÂ· '+brut.bemerkung:'') + '</div>';
     html += '<div class="progress-wrap"><div class="progress-fill" style="width:' + Math.min(100,pct) + '%"></div></div>';
     html += '<div class="brut-meta"><span>Eingelegt: ' + new Date(brut.start).toLocaleDateString('de-CH') + '</span><span>' + schlupfInfo + '</span></div>';
-    html += '<div style="text-align:right;padding:0.3rem 0 0.1rem"><button onclick="event.stopPropagation();deleteBrut(\'"+brut.id+"\')" style="background:none;border:1px solid var(--danger);color:var(--danger);border-radius:8px;padding:3px 12px;font-size:0.75rem;cursor:pointer;">&#128465; Brut l\u00f6schen</button></div>';
+    html += '<div style="text-align:right;padding:0.3rem 0 0.1rem"><button data-id="' + brut.id + '" onclick="event.stopPropagation();deleteBrut(this.dataset.id)" style="background:none;border:1px solid var(--danger);color:var(--danger);border-radius:8px;padding:3px 12px;font-size:0.75rem;cursor:pointer;">&#128465; Brut l\u00f6schen</button></div>';
     html += '</div>';
   });
   liste.innerHTML = html;
@@ -621,7 +621,7 @@ function getDayDate(brut, dayNum) {
 
 function formatDatum(date) {
   var t=['So','Mo','Di','Mi','Do','Fr','Sa'];
-  var m=['Jan','Feb','MÃ¤r','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  var m=['Jan','Feb','MÃÂ¤r','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
   return t[date.getDay()]+', '+date.getDate()+'. '+m[date.getMonth()]+' '+date.getFullYear();
 }
 // ===== TAGEBUCH =====
@@ -641,7 +641,7 @@ function renderTagebuch() {
     bruten.forEach(function(b) {
       var day=Math.min(42,getTodayDayForBrut(b));
       var isA=b.id===aktiveBrutId;
-      html+='<button onclick="switchBrut(\'"+b.id+"\')" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid '+(isA?'var(--gold)':'var(--border)')+';background:'+(isA?'var(--gold-light)':'var(--card)')+';font-family:inherit;font-size:0.75rem;color:'+(isA?'var(--blue)':'var(--muted)')+';cursor:pointer;">ð¥ '+b.rasse+' (T'+day+')</button>';
+      html+='<button data-id="'+b.id+'" onclick="switchBrut(this.dataset.id)" style="display:inline-block;margin-right:6px;padding:4px 12px;border-radius:20px;border:1px solid '+(isA?'var(--gold)':'var(--border)')+';background:'+(isA?'var(--gold-light)':'var(--card)')+';font-family:inherit;font-size:0.75rem;color:'+(isA?'var(--blue)':'var(--muted)')+';cursor:pointer;">Ã°ÂÂ¥Â '+b.rasse+' (T'+day+')</button>';
     });
     selectorBar.innerHTML=html;
   } else { selectorBar.style.display='none'; }
@@ -668,7 +668,7 @@ function renderDay() {
   var dayDate=getDayDate(brut,d);
   document.getElementById('day-num').textContent='Tag '+d;
   document.getElementById('day-date').textContent=formatDatum(dayDate);
-  document.getElementById('day-sub').textContent='Bruttag '+d+' von 21 Â· Schlupf: '+getSchlupfDatumForBrut(brut);
+  document.getElementById('day-sub').textContent='Bruttag '+d+' von 21 ÃÂ· Schlupf: '+getSchlupfDatumForBrut(brut);
   document.getElementById('entry-datum').textContent=dayDate.toLocaleDateString('de-CH');
   document.getElementById('prev-btn').disabled=d<=1;
   document.getElementById('next-btn').disabled=d>=42;
@@ -713,7 +713,7 @@ function renderMissingWarn(brut,currentD,todayDay) {
   }
   if(!missing.length) return;
   var links=missing.map(function(i){return '<span onclick="currentDay='+i+';renderDay()" style="display:inline-block;background:#fdf0f0;border:1px solid #f5a0a0;color:var(--danger);border-radius:4px;padding:1px 7px;margin:2px;cursor:pointer;font-size:0.75rem;">Tag '+i+'</span>';}).join('');
-  box.innerHTML='<div class="card" style="border-left:3px solid var(--danger);margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><div><div style="font-size:0.83rem;font-weight:bold;color:var(--danger);margin-bottom:3px">â ï¸ '+missing.length+' Tag'+(missing.length>1?'e':'')+' nicht ausgefÃ¼llt</div><div style="font-size:0.78rem;color:#666;margin-bottom:5px">Temperatur fehlt:</div><div>'+links+'</div></div><button onclick="toggleProModus()" style="flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:#f5f5f5;font-family:inherit;font-size:0.7rem;color:#888;cursor:pointer;">ð Pro-Modus</button></div></div>';
+  box.innerHTML='<div class="card" style="border-left:3px solid var(--danger);margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><div><div style="font-size:0.83rem;font-weight:bold;color:var(--danger);margin-bottom:3px">Ã¢ÂÂ Ã¯Â¸Â '+missing.length+' Tag'+(missing.length>1?'e':'')+' nicht ausgefÃÂ¼llt</div><div style="font-size:0.78rem;color:#666;margin-bottom:5px">Temperatur fehlt:</div><div>'+links+'</div></div><button onclick="toggleProModus()" style="flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:#f5f5f5;font-family:inherit;font-size:0.7rem;color:#888;cursor:pointer;">Ã°ÂÂÂ Pro-Modus</button></div></div>';
 }
 
 function toggleProModus() {
@@ -725,16 +725,16 @@ function renderAlerts(brut,d) {
   var box=document.getElementById('day-alerts');
   box.innerHTML='';
   var alerts=[];
-  if(d===1) alerts.push({t:'info',i:'ð¥',m:'Tag 1: Brut gestartet! BrÃ¼ter erste 6h nicht Ã¶ffnen.'});
-  if(d===3) alerts.push({t:'info',i:'ð¬',m:'Ab heute wenden â mind. 3â5Ã tÃ¤glich.'});
-  if(d===17) alerts.push({t:'warn',i:'â ï¸',m:'MORGEN: Wenden einstellen, Feuchtigkeit auf 65â70%!'});
-  if(d===18) alerts.push({t:'danger',i:'ð',m:'TAG 18: Wenden STOPP! Feuchtigkeit 65â70%. Eier auf Schlupfhorde. BrÃ¼ter zu!'});
-  if(d===19) alerts.push({t:'warn',i:'ð£',m:'Schlupfphase! BrÃ¼ter NICHT Ã¶ffnen. Pip mÃ¶glich â 12â24h Geduld.'});
-  if(d===20) alerts.push({t:'warn',i:'ð£',m:'Hauptschlupftag. Nicht helfen â 24h nach Pip warten.'});
-  if(d===21) alerts.push({t:'success',i:'ð¥',m:'Schlupftag! KÃ¼ken bleiben noch 3 Tage im BrÃ¼ter!'});
-  if(d===22) alerts.push({t:'warn',i:'ð¥',m:'KÃ¼ken noch im BrÃ¼ter! Aufzuchtraum vorbereiten.'});
-  if(d===23) alerts.push({t:'warn',i:'ð¥',m:'Morgen kÃ¶nnen die KÃ¼ken raus!'});
-  if(d>=24) alerts.push({t:'success',i:'ð¥',m:'KÃ¼ken kÃ¶nnen jetzt raus! Aufzuchtraum 35Â°C bereit?'});
+  if(d===1) alerts.push({t:'info',i:'Ã°ÂÂ¥Â',m:'Tag 1: Brut gestartet! BrÃÂ¼ter erste 6h nicht ÃÂ¶ffnen.'});
+  if(d===3) alerts.push({t:'info',i:'Ã°ÂÂÂ¬',m:'Ab heute wenden Ã¢ÂÂ mind. 3Ã¢ÂÂ5ÃÂ tÃÂ¤glich.'});
+  if(d===17) alerts.push({t:'warn',i:'Ã¢ÂÂ Ã¯Â¸Â',m:'MORGEN: Wenden einstellen, Feuchtigkeit auf 65Ã¢ÂÂ70%!'});
+  if(d===18) alerts.push({t:'danger',i:'Ã°ÂÂÂ',m:'TAG 18: Wenden STOPP! Feuchtigkeit 65Ã¢ÂÂ70%. Eier auf Schlupfhorde. BrÃÂ¼ter zu!'});
+  if(d===19) alerts.push({t:'warn',i:'Ã°ÂÂÂ£',m:'Schlupfphase! BrÃÂ¼ter NICHT ÃÂ¶ffnen. Pip mÃÂ¶glich Ã¢ÂÂ 12Ã¢ÂÂ24h Geduld.'});
+  if(d===20) alerts.push({t:'warn',i:'Ã°ÂÂÂ£',m:'Hauptschlupftag. Nicht helfen Ã¢ÂÂ 24h nach Pip warten.'});
+  if(d===21) alerts.push({t:'success',i:'Ã°ÂÂÂ¥',m:'Schlupftag! KÃÂ¼ken bleiben noch 3 Tage im BrÃÂ¼ter!'});
+  if(d===22) alerts.push({t:'warn',i:'Ã°ÂÂÂ¥',m:'KÃÂ¼ken noch im BrÃÂ¼ter! Aufzuchtraum vorbereiten.'});
+  if(d===23) alerts.push({t:'warn',i:'Ã°ÂÂÂ¥',m:'Morgen kÃÂ¶nnen die KÃÂ¼ken raus!'});
+  if(d>=24) alerts.push({t:'success',i:'Ã°ÂÂÂ¥',m:'KÃÂ¼ken kÃÂ¶nnen jetzt raus! Aufzuchtraum 35ÃÂ°C bereit?'});
   alerts.forEach(function(x){
     var div=document.createElement('div');
     div.className='alert alert-'+x.t;
@@ -745,35 +745,35 @@ function renderAlerts(brut,d) {
     var prepBlock=document.createElement('div');
     prepBlock.className='card';
     prepBlock.style.borderTop='3px solid var(--success)';
-    prepBlock.innerHTML='<div class="card-title" style="color:var(--success)"><span>ð </span> Aufzuchtraum vorbereiten</div><div class="alert alert-warn" style="margin-bottom:0.75rem"><span class="alert-icon">â³</span><span><strong>KÃ¼ken noch im BrÃ¼ter!</strong> Erst ab Tag 24 rausnehmen.</span></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>WÃ¤rmelampe/WÃ¤rmeplatte (35Â°C)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einstreu (grobe HobelsÐ¿Ã¤ne)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Flache KÃ¼ken-TrÃ¤nke</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>KÃ¼ken-Aufzuchtfutter</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Marek-Impfung Tierarzt kontaktiert</label></div>';
+    prepBlock.innerHTML='<div class="card-title" style="color:var(--success)"><span>Ã°ÂÂÂ </span> Aufzuchtraum vorbereiten</div><div class="alert alert-warn" style="margin-bottom:0.75rem"><span class="alert-icon">Ã¢ÂÂ³</span><span><strong>KÃÂ¼ken noch im BrÃÂ¼ter!</strong> Erst ab Tag 24 rausnehmen.</span></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>WÃÂ¤rmelampe/WÃÂ¤rmeplatte (35ÃÂ°C)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Einstreu (grobe HobelsÃÂ¿ÃÂ¤ne)</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Flache KÃÂ¼ken-TrÃÂ¤nke</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>KÃÂ¼ken-Aufzuchtfutter</label></div><div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox"><label>Marek-Impfung Tierarzt kontaktiert</label></div>';
     box.appendChild(prepBlock);
   }
   if(d>=24){
     var teaser=document.createElement('div');
     teaser.className='card';
     teaser.style.borderTop='3px solid var(--gold)';
-    teaser.innerHTML='<div class="card-title"><span>ð¥</span> KÃ¼ken kÃ¶nnen raus!</div><div class="alert alert-success" style="margin-bottom:0.75rem"><span class="alert-icon">â</span><span>Mind. 3 Tage alt â jetzt umziehen!</span></div><div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--blue);font-weight:bold;">â¨ Aufzucht-Modul â DemnÃ¤chst im Federkompass</div>';
+    teaser.innerHTML='<div class="card-title"><span>Ã°ÂÂÂ¥</span> KÃÂ¼ken kÃÂ¶nnen raus!</div><div class="alert alert-success" style="margin-bottom:0.75rem"><span class="alert-icon">Ã¢ÂÂ</span><span>Mind. 3 Tage alt Ã¢ÂÂ jetzt umziehen!</span></div><div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:8px;padding:0.75rem;text-align:center;font-size:0.82rem;color:var(--blue);font-weight:bold;">Ã¢ÂÂ¨ Aufzucht-Modul Ã¢ÂÂ DemnÃÂ¤chst im Federkompass</div>';
     box.appendChild(teaser);
   }
   var schierTage={
-    5:{titel:'Tag 5â6: Erste Schier-MÃ¶glichkeit',tipp:'Bei hellen Eiern ab Tag 4â5. Noch frÃ¼h â im Zweifel 2 Tage warten.'},
+    5:{titel:'Tag 5Ã¢ÂÂ6: Erste Schier-MÃÂ¶glichkeit',tipp:'Bei hellen Eiern ab Tag 4Ã¢ÂÂ5. Noch frÃÂ¼h Ã¢ÂÂ im Zweifel 2 Tage warten.'},
     6:{titel:'Tag 6: Schieren empfohlen',tipp:'Spinnennetz aus Adern sollte sichtbar sein.'},
-    7:{titel:'ð¦ Tag 7: Erste Hauptkontrolle!',tipp:'Idealer Zeitpunkt. Unbefruchtete Eier entfernen.'},
+    7:{titel:'Ã°ÂÂÂ¦ Tag 7: Erste Hauptkontrolle!',tipp:'Idealer Zeitpunkt. Unbefruchtete Eier entfernen.'},
     8:{titel:'Tag 8: Nachkontrolle',tipp:'Gestern unklar? Heute nochmals schieren.'},
-    14:{titel:'ð¦ Tag 14: Zweite Hauptkontrolle!',tipp:'Abgestorbene entfernen. Luftkammer ca. 1/3 des Eis.'},
-    18:{titel:'ð¦ Tag 18: â LETZTE Ãffnung!',tipp:'ACHTUNG: LETZTE Ãffnung bis zum Schlupf! Schieren, Schlupfhorde, BrÃ¼ter ZU!'}
+    14:{titel:'Ã°ÂÂÂ¦ Tag 14: Zweite Hauptkontrolle!',tipp:'Abgestorbene entfernen. Luftkammer ca. 1/3 des Eis.'},
+    18:{titel:'Ã°ÂÂÂ¦ Tag 18: Ã¢ÂÂ LETZTE ÃÂffnung!',tipp:'ACHTUNG: LETZTE ÃÂffnung bis zum Schlupf! Schieren, Schlupfhorde, BrÃÂ¼ter ZU!'}
   };
   if(schierTage[d]){
     var s=schierTage[d];
     var savedEntry=brut.tage&&brut.tage[d];
     var savedBefund=savedEntry?savedEntry.schier_befund||'':'';
     var savedNotiz=savedEntry?savedEntry.schier_notiz||'':'';
-    var opts=[{val:'lebend',icon:'ð¢',label:'Lebend',desc:'Adern, evtl. Bewegung'},{val:'unbefruchtet',icon:'âª',label:'Unbefruchtet',desc:'Hell, klar'},{val:'blutring',icon:'ð´',label:'Blutring',desc:'Roter Ring'},{val:'unklar',icon:'ð¡',label:'Unklar',desc:'Nochmals schieren'}];
+    var opts=[{val:'lebend',icon:'Ã°ÂÂÂ¢',label:'Lebend',desc:'Adern, evtl. Bewegung'},{val:'unbefruchtet',icon:'Ã¢ÂÂª',label:'Unbefruchtet',desc:'Hell, klar'},{val:'blutring',icon:'Ã°ÂÂÂ´',label:'Blutring',desc:'Roter Ring'},{val:'unklar',icon:'Ã°ÂÂÂ¡',label:'Unklar',desc:'Nochmals schieren'}];
     var optsHtml=opts.map(function(o){return '<div onclick="selectBefund(this,\'+o.val+\','+d+')" data-val="'+o.val+'" style="border:2px solid '+(savedBefund===o.val?'var(--gold)':'var(--border)')+';background:'+(savedBefund===o.val?'var(--gold-light)':'var(--card)')+';border-radius:8px;padding:0.55rem;text-align:center;cursor:pointer;"><div style="font-size:1.2rem">'+o.icon+'</div><div style="font-size:0.75rem;font-weight:bold">'+o.label+'</div><div style="font-size:0.68rem;color:var(--muted)">'+o.desc+'</div></div>';}).join('');
     var block=document.createElement('div');
     block.className='card';
     block.style.borderTop='3px solid var(--gold)';
-    block.innerHTML='<div class="card-title" style="color:var(--gold)"><span>ð¦</span> '+s.titel+'</div><div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">ð¡</span><span>'+s.tipp+'</span></div><div style="font-size:0.83rem;font-weight:bold;margin-bottom:0.5rem;color:var(--blue);">Was siehst du?</div><div class="schier-grid">'+optsHtml+'</div><div id="befund-result-'+d+'" style="margin-bottom:0.6rem"></div><div style="font-size:0.8rem;margin-bottom:3px;color:#555;">ð Schier-Notiz:</div><textarea id="schier-notiz-'+d+'" rows="2" style="width:100%;padding:0.4rem 0.6rem;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.8rem;background:var(--bg);resize:vertical;" placeholder="z.B. Ei 3 unbefruchtet entferntâ¦">'+savedNotiz+'</textarea>';
+    block.innerHTML='<div class="card-title" style="color:var(--gold)"><span>Ã°ÂÂÂ¦</span> '+s.titel+'</div><div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">Ã°ÂÂÂ¡</span><span>'+s.tipp+'</span></div><div style="font-size:0.83rem;font-weight:bold;margin-bottom:0.5rem;color:var(--blue);">Was siehst du?</div><div class="schier-grid">'+optsHtml+'</div><div id="befund-result-'+d+'" style="margin-bottom:0.6rem"></div><div style="font-size:0.8rem;margin-bottom:3px;color:#555;">Ã°ÂÂÂ Schier-Notiz:</div><textarea id="schier-notiz-'+d+'" rows="2" style="width:100%;padding:0.4rem 0.6rem;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.8rem;background:var(--bg);resize:vertical;" placeholder="z.B. Ei 3 unbefruchtet entferntÃ¢ÂÂ¦">'+savedNotiz+'</textarea>';
     box.appendChild(block);
     if(savedBefund) setTimeout(function(){showBefundResult(savedBefund,d);},50);
   }
@@ -790,7 +790,7 @@ function selectBefund(el,val,day) {
 function showBefundResult(val,day) {
   var box=document.getElementById('befund-result-'+day);
   if(!box) return;
-  var r={lebend:{cls:'alert-success',t:'â <strong>Lebend!</strong> ZurÃ¼ck in den BrÃ¼ter.'},unbefruchtet:{cls:'alert-warn',t:'âª <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'ð´ <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'ð¡ <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
+  var r={lebend:{cls:'alert-success',t:'Ã¢ÂÂ <strong>Lebend!</strong> ZurÃÂ¼ck in den BrÃÂ¼ter.'},unbefruchtet:{cls:'alert-warn',t:'Ã¢ÂÂª <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'Ã°ÂÂÂ´ <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'Ã°ÂÂÂ¡ <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
   if(r[val]) box.innerHTML='<div class="alert '+r[val].cls+'" style="margin:0 0 0.5rem">'+r[val].t+'</div>';
 }
 async function saveDay() {
@@ -824,8 +824,8 @@ async function saveDay() {
   brut.tage[d]=data;
   renderProtokolll(brut);
   var btn=event.currentTarget;
-  btn.textContent='â Gespeichert!';
-  setTimeout(function(){btn.textContent='ð¾ Tag speichern';},1500);
+  btn.textContent='Ã¢ÂÂ Gespeichert!';
+  setTimeout(function(){btn.textContent='Ã°ÂÂÂ¾ Tag speichern';},1500);
 }
 
 function renderProtokolll(brut) {
@@ -834,12 +834,12 @@ function renderProtokolll(brut) {
   var entries=Object.entries(brut.tage||{}).sort(function(a,b){return b[0]-a[0];});
   if(!entries.length){card.style.display='none';return;}
   card.style.display='block';
-  document.getElementById('protokoll-count').textContent='('+entries.length+' EintrÃ¤ge)';
-  var befunde={lebend:'Lebend â',unbefruchtet:'Unbefruchtet âª',blutring:'Blutring ð´',unklar:'Unklar ð¡'};
+  document.getElementById('protokoll-count').textContent='('+entries.length+' EintrÃÂ¤ge)';
+  var befunde={lebend:'Lebend Ã¢ÂÂ',unbefruchtet:'Unbefruchtet Ã¢ÂÂª',blutring:'Blutring Ã°ÂÂÂ´',unklar:'Unklar Ã°ÂÂÂ¡'};
   list.innerHTML=entries.map(function(e){
     var day=e[0],val=e[1];
-    var checks=[val.wenden?'ð':'',val.geschiert?'ð¦':'',val.wasser?'ð§':''].filter(Boolean).join(' ');
-    return '<div class="protokoll-entry"><div style="display:flex;justify-content:space-between"><span style="font-weight:bold;color:var(--blue)">Tag '+day+' Â· '+(val.datum_anzeige||val.datum||'')+'</span><span style="font-size:0.75rem">'+checks+'</span></div><div style="color:#555;font-size:0.8rem">'+(val.temp?'ð¡ï¸ '+val.temp+'Â°C':'')+' '+(val.humi?'Â· ð§ '+val.humi+'%':'')+(val.schier_befund?'Â· ð¦ '+(befunde[val.schier_befund]||val.schier_befund):'')+(val.notiz?'<div style="font-style:italic;color:#666;margin-top:2px">ð '+val.notiz+'</div>':'')+'</div></div>';
+    var checks=[val.wenden?'Ã°ÂÂÂ':'',val.geschiert?'Ã°ÂÂÂ¦':'',val.wasser?'Ã°ÂÂÂ§':''].filter(Boolean).join(' ');
+    return '<div class="protokoll-entry"><div style="display:flex;justify-content:space-between"><span style="font-weight:bold;color:var(--blue)">Tag '+day+' ÃÂ· '+(val.datum_anzeige||val.datum||'')+'</span><span style="font-size:0.75rem">'+checks+'</span></div><div style="color:#555;font-size:0.8rem">'+(val.temp?'Ã°ÂÂÂ¡Ã¯Â¸Â '+val.temp+'ÃÂ°C':'')+' '+(val.humi?'ÃÂ· Ã°ÂÂÂ§ '+val.humi+'%':'')+(val.schier_befund?'ÃÂ· Ã°ÂÂÂ¦ '+(befunde[val.schier_befund]||val.schier_befund):'')+(val.notiz?'<div style="font-style:italic;color:#666;margin-top:2px">Ã°ÂÂÂ '+val.notiz+'</div>':'')+'</div></div>';
   }).join('');
 }
 
@@ -865,10 +865,10 @@ function renderEgg(d) {
   c+='<ellipse cx="100" cy="52" rx="'+ac+'" ry="13" fill="#e8d4aa" opacity="0.8"/>';
   c+='<text x="100" y="43" text-anchor="middle" font-size="8" fill="#8a7a5a">Luftkammer</text>';
   if(d<=3){c+='<circle cx="100" cy="130" r="4" fill="#f5c842" opacity="0.5"/>';desc.textContent='Tag '+d+': Blastoderma. Im Ei noch nichts erkennbar.';}
-  else if(d<=7){var s=8+d*2;c+='<ellipse cx="100" cy="130" rx="'+s+'" ry="'+(s*1.3)+'" fill="#c8854a" opacity="0.75"/>';c+='<line x1="100" y1="112" x2="72" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/><line x1="100" y1="112" x2="128" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/>';desc.textContent='Tag '+d+': Adernetz, Herz schlÃ¤gt, Embryo beweglich.';}
-  else if(d<=14){var cov=Math.min(0.9,0.35+(d-7)*0.08);c+='<ellipse cx="100" cy="138" rx="52" ry="66" fill="#8b5e3c" opacity="'+cov+'"/><ellipse cx="100" cy="142" rx="28" ry="35" fill="#5a3520" opacity="'+Math.min(cov*0.8,0.6)+'"/>';desc.textContent='Tag '+d+': KÃ¼ken wÃ¤chst, Ei verdunkelt sich.';}
+  else if(d<=7){var s=8+d*2;c+='<ellipse cx="100" cy="130" rx="'+s+'" ry="'+(s*1.3)+'" fill="#c8854a" opacity="0.75"/>';c+='<line x1="100" y1="112" x2="72" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/><line x1="100" y1="112" x2="128" y2="90" stroke="#a06040" stroke-width="1.5" opacity="0.7"/>';desc.textContent='Tag '+d+': Adernetz, Herz schlÃÂ¤gt, Embryo beweglich.';}
+  else if(d<=14){var cov=Math.min(0.9,0.35+(d-7)*0.08);c+='<ellipse cx="100" cy="138" rx="52" ry="66" fill="#8b5e3c" opacity="'+cov+'"/><ellipse cx="100" cy="142" rx="28" ry="35" fill="#5a3520" opacity="'+Math.min(cov*0.8,0.6)+'"/>';desc.textContent='Tag '+d+': KÃÂ¼ken wÃÂ¤chst, Ei verdunkelt sich.';}
   else if(d<=17){c+='<ellipse cx="100" cy="143" rx="58" ry="74" fill="#4a2510" opacity="0.9"/><ellipse cx="100" cy="150" rx="38" ry="52" fill="#2c1005" opacity="0.7"/>';desc.textContent='Tag '+d+': Fast komplett dunkel.';}
-  else{c+='<ellipse cx="100" cy="145" rx="60" ry="80" fill="#1e0a00" opacity="0.97"/>';if(d>=19)c+='<path d="M 82 78 L 98 68 L 112 73 L 102 63" stroke="#f5e8c8" stroke-width="2.5" fill="none"/>';if(d>=20)c+='<circle cx="94" cy="70" r="5" fill="#f5c842"/>';desc.textContent=d===21?'ð£ Schlupftag!':'Tag '+d+': Pip â KÃ¼ken bricht durch!';}
+  else{c+='<ellipse cx="100" cy="145" rx="60" ry="80" fill="#1e0a00" opacity="0.97"/>';if(d>=19)c+='<path d="M 82 78 L 98 68 L 112 73 L 102 63" stroke="#f5e8c8" stroke-width="2.5" fill="none"/>';if(d>=20)c+='<circle cx="94" cy="70" r="5" fill="#f5c842"/>';desc.textContent=d===21?'Ã°ÂÂÂ£ Schlupftag!':'Tag '+d+': Pip Ã¢ÂÂ KÃÂ¼ken bricht durch!';}
   svg.innerHTML=c;
 }
 
@@ -930,15 +930,15 @@ function showSchierStage(btn,key) {
   var content=document.getElementById('schier-content');
   var stages={
     vor:{info:'Vor dem Einlegen: Risse, schwimmende Luftkammer, Doppeldotter erkennen.',eggs:[{l:'Gutes Ei',d:'Intakt, LK oben',svg:'vor_ok',c:'#90d4a0'},{l:'Riss',d:'Licht tritt aus',svg:'vor_riss',c:'#f5a0a0'},{l:'LK schwimmt',d:'Dreht sich',svg:'vor_lk',c:'#f5a0a0'},{l:'Doppeldotter',d:'Zwei Dotter',svg:'vor_dd',c:'#ddd'}]},
-    t5:{info:'Tag 5-6: Erstes Adernetz erkennbar.',eggs:[{l:'Befruchtet',d:'Spinnennetz, Punkt',svg:'t5_ja',c:'#90d4a0'},{l:'Unbefruchtet',d:'Klar wie frisch',svg:'t5_nein',c:'#f5a0a0'},{l:'Blutring',d:'FrÃ¼h abgestorben',svg:'t5_ring',c:'#f5a0a0'},{l:'Unklar',d:'Nochmals in 2T',svg:'t5_unklar',c:'#f5c842'}]},
+    t5:{info:'Tag 5-6: Erstes Adernetz erkennbar.',eggs:[{l:'Befruchtet',d:'Spinnennetz, Punkt',svg:'t5_ja',c:'#90d4a0'},{l:'Unbefruchtet',d:'Klar wie frisch',svg:'t5_nein',c:'#f5a0a0'},{l:'Blutring',d:'FrÃÂ¼h abgestorben',svg:'t5_ring',c:'#f5a0a0'},{l:'Unklar',d:'Nochmals in 2T',svg:'t5_unklar',c:'#f5c842'}]},
     t7:{info:'Tag 7: Erste Hauptkontrolle. Unbefruchtete entfernen.',eggs:[{l:'Lebend',d:'Adernetz, Bewegung',svg:'t7_ja',c:'#90d4a0'},{l:'Unbefruchtet',d:'Hell, klar',svg:'t7_nein',c:'#f5a0a0'},{l:'Blutring',d:'Roter Ring',svg:'t7_ring',c:'#f5a0a0'},{l:'Unklar',d:'Drin lassen',svg:'t7_unklar',c:'#f5c842'}]},
-    t10:{info:'Tag 10: KÃ¼ken wÃ¤chst. Bewegung erkennbar.',eggs:[{l:'Lebend',d:'Dunkel, Bewegung',svg:'t10_ja',c:'#90d4a0'},{l:'Abgestorben',d:'Dunkel, still',svg:'t10_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Immer noch hell',svg:'t10_nein',c:'#f5a0a0'},{l:'LK-GrÃ¶sse',d:'1/5 = normal',svg:'t10_lk',c:'#f5c842'}]},
+    t10:{info:'Tag 10: KÃÂ¼ken wÃÂ¤chst. Bewegung erkennbar.',eggs:[{l:'Lebend',d:'Dunkel, Bewegung',svg:'t10_ja',c:'#90d4a0'},{l:'Abgestorben',d:'Dunkel, still',svg:'t10_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Immer noch hell',svg:'t10_nein',c:'#f5a0a0'},{l:'LK-GrÃÂ¶sse',d:'1/5 = normal',svg:'t10_lk',c:'#f5c842'}]},
     t14:{info:'Tag 14: Zweite Kontrolle. LK ca. 1/3 des Eis.',eggs:[{l:'Perfekt',d:'Schwarz, LK 1/3',svg:'t14_ja',c:'#90d4a0'},{l:'Abgestorben',d:'Kein Leben',svg:'t14_tot',c:'#f5a0a0'},{l:'LK zu klein',d:'Zu feucht',svg:'t14_lk_klein',c:'#f5c842'},{l:'LK zu gross',d:'Zu trocken',svg:'t14_lk_gross',c:'#f5c842'}]},
-    t18:{info:'LETZTE Ãffnung! Danach BrÃ¼ter ZU bis Schlupf!',eggs:[{l:'Schlupfbereit',d:'Schwarz, LK gross',svg:'t18_ok',c:'#90d4a0'},{l:'Pip!',d:'Riss sichtbar',svg:'t18_pip',c:'#90d4a0'},{l:'Abgestorben',d:'Keine Reaktion',svg:'t18_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Noch hell',svg:'t18_nein',c:'#f5a0a0'}]}
+    t18:{info:'LETZTE ÃÂffnung! Danach BrÃÂ¼ter ZU bis Schlupf!',eggs:[{l:'Schlupfbereit',d:'Schwarz, LK gross',svg:'t18_ok',c:'#90d4a0'},{l:'Pip!',d:'Riss sichtbar',svg:'t18_pip',c:'#90d4a0'},{l:'Abgestorben',d:'Keine Reaktion',svg:'t18_tot',c:'#f5a0a0'},{l:'Unbefruchtet',d:'Noch hell',svg:'t18_nein',c:'#f5a0a0'}]}
   };
   var s=stages[key];
   if(!s) return;
-  var html='<div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">ð¡</span><span>'+s.info+'</span></div>';
+  var html='<div class="alert alert-info" style="margin-bottom:0.75rem"><span class="alert-icon">Ã°ÂÂÂ¡</span><span>'+s.info+'</span></div>';
   html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">';
   s.eggs.forEach(function(e){
     html+='<div style="border:2px solid '+e.c+';border-radius:8px;padding:0.5rem;text-align:center;background:var(--card)">';
@@ -953,7 +953,7 @@ function showSchierStage(btn,key) {
 function schierDiag(el,val) {
   document.querySelectorAll('#schier-diagnose .schier-opt').forEach(function(o){o.style.background='var(--card)';o.style.border='2px solid var(--border)';});
   el.style.background='var(--gold-light)';el.style.border='2px solid var(--gold)';
-  var r={lebend:{cls:'alert-success',t:'â <strong>Lebend!</strong> ZurÃ¼ck in den BrÃ¼ter.'},unbefruchtet:{cls:'alert-warn',t:'âª <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'ð´ <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'ð¡ <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
+  var r={lebend:{cls:'alert-success',t:'Ã¢ÂÂ <strong>Lebend!</strong> ZurÃÂ¼ck in den BrÃÂ¼ter.'},unbefruchtet:{cls:'alert-warn',t:'Ã¢ÂÂª <strong>Unbefruchtet.</strong> Nach Tag 7 entfernen.'},blutring:{cls:'alert-danger',t:'Ã°ÂÂÂ´ <strong>Abgestorben.</strong> Sofort entfernen!'},unklar:{cls:'alert-info',t:'Ã°ÂÂÂ¡ <strong>Unklar.</strong> In 2 Tagen nochmals.'}};
   document.getElementById('schier-diag-result').innerHTML='<div class="alert '+r[val].cls+'" style="margin-top:0.5rem">'+r[val].t+'</div>';
 }
 
@@ -969,7 +969,7 @@ function renderStatistik() {
   document.getElementById('stat-no-brut').style.display='none';
   document.getElementById('stat-content').style.display='block';
   var sel=document.getElementById('stat-brut-select');
-  sel.innerHTML=bruten.map(function(b){var day=Math.min(42,getTodayDayForBrut(b));return '<button onclick="selectStatBrut(\'+b.id+\',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">ð¥ '+b.rasse+' (T'+day+')</button>';}).join('');
+  sel.innerHTML=bruten.map(function(b){var day=Math.min(42,getTodayDayForBrut(b));return '<button onclick="selectStatBrut(\'+b.id+\',this)" style="display:inline-block;margin:3px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);font-family:inherit;font-size:0.8rem;color:var(--muted);cursor:pointer;">Ã°ÂÂ¥Â '+b.rasse+' (T'+day+')</button>';}).join('');
   if(aktiveBrutId){var btn=sel.querySelector('[onclick*="'+aktiveBrutId+'"]');if(btn) selectStatBrut(aktiveBrutId,btn);}
 }
 
@@ -1001,11 +1001,11 @@ function berechneStatistik(brutId) {
   setTimeout(function(){document.getElementById('bar-bf').style.width=pB+'%';document.getElementById('bar-lb').style.width=pL+'%';document.getElementById('bar-sl').style.width=pS+'%';},50);
   document.getElementById('txt-bf').textContent=befruchtet+' von '+eingelegt+' Eiern';
   document.getElementById('txt-lb').textContent=lebend14+' von '+befruchtet+' Befruchteten';
-  document.getElementById('txt-sl').textContent=geschluepft+' von '+eingelegt+' geschlÃ¼pft';
+  document.getElementById('txt-sl').textContent=geschluepft+' von '+eingelegt+' geschlÃÂ¼pft';
   var bew='';
-  bew+=pB>=85?'â <strong>Befruchtungsrate sehr gut</strong><br>':pB>=70?'ð¡ <strong>Befruchtungsrate mÃ¤ssig</strong><br>':'ð´ <strong>Befruchtungsrate tief</strong><br>';
-  bew+=pL>=90?'â <strong>Ãberlebensrate sehr gut</strong><br>':pL>=75?'ð¡ <strong>Ãberlebensrate mÃ¤ssig</strong><br>':'ð´ <strong>Viele abgestorben</strong><br>';
-  bew+=pS>=75?'â <strong>Schlupfrate sehr gut!</strong>':pS>=60?'ð¡ <strong>Schlupfrate mÃ¤ssig</strong>':'ð´ <strong>Schlupfrate tief</strong>';
+  bew+=pB>=85?'Ã¢ÂÂ <strong>Befruchtungsrate sehr gut</strong><br>':pB>=70?'Ã°ÂÂÂ¡ <strong>Befruchtungsrate mÃÂ¤ssig</strong><br>':'Ã°ÂÂÂ´ <strong>Befruchtungsrate tief</strong><br>';
+  bew+=pL>=90?'Ã¢ÂÂ <strong>ÃÂberlebensrate sehr gut</strong><br>':pL>=75?'Ã°ÂÂÂ¡ <strong>ÃÂberlebensrate mÃÂ¤ssig</strong><br>':'Ã°ÂÂÂ´ <strong>Viele abgestorben</strong><br>';
+  bew+=pS>=75?'Ã¢ÂÂ <strong>Schlupfrate sehr gut!</strong>':pS>=60?'Ã°ÂÂÂ¡ <strong>Schlupfrate mÃÂ¤ssig</strong>':'Ã°ÂÂÂ´ <strong>Schlupfrate tief</strong>';
   document.getElementById('stat-bew').innerHTML=bew;
   if(brut){brut.statistik={eingelegt,befruchtet,lebend14,geschluepft};renderBrutenListe();}
 }
@@ -1040,10 +1040,10 @@ async function loadFeedback() {
   var liste=document.getElementById('fb-liste');
   var count=document.getElementById('fb-count');
   card.style.display='block';
-  count.textContent='('+data.length+' EintrÃ¤ge)';
-  var typen={idee:'ð¡',bug:'ð',wunsch:'â­',lob:'ð'};
-  var statusMap={neu:'ðµ Neu',gelesen:'ðï¸ Gesehen',erledigt:'â Erledigt',abgelehnt:'â Abgelehnt'};
-  liste.innerHTML=data.map(function(f){return '<div style="padding:0.65rem 0;border-bottom:1px solid var(--border);"><div style="display:flex;justify-content:space-between;"><span style="font-weight:bold;font-size:0.85rem;">'+(typen[f.typ]||'ð¡')+' '+f.titel+'</span><span style="font-size:0.7rem;color:var(--muted);">'+(statusMap[f.status]||f.status)+'</span></div>'+(f.beschreibung?'<div style="font-size:0.78rem;color:#666;margin-top:2px;">'+f.beschreibung+'</div>':'')+'<div style="font-size:0.7rem;color:var(--muted);margin-top:3px;">'+new Date(f.erstellt_am).toLocaleDateString('de-CH')+'</div></div>';}).join('');
+  count.textContent='('+data.length+' EintrÃÂ¤ge)';
+  var typen={idee:'Ã°ÂÂÂ¡',bug:'Ã°ÂÂÂ',wunsch:'Ã¢Â­Â',lob:'Ã°ÂÂÂ'};
+  var statusMap={neu:'Ã°ÂÂÂµ Neu',gelesen:'Ã°ÂÂÂÃ¯Â¸Â Gesehen',erledigt:'Ã¢ÂÂ Erledigt',abgelehnt:'Ã¢ÂÂ Abgelehnt'};
+  liste.innerHTML=data.map(function(f){return '<div style="padding:0.65rem 0;border-bottom:1px solid var(--border);"><div style="display:flex;justify-content:space-between;"><span style="font-weight:bold;font-size:0.85rem;">'+(typen[f.typ]||'Ã°ÂÂÂ¡')+' '+f.titel+'</span><span style="font-size:0.7rem;color:var(--muted);">'+(statusMap[f.status]||f.status)+'</span></div>'+(f.beschreibung?'<div style="font-size:0.78rem;color:#666;margin-top:2px;">'+f.beschreibung+'</div>':'')+'<div style="font-size:0.7rem;color:var(--muted);margin-top:3px;">'+new Date(f.erstellt_am).toLocaleDateString('de-CH')+'</div></div>';}).join('');
 }
 
 // ===== ERINNERUNGEN =====
@@ -1053,7 +1053,7 @@ function checkReminder() {
   var today=new Date().toDateString();
   if(localStorage.getItem('last_reminder')===today) return;
   var day=getTodayDayForBrut(brut);
-  var reminders={1:{i:'ð¥',t:'Brut gestartet!',m:'Temperatur und Feuchtigkeit kontrolliert?'},7:{i:'ð¦',t:'Zeit zum Schieren!',m:'Tag 7: Erste Kontrolle. Unbefruchtete entfernen.'},14:{i:'ð¦',t:'Zweite Schier-Kontrolle',m:'Abgestorbene entfernen. Luftkammer prÃ¼fen.'},17:{i:'â ï¸',t:'Morgen: Wenden stoppen!',m:'Ab Tag 18 kein Wenden. Feuchtigkeit 65â70%.'},18:{i:'ð',t:'Wenden STOPP!',m:'Wenden abstellen, 65â70%, Schlupfhorde. BrÃ¼ter zu!'},19:{i:'ð£',t:'Schlupfphase!',m:'BrÃ¼ter NICHT Ã¶ffnen. Pip mÃ¶glich.'},21:{i:'ð¥',t:'Schlupftag!',m:'KÃ¼ken erst raus nach 3 Tagen!'}};
+  var reminders={1:{i:'Ã°ÂÂ¥Â',t:'Brut gestartet!',m:'Temperatur und Feuchtigkeit kontrolliert?'},7:{i:'Ã°ÂÂÂ¦',t:'Zeit zum Schieren!',m:'Tag 7: Erste Kontrolle. Unbefruchtete entfernen.'},14:{i:'Ã°ÂÂÂ¦',t:'Zweite Schier-Kontrolle',m:'Abgestorbene entfernen. Luftkammer prÃÂ¼fen.'},17:{i:'Ã¢ÂÂ Ã¯Â¸Â',t:'Morgen: Wenden stoppen!',m:'Ab Tag 18 kein Wenden. Feuchtigkeit 65Ã¢ÂÂ70%.'},18:{i:'Ã°ÂÂÂ',t:'Wenden STOPP!',m:'Wenden abstellen, 65Ã¢ÂÂ70%, Schlupfhorde. BrÃÂ¼ter zu!'},19:{i:'Ã°ÂÂÂ£',t:'Schlupfphase!',m:'BrÃÂ¼ter NICHT ÃÂ¶ffnen. Pip mÃÂ¶glich.'},21:{i:'Ã°ÂÂÂ¥',t:'Schlupftag!',m:'KÃÂ¼ken erst raus nach 3 Tagen!'}};
   var r=reminders[day];
   if(r){document.getElementById('rem-icon').textContent=r.i;document.getElementById('rem-title').textContent=r.t;document.getElementById('rem-text').textContent=r.m;document.getElementById('reminder-overlay').classList.add('open');localStorage.setItem('last_reminder',today);}
 }
@@ -1113,13 +1113,13 @@ async function togglePush() {
     .update({ push_enabled: newVal })
     .eq('user_id', user.id);
   updatePushBtn(newVal);
-  alert(newVal ? 'ð Push-Nachrichten aktiviert!' : 'ð Push-Nachrichten deaktiviert!');
+  alert(newVal ? 'Ã°ÂÂÂ Push-Nachrichten aktiviert!' : 'Ã°ÂÂÂ Push-Nachrichten deaktiviert!');
 }
 
 async function updatePushBtn(enabled) {
   const btn = document.getElementById('push-toggle-btn');
   if (!btn) return;
-  btn.textContent = enabled ? 'ð Push AN' : 'ð Push AUS';
+  btn.textContent = enabled ? 'Ã°ÂÂÂ Push AN' : 'Ã°ÂÂÂ Push AUS';
   btn.style.opacity = enabled ? '1' : '0.6';
 }
 
